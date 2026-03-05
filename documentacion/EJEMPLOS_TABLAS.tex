@@ -1,0 +1,246 @@
+% ============================================================================
+% PLANTILLA: Ejemplos de Tablas LaTeX para Diccionario de Datos
+% ============================================================================
+% Este archivo es SOLO REFERENCIA
+% Copia estos ejemplos en documentacion/main.tex Sección 3 (Diccionario)
+% ============================================================================
+
+% ============================================================================
+% EJEMPLO 1: Tabla Simple de Diccionario de Datos
+% ============================================================================
+
+% Para agregar una nueva tabla, copia esta estructura:
+
+\subsection{Tabla: nombre_tabla}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|p{4cm}|}
+    \hline
+    \textbf{Campo} & \textbf{Tipo de Dato} & \textbf{NULL} & \textbf{Clave} & \textbf{Descripción} \\
+    \hline
+    campo_id & INT & NO & PK & Identificador único de la tabla \\
+    \hline
+    nombre & VARCHAR(100) & NO & & Nombre del registro \\
+    \hline
+    email & VARCHAR(100) & SÍ & UNIQUE & Correo electrónico único \\
+    \hline
+    fecha_creacion & TIMESTAMP & NO & & Fecha de creación del registro \\
+    \hline
+    activo & BOOLEAN & NO & & Estado del registro (Sí/No) \\
+    \hline
+\end{tabular}
+\end{center}
+
+% ============================================================================
+% EJEMPLO 2: Tabla con Relaciones (Clave Foránea)
+% ============================================================================
+
+\subsection{Tabla: detalles_pedido}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|p{4cm}|}
+    \hline
+    \textbf{Campo} & \textbf{Tipo de Dato} & \textbf{NULL} & \textbf{Clave} & \textbf{Descripción} \\
+    \hline
+    detalles_pedido_id & INT & NO & PK & Identificador único \\
+    \hline
+    pedido_id & INT & NO & FK & Referencia a tabla pedidos \\
+    \hline
+    producto_id & INT & NO & FK & Referencia a tabla productos \\
+    \hline
+    cantidad & INT & NO & & Número de unidades compradas \\
+    \hline
+    precio_unitario & DECIMAL(10,2) & NO & & Precio por unidad al momento de compra \\
+    \hline
+    subtotal & DECIMAL(12,2) & NO & & cantidad × precio\_unitario \\
+    \hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Relaciones}
+\begin{itemize}
+    \item \textbf{pedido\_id} es una Clave Foránea de \texttt{pedidos.pedido\_id}
+    \item \textbf{producto\_id} es una Clave Foránea de \texttt{productos.producto\_id}
+    \item Esta tabla implementa una relación N:M entre pedidos y productos
+\end{itemize}
+
+% ============================================================================
+% EJEMPLO 3: Tabla con Múltiples Restricciones
+% ============================================================================
+
+\subsection{Tabla: inventario}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|p{4cm}|}
+    \hline
+    \textbf{Campo} & \textbf{Tipo de Dato} & \textbf{NULL} & \textbf{Clave} & \textbf{Descripción} \\
+    \hline
+    inventario_id & INT & NO & PK & Identificador único \\
+    \hline
+    producto_id & INT & NO & FK & Referencia a productos \\
+    \hline
+    cantidad & INT & NO & & Stock actual (CHECK: >= 0) \\
+    \hline
+    cantidad_minima & INT & NO & & Mínimo permitido antes de alerta \\
+    \hline
+    cantidad_maxima & INT & NO & & Máximo permitido en almacén \\
+    \hline
+    ubicacion & VARCHAR(50) & SÍ & & Ubicación física en almacén \\
+    \hline
+    fecha_actualizacion & TIMESTAMP & NO & & Última actualización de stock \\
+    \hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Restricciones}
+\begin{itemize}
+    \item \textbf{cantidad}: CHECK (cantidad >= 0)
+    \item \textbf{cantidad\_minima}: CHECK (cantidad\_minima < cantidad\_maxima)
+    \item \textbf{producto\_id}: FOREIGN KEY UNIQUE (un producto por registro)
+\end{itemize}
+
+% ============================================================================
+% EJEMPLO 4: Tabla de Auditoría
+% ============================================================================
+
+\subsection{Tabla: auditoria}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|p{4cm}|}
+    \hline
+    \textbf{Campo} & \textbf{Tipo de Dato} & \textbf{NULL} & \textbf{Clave} & \textbf{Descripción} \\
+    \hline
+    auditoria_id & INT & NO & PK & Identificador único de registro \\
+    \hline
+    tabla & VARCHAR(50) & NO & & Nombre de la tabla modificada \\
+    \hline
+    registro_id & INT & NO & & ID del registro modificado \\
+    \hline
+    operacion & ENUM(...) & NO & & INSERT, UPDATE o DELETE \\
+    \hline
+    datos_anteriores & JSON & SÍ & & Estado previo (para UPDATE) \\
+    \hline
+    datos_nuevos & JSON & SÍ & & Estado nuevo (para INSERT/UPDATE) \\
+    \hline
+    usuario & VARCHAR(100) & NO & & Quién realizó el cambio \\
+    \hline
+    fecha_cambio & TIMESTAMP & NO & & Cuándo se realizó el cambio \\
+    \hline
+\end{tabular}
+\end{center}
+
+% ============================================================================
+% EJEMPLO 5: Tabla de Configuración/Parámetros
+% ============================================================================
+
+\subsection{Tabla: configuracion}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|p{4cm}|}
+    \hline
+    \textbf{Campo} & \textbf{Tipo de Dato} & \textbf{NULL} & \textbf{Clave} & \textbf{Descripción} \\
+    \hline
+    config_id & INT & NO & PK & Identificador único \\
+    \hline
+    parametro & VARCHAR(100) & NO & UNIQUE & Nombre del parámetro \\
+    \hline
+    valor & VARCHAR(255) & NO & & Valor del parámetro \\
+    \hline
+    tipo & ENUM('string', 'numero', 'booleano') & NO & & Tipo de dato esperado \\
+    \hline
+    descripcion & TEXT & SÍ & & Explicación del parámetro \\
+    \hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Ejemplos de Parámetros}
+\begin{itemize}
+    \item \texttt{MAX\_ITEMS\_PER\_ORDER}: 100
+    \item \texttt{IMPUESTO}: 12
+    \item \texttt{PERMITE\_DEVOLUCIONES}: true
+\end{itemize}
+
+% ============================================================================
+% EJEMPLO 6: Tabla de Relación N:M (Intermedia)
+% ============================================================================
+
+\subsection{Tabla: usuario\_rol}
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|p{4cm}|}
+    \hline
+    \textbf{Campo} & \textbf{Tipo de Dato} & \textbf{NULL} & \textbf{Clave} & \textbf{Descripción} \\
+    \hline
+    usuario_id & INT & NO & PK/FK & Referencia a usuarios \\
+    \hline
+    rol_id & INT & NO & PK/FK & Referencia a roles \\
+    \hline
+    fecha_asignacion & TIMESTAMP & NO & & Cuándo se asignó el rol \\
+    \hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Estructura Relacional}
+\begin{itemize}
+    \item \textbf{Clave Primaria Compuesta}: (usuario\_id, rol\_id)
+    \item \textbf{usuario\_id}: Foreign Key → \texttt{usuarios.usuario\_id}
+    \item \textbf{rol\_id}: Foreign Key → \texttt{roles.rol\_id}
+    \item Implementa relación N:M: Un usuario puede tener múltiples roles
+\end{itemize}
+
+% ============================================================================
+% GUÍA: Cómo Copiar Estas Tablas
+% ============================================================================
+
+% PASOS:
+% 1. Abre documentacion/main.tex
+% 2. Ve a la Sección 3 "Diccionario de Datos"
+% 3. Busca el comentario "% TODO: [RESPONSABLE...]"
+% 4. Copia UNA de estas tablas como referencia
+% 5. Modifica:
+%    - Nombre de la tabla (\subsection{Tabla: ...})
+%    - Campos (nombres, tipos, restricciones)
+%    - Descripción (explicar qué es cada campo)
+% 6. Repite para cada tabla del MER
+% 7. Recompila: pdflatex -interaction=nonstopmode main.tex
+
+% ============================================================================
+% TIPOS DE DATOS COMUNES EN MYSQL
+% ============================================================================
+
+% INT              - Número entero (4 bytes): -2,147,483,648 a 2,147,483,647
+% BIGINT           - Número entero grande (8 bytes)
+%
+% DECIMAL(M,D)     - Decimal exacto: M=dígitos totales, D=decimales
+%                     Ejemplo: DECIMAL(10,2) para precios
+%
+% VARCHAR(N)       - Texto variable: hasta N caracteres
+% CHAR(N)          - Texto fijo: N caracteres
+% TEXT             - Texto largo (mayor a 65KB)
+%
+% TIMESTAMP        - Fecha y hora: 'YYYY-MM-DD HH:MM:SS'
+% DATE             - Solo fecha: 'YYYY-MM-DD'
+% TIME             - Solo hora: 'HH:MM:SS'
+%
+% BOOLEAN          - TRUE / FALSE (en MySQL es equivalente a TINYINT(1))
+%
+% ENUM(...)        - Selección de valores: ENUM('opción1', 'opción2')
+%
+% JSON             - Datos JSON estructurados
+
+% ============================================================================
+% RESTRICCIONES COMUNES
+% ============================================================================
+
+% PRIMARY KEY (PK)        - Identifica unícamente cada fila
+% FOREIGN KEY (FK)        - Referencia a otra tabla
+% UNIQUE                  - Valor único en la columna
+% NOT NULL                - Campo obligatorio
+% DEFAULT valor           - Valor por defecto si no se especifica
+% AUTO_INCREMENT          - Incrementa automáticamente
+% CHECK (condición)       - Valida una condición
+% UNSIGNED                - Solo números positivos
+
+% ============================================================================
+% FIN DE LA PLANTILLA
+% ============================================================================
