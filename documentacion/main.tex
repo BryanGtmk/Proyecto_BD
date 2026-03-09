@@ -159,6 +159,103 @@ A continuación, se presentan 10 ejemplos que ilustran la diferencia entre un \t
 
 \vspace{0.5cm}
 
+% ---------------------------------------------------------------------------
+% 2. Listar entidades y atributos del caso (mín. 8 entidades)
+% ---------------------------------------------------------------------------
+\subsubsection{Entidades y Atributos del Caso}
+
+A continuación, se listan las entidades principales del sistema de préstamos de equipos, junto con sus atributos:
+
+\begin{itemize}
+    \item \textbf{LABORATORISTAS} = (id\_lab, nom\_lab, ape\_lab, sue\_lab)
+    \item \textbf{USUARIOS} = (id\_cli, nom\_cli, ape\_cli, tel\_cli, dir\_cli, cor\_cli, ID\_CAR\_PER, habilitado)
+    \item \textbf{CARRERAS} = (ID\_CAR, NOM\_CAR)
+    \item \textbf{PERIODOS} = (ID\_PER\_ACA, FEC\_INI\_PER, FEC\_FIN\_PER)
+    \item \textbf{CATEGORIAS} = (ID\_CAT, NOM\_CAT)
+    \item \textbf{EQUIPOS} = (ID\_EQUI, MAR\_EQUI, SISTEMA\_OP\_EQUI, DIS\_EQUI, EST\_EQUI, MOD\_EQUI, ID\_CAT\_PER)
+    \item \textbf{PRESTAMOS} = (NUM\_PRE, FEC\_PRE, ID\_LAB\_PRESTA, ID\_USUA\_PRE, ID\_EQUI\_PRE, ESTADO\_PRE, ID\_LAB\_DEV, FEC\_DEV, FEC\_REAL, ESTADO\_DEV, ID\_PER\_PER)
+    \item \textbf{MULTAS} = (NUM\_MUL, FEC\_MUL, PRES\_PER\_MUL, VAL\_PAGAR, EST\_MUL)
+    \item \textbf{OBSERVACIONES} = (ID\_OBS, DES\_OBS, ID\_PRES\_PER)
+\end{itemize}
+
+% ---------------------------------------------------------------------------
+% 3. Definir 5 reglas de negocio
+% ---------------------------------------------------------------------------
+\subsubsection{Reglas de Negocio}
+
+\begin{enumerate}
+    \item \textbf{Regla de Unicidad de Préstamo por Usuario}
+    \begin{itemize}
+        \item \textbf{Regla:} Un usuario está autorizado a poseer únicamente un equipo bajo su responsabilidad de forma simultánea. No se permitirá la apertura de un nuevo préstamo si el usuario tiene uno previo sin devolver.
+        \item \textbf{Justificación de Negocio:} Esta medida protege el patrimonio tecnológico de la universidad. Al ser equipos de alto costo (laptops, proyectores), se mitiga el riesgo de pérdida masiva y se garantiza que más estudiantes tengan acceso a los recursos disponibles, evitando el acaparamiento.
+        \item \textbf{Impacto en BD:}
+        \begin{itemize}
+            \item Estado del Préstamo: Un préstamo se considera "Activo" o "Pendiente" mientras el campo FEC\_REAL sea NULL (vacío), lo que indica que el equipo aún no ha reingresado al laboratorio.
+            \item Validación de Inserción: Antes de registrar un nuevo préstamo en la tabla PRESTAMOS, el sistema debe realizar una consulta para verificar que el ID\_USUA\_PRE no aparezca en ningún registro donde la fecha de devolución real aún no haya sido marcada.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Condición de Usuario Habilitado}
+    \begin{itemize}
+        \item \textbf{Regla:} Solo los usuarios con el atributo habilitado = 'S' pueden solicitar préstamos.
+        \item \textbf{Justificación:} Si un estudiante tiene multas pendientes o dañó un equipo anteriormente, el sistema debe bloquearle el acceso automáticamente.
+        \item \textbf{Impacto en la BD:} El campo habilitado en la tabla USUARIOS debe cambiar a 'N' automáticamente si se genera una multa.
+    \end{itemize}
+
+    \item \textbf{Integridad de la Devolución (Doble Verificación)}
+    \begin{itemize}
+        \item \textbf{Regla:} Todo préstamo debe registrar obligatoriamente al laboratorista que entrega (ID\_LAB\_PRESTA) y, posteriormente, al que recibe (ID\_LAB\_DEV).
+        \item \textbf{Justificación:} Esto asegura la trazabilidad (responsabilidad) en caso de que el equipo regrese dañado.
+        \item \textbf{Impacto en la BD:} El campo ID\_LAB\_DEV debe ser obligatorio al momento de actualizar la FEC\_REAL.
+    \end{itemize}
+
+    \item \textbf{Generación Automática de Multas por Mora}
+    \begin{itemize}
+        \item \textbf{Regla:} Si la FEC\_REAL (fecha de entrega real) es mayor a la FEC\_DEV (fecha máxima pactada), se debe generar automáticamente un registro en la tabla MULTAS.
+        \item \textbf{Justificación:} Garantiza que los equipos roten y estén disponibles para otros usuarios en los tiempos previstos.
+        \item \textbf{Impacto en la BD:} Se requiere un cálculo de ($FEC\_REAL - FEC\_DEV$) para determinar el VAL\_PAGAR.
+    \end{itemize}
+
+    \item \textbf{Vigencia por Periodo Académico}
+    \begin{itemize}
+        \item \textbf{Regla:} No se pueden realizar préstamos cuyas fechas estén fuera del rango de FEC\_INI\_PER y FEC\_FIN\_PER del periodo activo.
+        \item \textbf{Justificación:} Evita que los equipos se queden en manos de los usuarios durante las vacaciones o periodos donde no hay supervisión de laboratorio.
+        \item \textbf{Impacto en la BD:} Validación de fechas cruzando PRESTAMOS con PERIODOS.
+    \end{itemize}
+
+    \item \textbf{Exclusividad de Disponibilidad del Equipo}
+    \begin{itemize}
+        \item \textbf{Regla:} Un equipo solo puede ser objeto de un nuevo préstamo si su atributo DIS\_EQUI tiene el valor 'D' (Disponible). Al momento de registrar el préstamo, este valor debe cambiar automáticamente a 'P' (Prestado).
+        \item \textbf{Justificación:} Evita la duplicidad de préstamos sobre un mismo activo físico y garantiza que el inventario mostrado al laboratorista sea real.
+        \item \textbf{Impacto en la BD:}
+        \begin{itemize}
+            \item Antes del Préstamo: Una consulta SELECT debe filtrar solo equipos con DIS\_EQUI = 'D'.
+            \item Durante el Préstamo: Se ejecuta un UPDATE en la tabla EQUIPOS para cambiar el estado a 'P'.
+            \item En la Devolución: Cuando se registra la FEC\_REAL en la tabla PRESTAMOS, el estado en EQUIPOS debe volver a 'D'.
+        \end{itemize}
+    \end{itemize}
+
+    \item \textbf{Regla de Integridad del Estado Físico (Entregas vs. Devoluciones)}
+    \begin{itemize}
+        \item \textbf{Enunciado:} El ESTADO\_DEV (estado de devolución) no puede ser superior en calidad al ESTADO\_PRE (estado de préstamo). Si un equipo sale como "ANTIGUO", no puede regresar como "NUEVO".
+        \item \textbf{Justificación:} Detecta errores de digitación o posibles cambios de piezas/equipos por parte del usuario. Si hay una discrepancia negativa (sale "NUEVO" y regresa "DAÑADO"), el sistema debe obligar a registrar una OBSERVACIÓN.
+        \item \textbf{Impacto en la BD:} El sistema debe comparar el texto o nivel de calidad de ambos atributos antes de cerrar el préstamo.
+    \end{itemize}
+
+    \item \textbf{Regla de Consistencia de Categoría}
+    \begin{itemize}
+        \item \textbf{Enunciado:} Todo equipo registrado en la tabla EQUIPOS debe tener obligatoriamente un ID\_CAT\_PER válido que exista en la tabla CATEGORIAS.
+        \item \textbf{Justificación:} Evita tener equipos "huérfanos" en el sistema. Si no sabemos si es una Laptop o un Proyector, no podemos aplicar reglas de tiempo (por ejemplo, las laptops se prestan por 2 días, pero los proyectores quizás solo por 3 horas).
+        \item \textbf{Impacto en la BD:} Aplicación de Integridad Referencial (Foreign Key). No se puede borrar una categoría si todavía tiene equipos asignados a ella.
+    \end{itemize}
+
+    \item \textbf{Regla de Liquidación de Multas para Rehabilitación}
+    \begin{itemize}
+        \item \textbf{Enunciado:} El atributo habilitado del usuario solo puede volver a 'S' (Sí) cuando todos los registros relacionados en la tabla MULTAS tengan el EST\_MUL como "PAGADO".
+        \item \textbf{Justificación:} Asegura que el proceso de cobro se complete. El laboratorista no debe habilitar a mano a un amigo si este aún debe dinero a la universidad.
+        \item \textbf{Impacto en la BD:} Al actualizar una multa a "PAGADO", el sistema debe hacer un COUNT de las multas pendientes del usuario; si el resultado es 0, entonces se ejecuta el UPDATE a habilitado = 'S'.
+    \end{itemize}
+\end{enumerate}
 %Especifique las TAC's utilizadas en la Tarea. 
 \subsection{Habilidades blandas empleadas en la tarea}
 \begin{itemize}
