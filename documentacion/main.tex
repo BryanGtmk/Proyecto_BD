@@ -1,311 +1,233 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 
-% Language setting
-% Replace `english' with e.g. `spanish' to change the document language
+% Codificación e idioma
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
 
-\usepackage[letterpaper,top=2cm,bottom=5cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+% Tamaño de página y márgenes
+\usepackage[letterpaper,top=2cm,bottom=3cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
-% Useful packages
+% Paquetes útiles
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\usepackage{amssymb} 
 \usepackage{fancyhdr}
-\usepackage{lipsum} % Para generar texto de ejemplo
-\usepackage{multicol}
-\pagestyle{fancy} 
 \usepackage{url}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{setspace}
 
-  
+\graphicspath{{img/}}
 
-\fancyhf{} % Limpiar encabezado y pie de página por defecto
-\setlength{\headheight}{70pt} % Ajuste del tamaño del encabezado (puedes aumentar este valor si es necesario)
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{1.25em}
+\setstretch{1.1}
 
-% Definición del encabezado
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{70pt}
+\fancyfoot[C]{\thepage}
 
 \fancyhead[C]{%
     \begin{minipage}[c]{2.0cm}
         \centering
-        \includegraphics[width=2.0cm]{img/uta.png}
+        \includegraphics[width=2.0cm]{uta.png}
     \end{minipage}%
     \hfill
-    \begin{minipage}[c]{8cm} 
+    \begin{minipage}[c]{8cm}
         \centering
-        \small {\textbf{UNIVERSIDAD TÉCNICA DE AMBATO}} \\[0.1cm]
-        \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL} \\[0.1cm]
-        \scriptsize \textbf{CARRERA SOFTWARE - Base de Datos} \\[0.1cm]
-        \scriptsize \textbf{CICLO ACADÉMICO: AGOSTO 2025 - ENERO 2026}
+        \small \textbf{UNIVERSIDAD TÉCNICA DE AMBATO}\\[0.1cm]
+        \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS, ELECTRÓNICA E INDUSTRIAL}\\[0.1cm]
+        \scriptsize \textbf{CARRERA DE SOFTWARE -- Base de Datos}\\[0.1cm]
+        \scriptsize \textbf{CICLO ACADÉMICO: AGOSTO 2025 -- ENERO 2026}
     \end{minipage}%
     \hfill
     \begin{minipage}[c]{2.0cm}
         \centering
-        \includegraphics[width=2.0cm]{img/fisei.png}
+        \includegraphics[width=2.0cm]{fisei.png}
     \end{minipage}%
 }
 
 \begin{document}
+
 \begin{center}
-    {\large \textbf{INFORME DE TAREA}} \\    
+    {\large \textbf{INFORME DE TAREA}}
 \end{center}
 
 \section{Portada}
 \begin{flushleft}
-\begin{tabular}{ l l }
-    \textbf{Tema:} & Proyecto de base de datos \\
-    \textbf{Unidad de Organización Curricular:} & Profesional \\
-    \textbf{Nivel y Paralelo:} & 4to Semestre "B"\\
-    \textbf{Alumnos participantes:} & Molina Karen \\
-    & Guatemal Bryan \\
-    &  Gisselle Espín\\
-    & Benjarano Carlos \\
-    \textbf{Asignatura:} & Base de Datos\\
-    \textbf{Docente:} & Ing.Jose Ruben Caiza Caizabuano Mg. \\
+\begin{tabular}{>{\bfseries}p{6.2cm} p{8.2cm}}
+Tema: & APE1. Esquema Conceptual y Esquema Lógico.\\
+Unidad de Organización Curricular: & Profesional.\\
+Nivel y Paralelo: & 4to Semestre ``B''.\\
+Alumnos participantes: & Molina Karen \\
+& Guatemal Bryan \\
+& Gisselle Espín \\
+& Bejarano Carlos \\
+Asignatura: & Base de Datos.\\
+Docente: & Ing. Jose Ruben Caiza Caizabuano, Mg.\\
 \end{tabular}
 \end{flushleft}
 
-
 \section{Informe de la Tarea}
+
 \subsection{Objetivos}
 
 \subsubsection{General}
-Desarrollar un modelo de base de datos eficiente para el control y seguimiento del préstamo de equipos tecnológicos, permitiendo la organización centralizada de la información y el cumplimiento de las normativas de uso institucional.
+Diseñar el esquema conceptual, el esquema lógico relacional y el diagrama en notación de Codd para el caso real del sistema de gestión de préstamos, reservas y mantenimiento de equipos tecnológicos de la Universidad Técnica de Ambato.
 
 \subsubsection{Específicos}
-\begin{itemize}
-    \item Identificar las entidades y atributos fundamentales del dominio para establecer una estructura de datos sólida que soporte al menos 8 entidades principales.
-    \item Definir y normalizar las reglas de negocio para garantizar la integridad y el flujo correcto de los procesos de préstamo y devolución de equipos.
-    \item Establecer el alcance técnico y funcional del proyecto, delimitando las responsabilidades del sistema y los requerimientos iniciales para el entregable de la Fase 1.
+\begin{itemize}[leftmargin=1.2cm]
+    \item Identificar las entidades, atributos, relaciones, restricciones y reglas de negocio presentes en el caso de estudio.
+    \item Elaborar el esquema conceptual mediante un modelo entidad--relación que represente de forma clara la estructura del problema.
+    \item Transformar el esquema conceptual en un esquema lógico relacional y en una representación en notación de Codd, respetando claves primarias, claves foráneas y restricciones de integridad.
 \end{itemize}
-
 
 \subsection{Instrucciones}
-
-De acuerdo con la planificación de la asignatura para la Semana 1-2, el desarrollo de la presente práctica se rige bajo las siguientes directrices:
-
-\begin{itemize}
-    \item \textbf{Análisis de Conceptos:} Identificar y diferenciar ejemplos prácticos de datos frente a información dentro del contexto de la Universidad Técnica de Ambato (UTA).
-    \item \textbf{Modelado Inicial:} Listar y estructurar un mínimo de 8 entidades con sus respectivos atributos basados en el caso de estudio "Préstamos de equipos".
-    \item \textbf{Reglas de Negocio:} Definir al menos 5 reglas de negocio que condicionen el funcionamiento del sistema (estados, plazos y restricciones).
-    \item \textbf{Documentación:} Elaborar el acta de grupo que integre el alcance técnico y las reglas iniciales como primer entregable del proyecto.
-\end{itemize}
+La tarea consistió en analizar el problema propuesto por el docente sobre la administración de equipos tecnológicos en los laboratorios de la carrera de Software de la UTA. A partir del enunciado se debían identificar los elementos de información relevantes, las reglas de negocio y las dependencias entre los datos. Posteriormente, se solicitó construir tres representaciones del diseño de base de datos: el esquema conceptual, el esquema lógico relacional y el diagrama en notación de Codd.
 
 \subsection{Listado de equipos, materiales y recursos}
+
 \textbf{Listado de equipos y materiales generales empleados en la tarea:}
-\begin{itemize}
-    \item Computador portátil o de escritorio con acceso a internet.
-    \item Herramientas de modelado de datos.
-    \item Editor de texto especializado (Overleaf / LaTeX).
-    \item Repositorio de código (GitHub / Git) para control de versiones del proyecto.
+\begin{itemize}[leftmargin=1.2cm]
+    \item Computador portátil.
+    \item Visual Studio Code para edición del archivo en \LaTeX.
+    \item Draw.io / Mermaid / PlantUML para apoyo en la construcción de diagramas.
+    \item Compilador \LaTeX\ para la generación del informe en PDF.
+    \item Guía de la tarea proporcionada por el docente.
+    \item Bibliografía de modelado de bases de datos y diseño relacional.
 \end{itemize}
 
 \textbf{TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la tarea:}
-\begin{itemize}
-    \item[$\boxtimes$] Plataformas educativas
+\begin{itemize}[leftmargin=1.2cm]
+    \item[$\blacksquare$] Plataformas educativas
     \item[$\square$] Simuladores y laboratorios virtuales
-    \item[$\boxtimes$] Aplicaciones educativas
-    \item[$\boxtimes$] Recursos audiovisuales
+    \item[$\blacksquare$] Aplicaciones educativas
+    \item[$\square$] Recursos audiovisuales
     \item[$\square$] Gamificación
-    \item[$\boxtimes$] Inteligencia Artificial
-    \item Otros (Especifique)
+    \item[$\blacksquare$] Inteligencia Artificial
+    \item Otros (Especifique): Herramientas de diagramación y edición académica.
 \end{itemize}
 
 \subsection{Desarrollo de la Tarea (Actividades a Desarrollar)}
 
-El desarrollo de la presente práctica se desglosa en las siguientes actividades secuenciales orientadas al diseño del sistema de préstamo de equipos:
-\begin{enumerate}
-    \item \textbf{Análisis de requerimientos y contexto:} Identificación de 10 ejemplos prácticos de datos e información aplicados al entorno de la Universidad Técnica de Ambato para comprender el flujo de entrada y salida del sistema.
-    \item \textbf{Modelado conceptual de datos:} Definición de un esquema relacional que incluye un mínimo de 8 entidades fundamentales, estableciendo sus respectivos atributos y relaciones de cardinalidad.
-    \item \textbf{Establecimiento de la lógica de negocio:} Formulación de 5 reglas de negocio iniciales que regirán el comportamiento del sistema ante eventos de préstamo, devolución y gestión de usuarios.
-    \item \textbf{Documentación técnica del proyecto:} Elaboración del acta constitutiva del grupo y definición del alcance del proyecto, delimitando las fronteras del software y sus entregables inmediatos.
-\end{enumerate}
+\subsubsection{Análisis del caso}
+El caso plantea la necesidad de modelar una base de datos para gestionar equipos tecnológicos, laboratorios, préstamos, reservas, mantenimientos y actas de novedad. A partir del enunciado se observó que el sistema debía cubrir tanto la administración de los recursos físicos como el seguimiento de los procesos asociados a su uso.
+
+En la fase de análisis se identificaron tres grupos principales de información:
+\begin{itemize}[leftmargin=1.2cm]
+    \item \textbf{Actores del sistema:} persona, estudiante, docente y técnico.
+    \item \textbf{Recursos institucionales:} equipo, accesorio, categoría, laboratorio y proveedor.
+    \item \textbf{Procesos operativos:} reserva, préstamo, mantenimiento y acta de novedad.
+\end{itemize}
+
+Asimismo, se determinaron reglas de negocio importantes, como la especialización de \textit{Persona} en \textit{Estudiante} y \textit{Docente}, la relación de muchos a muchos entre préstamos y equipos, entre reservas y equipos, y entre mantenimientos y técnicos. Estas estructuras son coherentes con los principios del modelo entidad--relación y con la transformación posterior al modelo relacional \cite{chen1976,elmasri2016}.
+
+\subsubsection{Identificación de entidades y relaciones}
+Del análisis del enunciado se obtuvieron las siguientes entidades principales: \textit{Persona, Estudiante, Docente, Carrera, Departamento, Laboratorio, Categoría, Proveedor, Equipo, Accesorio, Reserva, Préstamo, Mantenimiento, Técnico} y \textit{Acta\_Novedad}. Además, se definieron entidades asociativas o tablas intermedias para resolver relaciones de muchos a muchos: \textit{Detalle\_Reserva, Detalle\_Prestamo} y \textit{Detalle\_Mantenimiento}.
+
+La Tabla \ref{tab:entidades} resume las entidades más relevantes identificadas en el diseño.
+
+\begin{table}[H]
+\centering
+\caption{Entidades principales identificadas en el caso de estudio}
+\label{tab:entidades}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{4cm} X}
+\toprule
+\textbf{Entidad} & \textbf{Descripción} \\
+\midrule
+Persona & Almacena la información general de usuarios que interactúan con el sistema, como estudiantes y docentes. \\
+Equipo & Representa cada recurso tecnológico disponible en los laboratorios. \\
+Laboratorio & Registra la ubicación física y datos administrativos del laboratorio donde se encuentra un equipo. \\
+Reserva & Controla las solicitudes previas de uso de uno o varios equipos. \\
+Prestamo & Registra la entrega formal de equipos a una persona solicitante. \\
+Mantenimiento & Guarda la información de daños, diagnósticos y acciones técnicas realizadas a un equipo. \\
+Acta\_Novedad & Documenta incidentes de daño, pérdida u otra novedad generada tras un préstamo. \\
+Tecnico & Almacena la información del personal técnico que interviene en los mantenimientos. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection{Diseño del esquema conceptual}
+El esquema conceptual representa la estructura general del problema sin enfocarse todavía en los detalles de implementación. En esta etapa se definieron entidades, atributos, relaciones y cardinalidades. El objetivo fue modelar el dominio del problema de forma comprensible y consistente.
+
+En el esquema conceptual se estableció que una persona puede realizar muchas reservas y muchos préstamos, que un equipo pertenece a una sola categoría y a un solo laboratorio, y que un mantenimiento corresponde a un único equipo, pero puede ser atendido por varios técnicos. También se modeló la especialización de la entidad \textit{Persona} hacia \textit{Estudiante} y \textit{Docente}, lo que evita mezclar en una sola estructura los datos propios de carrera y departamento. Este enfoque es recomendable para mantener la semántica del problema y evitar ambigüedades \cite{chen1976}.
+
+\subsubsection{Transformación al esquema lógico relacional}
+Una vez definido el esquema conceptual, se realizó la transformación al esquema lógico relacional. En esta fase se materializaron las entidades como tablas, se definieron claves primarias y claves foráneas, y se resolvieron las relaciones de muchos a muchos mediante tablas intermedias.
+
+El proceso de transformación consideró criterios de integridad de entidad, integridad referencial y organización de atributos, de acuerdo con la teoría de diseño lógico relacional \cite{elmasri2016,silberschatz2019}. Como resultado, se obtuvo un modelo compuesto por tablas bien definidas y vinculadas entre sí mediante referencias explícitas.
+
+\subsubsection{Representación en notación de Codd}
+Finalmente, el diseño se representó también mediante una vista en notación de Codd. Esta representación resume las entidades y sus atributos desde una perspectiva más formal, permitiendo verificar la estructura del modelo y la coherencia entre los elementos identificados durante el análisis. Su uso facilita la revisión académica del diseño y ayuda a consolidar la comprensión de las dependencias presentes en la base de datos \cite{silberschatz2019}.
 
 \subsection{Resultados obtenidos}
-De acuerdo con el tipo de trabajo, se plasmarán los resultados alcanzados en la guía tarea una vez ejecutadas las actividades. Se pueden emplear figuras y tablas las cuales deben ser numeradas.
+Como resultado del desarrollo de la tarea se obtuvieron tres representaciones complementarias del diseño de la base de datos: el esquema conceptual, el esquema lógico relacional y el diagrama en notación de Codd. Estas tres vistas permiten comprender el sistema desde distintos niveles de abstracción.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{esquema_conceptual.png}
+    \caption{Esquema conceptual del sistema de gestión de préstamos, reservas y mantenimiento de equipos tecnológicos de la UTA.}
+    \label{fig:conceptual}
+\end{figure}
 
-\subsubsection{Identificación de Datos e Información en el Contexto UTA}
+La Figura \ref{fig:conceptual} presenta el esquema conceptual construido a partir del análisis del caso. En esta representación se observan las entidades principales, sus atributos y las relaciones con sus respectivas cardinalidades. Este diagrama permitió validar que las reglas de negocio estuvieran adecuadamente reflejadas antes de pasar al nivel lógico.
 
-A continuación, se presentan 10 ejemplos que ilustran la diferencia entre un \textbf{dato} (hecho en bruto) y la \textbf{información} (dato procesado con contexto y utilidad), aplicados al sistema de préstamos de equipos de la carrera de Ingeniería en Software.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{esquema_logico_relacional.png}
+    \caption{Esquema lógico relacional del sistema de gestión de préstamos, reservas y mantenimiento de equipos tecnológicos de la UTA.}
+    \label{fig:logico}
+\end{figure}
 
-\vspace{0.5cm}
+En la Figura \ref{fig:logico} se muestra el esquema lógico relacional. En este nivel se definieron las tablas del sistema, las claves primarias y foráneas, así como las tablas puente necesarias para representar adecuadamente las relaciones de muchos a muchos.
 
-\begin{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{DER_Codd.png}
+    \caption{Diagrama en notación de Codd del sistema de gestión de préstamos, reservas y mantenimiento de equipos tecnológicos de la UTA.}
+    \label{fig:codd}
+\end{figure}
 
-\item \textbf{Control del proyector Epson} \\
-\textit{Dato}: ``Control: Epson CB-695Wi'' \\
-\textit{Información}: El control del proyector Epson del aula 304 se ha prestado 8 veces esta semana, pero en 3 ocasiones lo devolvieron sin pilas, lo que indica la necesidad de mantener un stock de repuestos en el laboratorio.
+La Figura \ref{fig:codd} presenta la representación del diseño en notación de Codd. Esta vista permitió reforzar la interpretación formal del modelo construido, mostrando de manera organizada las entidades, sus atributos y la estructura general del sistema. En conjunto, los resultados alcanzados evidencian una propuesta consistente, trazable y coherente con el problema planteado.
 
-\item \textbf{Control del aire acondicionado} \\
-\textit{Dato}: ``Aire acondicionado: LG - Laboratorio 2'' \\
-\textit{Información}: El control del aire acondicionado del Laboratorio 2 solo es solicitado por profesores en horarios de 3 a 5 PM, coincidiendo con las prácticas intensivas de programación, por lo que debe estar siempre disponible en esa franja.
-
-\item \textbf{Computadora de laboratorio} \\
-\textit{Dato}: ``PC: HP ProDesk 400 G5'' \\
-\textit{Información}: La PC \#12 del laboratorio de cómputo ha sido la más solicitada (50 préstamos en el semestre) por ser la única con Android Studio instalado correctamente, justificando la clonación de su software a otros equipos.
-
-\item \textbf{Horario de préstamos} \\
-\textit{Dato}: ``Horario: 7:00 AM'' \\
-\textit{Información}: Las 7:00 AM concentran la mayor demanda de préstamo de computadoras, justo antes de la clase de Estructura de Datos, lo que sugiere abrir el laboratorio 15 minutos antes para evitar demoras.
-
-\item \textbf{Usuario frecuente} \\
-\textit{Dato}: ``Usuario: Ana López - 5to semestre'' \\
-\textit{Información}: La estudiante Ana López ha solicitado el control del proyector en 4 materias diferentes durante el mes (Inglés, Redacción, Web y Proyectos), evidenciando la necesidad de asignarle un equipo de uso temporal.
-
-\item \textbf{Periféricos dañados} \\
-\textit{Dato}: ``Estado: Mouse no funciona'' \\
-\textit{Información}: El 40\% de las computadoras del Laboratorio 3 presentan fallas en el mouse óptico, afectando directamente las prácticas de Interacción Humano-Computador, por lo que se requiere un reemplazo inmediato.
-
-\item \textbf{Software más utilizado} \\
-\textit{Dato}: ``Software: Visual Studio 2022'' \\
-\textit{Información}: Visual Studio 2022 es el IDE con mayor tiempo de uso en los préstamos, principalmente para proyectos de Programación Avanzada, lo que exige priorizar mantenimiento en las PCs que lo ejecutan.
-
-\item \textbf{Accesorios complementarios} \\
-\textit{Dato}: ``Cable: HDMI - 2 metros'' \\
-\textit{Información}: Los cables HDMI se prestan generalmente junto con los controles de proyector para presentaciones de Proyecto Integrador, sugiriendo la creación de ``kits de exposición'' completos.
-
-\item \textbf{Incumplimiento recurrente} \\
-\textit{Dato}: ``Devolución: Tardía - 20 min'' \\
-\textit{Información}: El grupo de Sexto semestre de la materia Integrador acumula 4 devoluciones tardías en el mes, lo que amerita restringir sus préstamos múltiples o aplicar multas más estrictas.
-
-\item \textbf{Fallas técnicas recurrentes} \\
-\textit{Dato}: ``PC \#08 - Sin Internet'' \\
-\textit{Información}: La PC \#08 ha sido reportada 5 veces por conexión lenta a internet, afectando las prácticas de Cloud Computing, por lo que se debe revisar su tarjeta de red o el puerto del switch correspondiente.
-
-\end{enumerate}
-
-\vspace{0.5cm}
-
-% ---------------------------------------------------------------------------
-% 2. Listar entidades y atributos del caso (mín. 8 entidades)
-% ---------------------------------------------------------------------------
-\subsubsection{Entidades y Atributos del Caso}
-
-A continuación, se listan las entidades principales del sistema de préstamos de equipos, junto con sus atributos:
-
-\begin{itemize}
-    \item \textbf{LABORATORISTAS} = (id\_lab, nom\_lab, ape\_lab, sue\_lab)
-    \item \textbf{USUARIOS} = (id\_cli, nom\_cli, ape\_cli, tel\_cli, dir\_cli, cor\_cli, ID\_CAR\_PER, habilitado)
-    \item \textbf{CARRERAS} = (ID\_CAR, NOM\_CAR)
-    \item \textbf{PERIODOS} = (ID\_PER\_ACA, FEC\_INI\_PER, FEC\_FIN\_PER)
-    \item \textbf{CATEGORIAS} = (ID\_CAT, NOM\_CAT)
-    \item \textbf{EQUIPOS} = (ID\_EQUI, MAR\_EQUI, SISTEMA\_OP\_EQUI, DIS\_EQUI, EST\_EQUI, MOD\_EQUI, ID\_CAT\_PER)
-    \item \textbf{PRESTAMOS} = (NUM\_PRE, FEC\_PRE, ID\_LAB\_PRESTA, ID\_USUA\_PRE, ID\_EQUI\_PRE, ESTADO\_PRE, ID\_LAB\_DEV, FEC\_DEV, FEC\_REAL, ESTADO\_DEV, ID\_PER\_PER)
-    \item \textbf{MULTAS} = (NUM\_MUL, FEC\_MUL, PRES\_PER\_MUL, VAL\_PAGAR, EST\_MUL)
-    \item \textbf{OBSERVACIONES} = (ID\_OBS, DES\_OBS, ID\_PRES\_PER)
-\end{itemize}
-
-% ---------------------------------------------------------------------------
-% 3. Definir 5 reglas de negocio
-% ---------------------------------------------------------------------------
-\subsubsection{Reglas de Negocio}
-
-\begin{enumerate}
-    \item \textbf{Regla de Unicidad de Préstamo por Usuario}
-    \begin{itemize}
-        \item \textbf{Regla:} Un usuario está autorizado a poseer únicamente un equipo bajo su responsabilidad de forma simultánea. No se permitirá la apertura de un nuevo préstamo si el usuario tiene uno previo sin devolver.
-        \item \textbf{Justificación de Negocio:} Esta medida protege el patrimonio tecnológico de la universidad. Al ser equipos de alto costo (laptops, proyectores), se mitiga el riesgo de pérdida masiva y se garantiza que más estudiantes tengan acceso a los recursos disponibles, evitando el acaparamiento.
-        \item \textbf{Impacto en BD:}
-        \begin{itemize}
-            \item Estado del Préstamo: Un préstamo se considera "Activo" o "Pendiente" mientras el campo FEC\_REAL sea NULL (vacío), lo que indica que el equipo aún no ha reingresado al laboratorio.
-            \item Validación de Inserción: Antes de registrar un nuevo préstamo en la tabla PRESTAMOS, el sistema debe realizar una consulta para verificar que el ID\_USUA\_PRE no aparezca en ningún registro donde la fecha de devolución real aún no haya sido marcada.
-        \end{itemize}
-    \end{itemize}
-
-    \item \textbf{Condición de Usuario Habilitado}
-    \begin{itemize}
-        \item \textbf{Regla:} Solo los usuarios con el atributo habilitado = 'S' pueden solicitar préstamos.
-        \item \textbf{Justificación:} Si un estudiante tiene multas pendientes o dañó un equipo anteriormente, el sistema debe bloquearle el acceso automáticamente.
-        \item \textbf{Impacto en la BD:} El campo habilitado en la tabla USUARIOS debe cambiar a 'N' automáticamente si se genera una multa.
-    \end{itemize}
-
-    \item \textbf{Integridad de la Devolución (Doble Verificación)}
-    \begin{itemize}
-        \item \textbf{Regla:} Todo préstamo debe registrar obligatoriamente al laboratorista que entrega (ID\_LAB\_PRESTA) y, posteriormente, al que recibe (ID\_LAB\_DEV).
-        \item \textbf{Justificación:} Esto asegura la trazabilidad (responsabilidad) en caso de que el equipo regrese dañado.
-        \item \textbf{Impacto en la BD:} El campo ID\_LAB\_DEV debe ser obligatorio al momento de actualizar la FEC\_REAL.
-    \end{itemize}
-
-    \item \textbf{Generación Automática de Multas por Mora}
-    \begin{itemize}
-        \item \textbf{Regla:} Si la FEC\_REAL (fecha de entrega real) es mayor a la FEC\_DEV (fecha máxima pactada), se debe generar automáticamente un registro en la tabla MULTAS.
-        \item \textbf{Justificación:} Garantiza que los equipos roten y estén disponibles para otros usuarios en los tiempos previstos.
-        \item \textbf{Impacto en la BD:} Se requiere un cálculo de ($FEC\_REAL - FEC\_DEV$) para determinar el VAL\_PAGAR.
-    \end{itemize}
-
-    \item \textbf{Vigencia por Periodo Académico}
-    \begin{itemize}
-        \item \textbf{Regla:} No se pueden realizar préstamos cuyas fechas estén fuera del rango de FEC\_INI\_PER y FEC\_FIN\_PER del periodo activo.
-        \item \textbf{Justificación:} Evita que los equipos se queden en manos de los usuarios durante las vacaciones o periodos donde no hay supervisión de laboratorio.
-        \item \textbf{Impacto en la BD:} Validación de fechas cruzando PRESTAMOS con PERIODOS.
-    \end{itemize}
-
-    \item \textbf{Exclusividad de Disponibilidad del Equipo}
-    \begin{itemize}
-        \item \textbf{Regla:} Un equipo solo puede ser objeto de un nuevo préstamo si su atributo DIS\_EQUI tiene el valor 'D' (Disponible). Al momento de registrar el préstamo, este valor debe cambiar automáticamente a 'P' (Prestado).
-        \item \textbf{Justificación:} Evita la duplicidad de préstamos sobre un mismo activo físico y garantiza que el inventario mostrado al laboratorista sea real.
-        \item \textbf{Impacto en la BD:}
-        \begin{itemize}
-            \item Antes del Préstamo: Una consulta SELECT debe filtrar solo equipos con DIS\_EQUI = 'D'.
-            \item Durante el Préstamo: Se ejecuta un UPDATE en la tabla EQUIPOS para cambiar el estado a 'P'.
-            \item En la Devolución: Cuando se registra la FEC\_REAL en la tabla PRESTAMOS, el estado en EQUIPOS debe volver a 'D'.
-        \end{itemize}
-    \end{itemize}
-
-    \item \textbf{Regla de Integridad del Estado Físico (Entregas vs. Devoluciones)}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El ESTADO\_DEV (estado de devolución) no puede ser superior en calidad al ESTADO\_PRE (estado de préstamo). Si un equipo sale como "ANTIGUO", no puede regresar como "NUEVO".
-        \item \textbf{Justificación:} Detecta errores de digitación o posibles cambios de piezas/equipos por parte del usuario. Si hay una discrepancia negativa (sale "NUEVO" y regresa "DAÑADO"), el sistema debe obligar a registrar una OBSERVACIÓN.
-        \item \textbf{Impacto en la BD:} El sistema debe comparar el texto o nivel de calidad de ambos atributos antes de cerrar el préstamo.
-    \end{itemize}
-
-    \item \textbf{Regla de Consistencia de Categoría}
-    \begin{itemize}
-        \item \textbf{Enunciado:} Todo equipo registrado en la tabla EQUIPOS debe tener obligatoriamente un ID\_CAT\_PER válido que exista en la tabla CATEGORIAS.
-        \item \textbf{Justificación:} Evita tener equipos "huérfanos" en el sistema. Si no sabemos si es una Laptop o un Proyector, no podemos aplicar reglas de tiempo (por ejemplo, las laptops se prestan por 2 días, pero los proyectores quizás solo por 3 horas).
-        \item \textbf{Impacto en la BD:} Aplicación de Integridad Referencial (Foreign Key). No se puede borrar una categoría si todavía tiene equipos asignados a ella.
-    \end{itemize}
-
-    \item \textbf{Regla de Liquidación de Multas para Rehabilitación}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El atributo habilitado del usuario solo puede volver a 'S' (Sí) cuando todos los registros relacionados en la tabla MULTAS tengan el EST\_MUL como "PAGADO".
-        \item \textbf{Justificación:} Asegura que el proceso de cobro se complete. El laboratorista no debe habilitar a mano a un amigo si este aún debe dinero a la universidad.
-        \item \textbf{Impacto en la BD:} Al actualizar una multa a "PAGADO", el sistema debe hacer un COUNT de las multas pendientes del usuario; si el resultado es 0, entonces se ejecuta el UPDATE a habilitado = 'S'.
-    \end{itemize}
-\end{enumerate}
-%Especifique las TAC's utilizadas en la Tarea. 
 \subsection{Habilidades blandas empleadas en la tarea}
-\begin{itemize}
-    \item[$\square$] Liderazgo
-    \item[$\square$] Trabajo en equipo
-    \item[$\square$] Comunicación asertiva
-    \item[$\square$] La empatía
-    \item[$\square$] Pensamiento crítico
-    \item[$\square$] Flexibilidad
-    \item[$\square$] La resolución de conflictos
-    \item[$\square$] Adaptabilidad
-    \item[$\square$] Responsabilidad
+\begin{itemize}[leftmargin=1.2cm]
+    \item[$\blacksquare$] Liderazgo
+    \item[$\blacksquare$] Trabajo en equipo
+    \item[$\blacksquare$] Comunicación asertiva
+    \item[$\blacksquare$] La empatía
+    \item[$\blacksquare$] Pensamiento crítico
+    \item[$\blacksquare$] Flexibilidad
+    \item[$\blacksquare$] La resolución de conflictos
+    \item[$\blacksquare$] Adaptabilidad
+    \item[$\blacksquare$] Responsabilidad
 \end{itemize}
-
 
 \subsection{Conclusiones}
-Se concluye que el diseño preliminar del sistema de gestión de préstamos, fundamentado en la correcta identificación de entidades y reglas de negocio, establece una base técnica sólida para el desarrollo de la base de datos. La aplicación de un enfoque estructurado permitió transformar los requerimientos institucionales en un modelo conceptual organizado, garantizando que la futura implementación responda eficazmente a las necesidades de control, integridad de la información y optimización de los procesos administrativos dentro del contexto universitario.
+\begin{itemize}[leftmargin=1.2cm]
+    \item El análisis del caso permitió identificar de manera ordenada las entidades, relaciones y restricciones necesarias para modelar el sistema de gestión de equipos tecnológicos de la UTA.
+    \item El esquema conceptual facilitó la comprensión del problema desde un nivel abstracto, mientras que el esquema lógico relacional permitió trasladar esa estructura a tablas consistentes y normalizadas.
+    \item La representación en notación de Codd complementó el trabajo al ofrecer una vista formal de las entidades y atributos del sistema, fortaleciendo la validación del diseño final de la base de datos.
+\end{itemize}
 
 \subsection{Recomendaciones}
-\begin{itemize}
-    \item Realizar un análisis exhaustivo de la cardinalidad entre las 8 entidades identificadas para asegurar que las relaciones en el modelo entidad-relación reflejen fielmente la lógica del negocio.
-    \item Documentar de manera detallada cada regla de negocio establecida, con el fin de facilitar la posterior creación de restricciones (constraints) y disparadores (triggers) a nivel de base de datos.
-    \item Validar el listado de atributos propuesto mediante un proceso de normalización hasta la tercera forma normal (3NF), evitando así la redundancia de datos y posibles anomalías en futuras inserciones o actualizaciones.
-    \item Mantener una comunicación constante entre los integrantes del grupo para asegurar que el alcance definido se cumpla estrictamente dentro de los plazos establecidos por el docente. \cite{greenwade93}
+\begin{itemize}[leftmargin=1.2cm]
+    \item Verificar siempre las reglas de negocio antes de transformar el modelo conceptual al modelo lógico, para evitar errores en las cardinalidades y en la asignación de claves foráneas.
+    \item Mantener nombres consistentes en entidades, atributos y relaciones, ya que esto mejora la comprensión del modelo y reduce ambigüedades durante la implementación.
+    \item En una fase posterior, complementar este diseño con procesos de normalización avanzada y con restricciones de validación a nivel del sistema gestor de bases de datos.
 \end{itemize}
-\subsection{Referencias}
-Insertar las referencias bibliográficas empleadas aplicando la norma IEEE.
 
-\vspace{-3em} %reduce el espacio causado por refname vacío
+\subsection{Referencias}
+\vspace{-2em}
 \renewcommand{\refname}{}
 \bibliographystyle{ieeetr}
 \bibliography{citas}
 
-\subsection{Anexos}
-\vfill
 \end{document}
