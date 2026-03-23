@@ -1,0 +1,269 @@
+\documentclass{article}
+
+% Configuración de idioma y codificación
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage[letterpaper,top=2cm,bottom=5cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Paquetes útiles
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{amssymb}
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+\usepackage{multicol}
+\usepackage{url}
+\usepackage{float}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{70pt}
+
+% Encabezado
+\fancyhead[C]{%
+    \begin{minipage}[c]{2.0cm}
+        \centering
+        \includegraphics[width=2.0cm]{img/uta.png}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{8cm}
+        \centering
+        \small {\textbf{UNIVERSIDAD TÉCNICA DE AMBATO}} \\[0.1cm]
+        \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL} \\[0.1cm]
+        \scriptsize \textbf{CARRERA SOFTWARE - Base de Datos} \\[0.1cm]
+        \scriptsize \textbf{CICLO ACADÉMICO: AGOSTO 2025 - ENERO 2026}
+    \end{minipage}%
+    \hfill
+    \begin{minipage}[c]{2.0cm}
+        \centering
+        \includegraphics[width=2.0cm]{img/fisei.png}
+    \end{minipage}%
+}
+
+\begin{document}
+
+\begin{center}
+    {\large \textbf{INFORME DE TAREA}} \\
+\end{center}
+
+\section{Portada}
+\begin{flushleft}
+\begin{tabular}{ l l }
+    \textbf{Tema:} & Prueba del Primer Parcial \\
+    \textbf{Unidad de Organización Curricular:} & Profesional \\
+    \textbf{Nivel y Paralelo:} & 4to Semestre ``B'' \\
+    \textbf{Alumnos participantes:} & Molina Karen \\
+    & Guatemal Bryan \\
+    & Gisselle Espín \\
+    & Benjarano Carlos \\
+    \textbf{Asignatura:} & Base de Datos \\
+    \textbf{Docente:} & Ing. Jose Ruben Caiza Caizabuano Mg. \\
+\end{tabular}
+\end{flushleft}
+
+\section{Informe de la Tarea}
+
+\subsection{Objetivos}
+
+\subsubsection{General}
+Desarrollar el esquema lógico de una base de datos para gestionar la información de cooperativas de transporte, socios, unidades, provincias, cantones, viajes, controles de calidad e incumplimientos, aplicando los principios del diseño de bases de datos.
+
+\subsubsection{Específicos}
+\begin{itemize}
+    \item Identificar las entidades, atributos y relaciones presentes en el caso planteado.
+    \item Establecer las cardinalidades entre las entidades del sistema.
+    \item Convertir el modelo conceptual en tablas y revisar las reglas de integridad correspondientes.
+\end{itemize}
+
+\subsection{Instrucciones}
+
+Se desea crear una base de datos para controlar los viajes de las cooperativas de transporte hacia las diferentes ciudades del país.
+
+De las cooperativas de transporte se conoce el código, nombre, dirección y teléfono. Una cooperativa tiene muchos socios, pero cada socio puede pertenecer únicamente a una cooperativa.
+
+Un socio tiene muchas unidades o buses, pero cada unidad pertenece solamente a un socio. De cada socio se conoce la cédula, nombre, apellido, dirección, teléfono y fecha de nacimiento. De cada unidad o bus se conoce el número de disco (ID), marca, año, placa y capacidad de pasajeros.
+
+Una provincia tiene muchos cantones, pero cada cantón pertenece solo a una provincia. De cada provincia se conoce el código, nombre y ubicación. De cada cantón se conoce el código, nombre y referencia geográfica.
+
+Muchos buses viajan a muchos cantones. De cada viaje se conoce el número de viaje, la fecha y hora de salida, la fecha y hora de llegada, el costo del asiento y la cantidad de pasajeros que viajan.
+
+A los buses se les realizan controles de calidad anuales. Un bus pasa varios controles y cada control se aplica a un solo bus. Del control se conoce un código, la fecha del control, el tipo de control, el identificador del funcionario responsable del control y el resultado del control, el cual puede ser aprobado o reprobado.
+
+Un control puede tener muchos incumplimientos. De cada incumplimiento se conoce el identificador, la descripción y el nivel de gravedad de la novedad.
+
+\textbf{Secuencia sugerida:}
+\begin{enumerate}
+    \item Lea el caso.
+    \item Identifique entidades.
+    \item Defina cardinalidades.
+    \item Convierta a tablas.
+    \item Revise integridad.
+\end{enumerate}
+
+Desarrolle hasta el esquema lógico y utilice herramientas acordes a la solución. Además, considérese la siguiente figura para la presentación:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.50\textwidth]{img/metodologia.png}
+    \caption{Metodología considerada para la presentación del desarrollo de la tarea.}
+    \label{fig:metodologia}
+\end{figure}
+
+\subsection{Listado de equipos, materiales y recursos}
+
+\textbf{Listado de equipos y materiales generales empleados en la tarea:}
+\begin{itemize}
+    \item Computadora o laptop.
+    \item Documento guía proporcionado por el docente.
+    \item Herramienta de modelado de bases de datos.
+    \item Editor de texto para la elaboración del informe.
+\end{itemize}
+
+\textbf{TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la tarea:}
+\begin{itemize}
+    \item[$\square$] Plataformas educativas
+    \item[$\square$] Simuladores y laboratorios virtuales
+    \item[$\boxtimes$] Aplicaciones educativas
+    \item[$\square$] Recursos audiovisuales
+    \item[$\square$] Gamificación
+    \item[$\boxtimes$] Inteligencia Artificial
+    \item Otros (Especifique): Herramienta de modelado de bases de datos
+\end{itemize}
+
+\subsection{Desarrollo de la Tarea (Actividades a Desarrollar)}
+
+\textbf{Herramienta utilizada:} draw.io.
+plantuml.
+
+\subsubsection{Identificación de entidades y atributos}
+
+A partir del análisis del caso se identificaron las siguientes entidades principales del sistema:
+
+\begin{itemize}
+    \item \textbf{Cooperativa:} cod\_coo, nombre, dirección, teléfono.
+    \item \textbf{Socio:} id\_soc, nombre, apellido, dirección, teléfono, fecha\_nacimiento, cod\_coo.
+    \item \textbf{Unidad (Bus):} id\_bus, marca, año, placa, cap\_pas, id\_soc.
+    \item \textbf{Provincia:} cod\_pro, nombre, ubicación.
+    \item \textbf{Cantón:} cod\_can, nombre, ref\_geo, cod\_pro.
+    \item \textbf{Viaje:} num\_via, fec\_hor\_sal, fec\_hor\_lleg, cost\_asi, cant\_pas, id\_bus, cod\_can.
+    \item \textbf{Control de calidad:} cod\_con, fec\_con, tip\_con, id\_fun, result\_control, id\_bus.
+    \item \textbf{Funcionario:} id\_fun, nom\_fun, ape\_fun.
+    \item \textbf{Incumplimiento:} id\_inc, des\_nov, nivel\_gravedad, cod\_con.
+\end{itemize}
+
+\subsubsection{Relaciones y cardinalidades}
+
+Las relaciones identificadas dentro del problema son las siguientes:
+
+\begin{itemize}
+    \item \textbf{Cooperativa -- Socio:} una cooperativa tiene muchos socios, pero cada socio pertenece a una sola cooperativa (1:N).
+    \item \textbf{Socio -- Unidad:} un socio posee muchas unidades, pero cada unidad pertenece a un solo socio (1:N).
+    \item \textbf{Provincia -- Cantón:} una provincia tiene muchos cantones, pero cada cantón pertenece a una sola provincia (1:N).
+    \item \textbf{Unidad -- Viaje:} un bus puede realizar muchos viajes, pero cada viaje corresponde a un solo bus (1:N).
+    \item \textbf{Cantón -- Viaje:} un cantón puede recibir muchos viajes, pero cada viaje tiene un solo destino (1:N).
+    \item \textbf{Unidad -- Control de calidad:} un bus pasa varios controles, pero cada control se aplica a un solo bus (1:N).
+    \item \textbf{Funcionario -- Control de calidad:} un funcionario puede realizar muchos controles, pero cada control es responsabilidad de un solo funcionario (1:N).
+    \item \textbf{Control de calidad -- Incumplimiento:} un control puede registrar muchos incumplimientos, pero cada incumplimiento pertenece a un solo control (1:N).
+\end{itemize}
+\subsubsection{Diagrama Entidad-Relación}
+
+Como representación conceptual del problema, se elaboró el siguiente diagrama Entidad-Relación, en el cual se observan las entidades principales del sistema, sus atributos y las relaciones existentes entre ellas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{img/ER.png}
+    \caption{Diagrama Entidad-Relación del sistema de control de viajes de cooperativas de transporte.}
+    \label{fig:diagrama_er}
+\end{figure}
+
+\subsubsection{Conversión al esquema lógico}
+
+Con base en las entidades y relaciones identificadas, se propone el siguiente esquema lógico:
+
+\begin{itemize}
+    \item \textbf{COOPERATIVAS}(\underline{cod\_coo}, nombre, dirección, teléfono)
+    \item \textbf{SOCIOS}(\underline{id\_soc}, nombre, apellido, dirección, teléfono, fecha\_nacimiento, cod\_coo)
+    \item \textbf{UNIDADES\_BUSES}(\underline{id\_bus}, marca, año, placa, cap\_pas, id\_soc)
+    \item \textbf{PROVINCIAS}(\underline{cod\_pro}, nombre, ubicación)
+    \item \textbf{CANTONES}(\underline{cod\_can}, nombre, ref\_geo, cod\_pro)
+    \item \textbf{VIAJES}(\underline{num\_via}, fec\_hor\_sal, fec\_hor\_lleg, cost\_asi, cant\_pas, id\_bus, cod\_can)
+    \item \textbf{FUNCIONARIOS}(\underline{id\_fun}, nom\_fun, ape\_fun)
+    \item \textbf{CONTROLES}(\underline{cod\_con}, fec\_con, tip\_con, result\_control, id\_bus, id\_fun)
+    \item \textbf{INCUMPLIMIENTOS}(\underline{id\_inc}, des\_nov, nivel\_gravedad, cod\_con)
+\end{itemize}
+
+\subsubsection{Reglas de integridad y negocio}
+
+Para asegurar la consistencia de la base de datos, se plantean las siguientes reglas:
+
+\begin{enumerate}
+    \item Un socio debe pertenecer obligatoriamente a una cooperativa.
+    \item Una unidad debe pertenecer obligatoriamente a un socio.
+    \item Un cantón debe pertenecer obligatoriamente a una provincia.
+    \item Cada viaje debe registrar fecha y hora de salida, fecha y hora de llegada, costo del asiento y cantidad de pasajeros.
+    \item La capacidad del bus debe ser mayor o igual a la cantidad de pasajeros transportados en el viaje.
+    \item Cada control debe estar asociado a un bus y a un funcionario responsable.
+    \item Cada incumplimiento debe estar asociado a un control de calidad.
+\end{enumerate}
+
+\subsubsection{Esquema lógico obtenido}
+
+Como evidencia del desarrollo realizado, se presenta a continuación la imagen del modelo relacional elaborado para la solución del problema:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{img/modeloRelacional.png}
+    \caption{Esquema lógico propuesto para el sistema de control de viajes de cooperativas de transporte.}
+    \label{fig:modelo_relacional}
+\end{figure}
+
+\subsection{Resultados obtenidos}
+
+Como resultado del desarrollo de la tarea, se obtuvo un esquema lógico compuesto por nueve tablas: COOPERATIVAS, SOCIOS, UNIDADES\_BUSES, PROVINCIAS, CANTONES, VIAJES, FUNCIONARIOS, CONTROLES e INCUMPLIMIENTOS.
+
+El modelo elaborado permite representar de manera estructurada la información del sistema de transporte, respetando las relaciones de dependencia entre cooperativas, socios, buses, destinos, controles de calidad y novedades detectadas.
+
+Asimismo, la solución propuesta facilita la aplicación de claves primarias y claves foráneas, permitiendo mantener la integridad referencial y reduciendo la redundancia en el almacenamiento de datos.
+
+\subsection{Habilidades blandas empleadas en la tarea}
+\begin{itemize}
+    \item[$\square$] Liderazgo
+    \item[$\boxtimes$] Trabajo en equipo
+    \item[$\boxtimes$] Comunicación asertiva
+    \item[$\square$] La empatía
+    \item[$\boxtimes$] Pensamiento crítico
+    \item[$\square$] Flexibilidad
+    \item[$\square$] La resolución de conflictos
+    \item[$\boxtimes$] Adaptabilidad
+    \item[$\boxtimes$] Responsabilidad
+\end{itemize}
+
+\subsection{Conclusiones}
+
+El análisis del caso permitió identificar correctamente las entidades, atributos y relaciones necesarias para representar el sistema de control de viajes de cooperativas de transporte mediante una base de datos relacional.
+
+La transformación del problema al esquema lógico evidenció la importancia de aplicar cardinalidades, claves primarias, claves foráneas y reglas de integridad para asegurar una estructura organizada, consistente y adecuada para la gestión de la información.
+
+\subsection{Recomendaciones}
+
+Se recomienda validar el esquema lógico antes de su implementación física en un SGBD, con el fin de comprobar que todas las relaciones y restricciones respondan correctamente a las necesidades del caso planteado.
+
+También se recomienda mantener una adecuada normalización de las tablas y documentar claramente las reglas de negocio, para facilitar futuras modificaciones o ampliaciones del sistema.
+
+\subsection{Referencias}
+Insertar las referencias bibliográficas empleadas aplicando la norma IEEE.
+
+\vspace{-3em}
+\renewcommand{\refname}{}
+\bibliographystyle{ieeetr}
+\bibliography{citas}
+
+\subsection{Anexos}
+Se adjuntan como anexos las figuras correspondientes a la metodología de presentación y al modelo relacional desarrollado.
+
+\vfill
+
+\end{document}
