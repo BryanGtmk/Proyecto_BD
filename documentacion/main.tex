@@ -1,311 +1,1260 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 
-% Language setting
-% Replace `english' with e.g. `spanish' to change the document language
-\usepackage[spanish]{babel}
+% Idioma y codificación
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
-\usepackage[letterpaper,top=2cm,bottom=5cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+% Márgenes
+\usepackage[letterpaper,top=2cm,bottom=3cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
-% Useful packages
+% Paquetes útiles
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\usepackage{amssymb} 
-\usepackage{fancyhdr}
-\usepackage{lipsum} % Para generar texto de ejemplo
-\usepackage{multicol}
-\pagestyle{fancy} 
+\usepackage{float}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{xcolor}
 \usepackage{url}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{fancyhdr}
+\usepackage{multicol}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{listings}
 
-  
+\graphicspath{{imagenes/}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4em}
+\renewcommand{\arraystretch}{1.2}
 
-\fancyhf{} % Limpiar encabezado y pie de página por defecto
-\setlength{\headheight}{70pt} % Ajuste del tamaño del encabezado (puedes aumentar este valor si es necesario)
+% Configuración de listings para código SQL
+\lstset{
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    frame=single,
+    showstringspaces=false,
+    columns=fullflexible,
+    tabsize=4
+}
 
-% Definición del encabezado
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{70pt}
 
+% Encabezado
 \fancyhead[C]{%
     \begin{minipage}[c]{2.0cm}
         \centering
-        \includegraphics[width=2.0cm]{img/uta.png}
+        \includegraphics[width=2.0cm]{uta.png}
     \end{minipage}%
     \hfill
-    \begin{minipage}[c]{8cm} 
+    \begin{minipage}[c]{8cm}
         \centering
-        \small {\textbf{UNIVERSIDAD TÉCNICA DE AMBATO}} \\[0.1cm]
-        \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL} \\[0.1cm]
-        \scriptsize \textbf{CARRERA SOFTWARE - Base de Datos} \\[0.1cm]
-        \scriptsize \textbf{CICLO ACADÉMICO: AGOSTO 2025 - ENERO 2026}
+        \small \textbf{UNIVERSIDAD TÉCNICA DE AMBATO}\\[0.1cm]
+        \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS, ELECTRÓNICA E INDUSTRIAL}\\[0.1cm]
+        \scriptsize \textbf{CARRERA SOFTWARE - BASE DE DATOS}\\[0.1cm]
+        \scriptsize \textbf{CICLO ACADÉMICO: ENERO 2026 - JULIO 2026}
     \end{minipage}%
     \hfill
     \begin{minipage}[c]{2.0cm}
         \centering
-        \includegraphics[width=2.0cm]{img/fisei.png}
+        \includegraphics[width=2.0cm]{fisei.png}
     \end{minipage}%
 }
 
+\fancyfoot[C]{\thepage}
+
 \begin{document}
+
 \begin{center}
-    {\large \textbf{INFORME DE TAREA}} \\    
+    {\large \textbf{INFORME DE GUÍA PRÁCTICA}}\\
 \end{center}
 
 \section{Portada}
 \begin{flushleft}
-\begin{tabular}{ l l }
-    \textbf{Tema:} & Proyecto de base de datos \\
-    \textbf{Unidad de Organización Curricular:} & Profesional \\
-    \textbf{Nivel y Paralelo:} & 4to Semestre "B"\\
-    \textbf{Alumnos participantes:} & Molina Karen \\
-    & Guatemal Bryan \\
-    &  Gisselle Espín\\
-    & Benjarano Carlos \\
-    \textbf{Asignatura:} & Base de Datos\\
-    \textbf{Docente:} & Ing.Jose Ruben Caiza Caizabuano Mg. \\
+\begin{tabular}{>{\bfseries}p{6.2cm} p{8.5cm}}
+Tema: & APE2. Formas Normales y Normalización \\
+Unidad de Organización Curricular: & PROFESIONAL \\
+Nivel y Paralelo: & 4to Semestre ``B'' \\
+Alumno participante: & Guatemal Avilez Bryan Stalin \\
+Asignatura: & Base de Datos \\
+Docente: & Ing. Jose Ruben Caiza Caizabuano Mg. \\
+Modalidad: & Presencial \\
 \end{tabular}
 \end{flushleft}
 
+\section{Informe de guía práctica}
 
-\section{Informe de la Tarea}
 \subsection{Objetivos}
 
 \subsubsection{General}
-Desarrollar un modelo de base de datos eficiente para el control y seguimiento del préstamo de equipos tecnológicos, permitiendo la organización centralizada de la información y el cumplimiento de las normativas de uso institucional.
+Analizar las formas normales y las dependencias funcionales para construir esquemas lógicos relacionales normalizados e implementar su estructura física básica en Oracle.
 
 \subsubsection{Específicos}
-\begin{itemize}
-    \item Identificar las entidades y atributos fundamentales del dominio para establecer una estructura de datos sólida que soporte al menos 8 entidades principales.
-    \item Definir y normalizar las reglas de negocio para garantizar la integridad y el flujo correcto de los procesos de préstamo y devolución de equipos.
-    \item Establecer el alcance técnico y funcional del proyecto, delimitando las responsabilidades del sistema y los requerimientos iniciales para el entregable de la Fase 1.
+\begin{itemize}[leftmargin=1.2cm]
+    \item Identificar entidades, atributos, relaciones y cardinalidades en los ejercicios propuestos.
+    \item Analizar dependencias funcionales y aplicar las reglas de normalización hasta Tercera Forma Normal.
+    \item Transformar los modelos obtenidos en esquemas relacionales e implementarlos físicamente en Oracle mediante tablas con claves primarias y foráneas.
 \end{itemize}
-
 
 \subsection{Instrucciones}
+La actividad consiste en desarrollar un documento en formato PDF con la resolución de la guía APE. Para ello, se realizó el análisis de los cuatro enunciados propuestos, identificando los componentes del modelo entidad/relación y su posterior traducción al modelo relacional. Además, se organizó la información de forma técnica y ordenada, considerando la lógica de diseño de bases de datos, la consistencia de las relaciones establecidas entre tablas y la implementación del modelo físico en Oracle.
 
-De acuerdo con la planificación de la asignatura para la Semana 1-2, el desarrollo de la presente práctica se rige bajo las siguientes directrices:
+\subsection{Fundamento teórico de normalización}
 
-\begin{itemize}
-    \item \textbf{Análisis de Conceptos:} Identificar y diferenciar ejemplos prácticos de datos frente a información dentro del contexto de la Universidad Técnica de Ambato (UTA).
-    \item \textbf{Modelado Inicial:} Listar y estructurar un mínimo de 8 entidades con sus respectivos atributos basados en el caso de estudio "Préstamos de equipos".
-    \item \textbf{Reglas de Negocio:} Definir al menos 5 reglas de negocio que condicionen el funcionamiento del sistema (estados, plazos y restricciones).
-    \item \textbf{Documentación:} Elaborar el acta de grupo que integre el alcance técnico y las reglas iniciales como primer entregable del proyecto.
+La normalización es un proceso de organización de datos que permite estructurar correctamente una base de datos relacional, reduciendo redundancia, evitando anomalías de inserción, actualización y eliminación, y mejorando la integridad de la información. Su propósito principal consiste en descomponer relaciones complejas en tablas más pequeñas y coherentes, sin perder la capacidad de reconstruir la información necesaria.
+
+\subsubsection{Dependencias funcionales}
+
+Una dependencia funcional se presenta cuando el valor de un atributo determina de manera única el valor de otro atributo dentro de una relación. En otras palabras, si se conoce el valor del atributo determinante, entonces se puede conocer con precisión el valor del atributo dependiente.
+
+De forma general, una dependencia funcional se representa como:
+
+\[
+X \rightarrow Y
+\]
+
+donde \(X\) es el atributo o conjunto de atributos determinantes, y \(Y\) es el atributo o conjunto de atributos dependientes.
+
+Las dependencias funcionales son importantes porque permiten identificar:
+\begin{itemize}[leftmargin=1.2cm]
+    \item claves candidatas y claves primarias;
+    \item dependencias parciales;
+    \item dependencias transitivas;
+    \item posibles problemas de redundancia en una relación.
 \end{itemize}
+
+\subsubsection{Primera Forma Normal (1FN)}
+
+Una relación se encuentra en Primera Forma Normal cuando todos sus atributos contienen valores atómicos, es decir, indivisibles, y no existen grupos repetitivos ni listas dentro de un mismo campo. En esta forma, cada intersección fila-columna debe almacenar un único valor.
+
+La 1FN exige que:
+\begin{itemize}[leftmargin=1.2cm]
+    \item cada atributo contenga un solo valor por celda;
+    \item no existan atributos multivaluados;
+    \item cada fila pueda identificarse de manera única mediante una clave.
+\end{itemize}
+
+\subsubsection{Segunda Forma Normal (2FN)}
+
+Una relación se encuentra en Segunda Forma Normal cuando ya cumple con la 1FN y, además, todos los atributos no clave dependen completamente de la clave primaria. Esto significa que no deben existir dependencias parciales respecto de una clave compuesta.
+
+La 2FN se aplica especialmente cuando la clave primaria está formada por más de un atributo. Si un atributo no clave depende solo de una parte de la clave compuesta, entonces existe una dependencia parcial y la relación no cumple con 2FN.
+
+\subsubsection{Tercera Forma Normal (3FN)}
+
+Una relación se encuentra en Tercera Forma Normal cuando cumple con la 2FN y no presenta dependencias transitivas. Esto significa que ningún atributo no clave debe depender de otro atributo no clave.
+
+La 3FN busca eliminar relaciones indirectas entre atributos no clave, con el fin de evitar redundancia y mejorar la consistencia del diseño. En esta forma, cada atributo no clave debe depender únicamente de la clave primaria.
+
+\subsubsection{Proceso de normalización}
+
+El proceso de normalización se desarrolla de manera progresiva. Primero, se parte de una relación inicial obtenida del análisis del problema. Después, se identifican los atributos clave y las dependencias funcionales. A continuación, se verifica el cumplimiento de la Primera Forma Normal eliminando grupos repetitivos y valores no atómicos. Luego, se analiza si existen dependencias parciales para pasar a Segunda Forma Normal. Finalmente, se revisa la presencia de dependencias transitivas para alcanzar la Tercera Forma Normal.
+
+En términos generales, el procedimiento aplicado es el siguiente:
+\begin{enumerate}[leftmargin=1.2cm]
+    \item Identificar la relación inicial y sus atributos.
+    \item Determinar la clave primaria.
+    \item Establecer las dependencias funcionales.
+    \item Verificar el cumplimiento de 1FN.
+    \item Eliminar dependencias parciales para obtener 2FN.
+    \item Eliminar dependencias transitivas para obtener 3FN.
+    \item Construir el esquema lógico normalizado.
+\end{enumerate}
+
+\subsubsection{Ejemplo de esquema normalizado}
+
+Como ejemplo de normalización, se puede tomar una relación inicial asociada al ejercicio 2 del instituto:
+
+\begin{center}
+\texttt{INSCRIPCION(ID\_ALUMNO, NOM\_ALUMNO, APE\_ALUMNO, COD\_MODULO, NOM\_MODULO, HORARIO, AULA, CI\_PROFESOR, NOM\_PROFESOR)}
+\end{center}
+
+En esta relación, la clave compuesta puede representarse mediante:
+
+\[
+(ID\_ALUMNO, COD\_MODULO)
+\]
+
+A partir de su análisis, se identifican las siguientes dependencias funcionales:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{ID\_ALUMNO \(\rightarrow\) NOM\_ALUMNO, APE\_ALUMNO}
+    \item \texttt{COD\_MODULO \(\rightarrow\) NOM\_MODULO, HORARIO, AULA, CI\_PROFESOR}
+    \item \texttt{CI\_PROFESOR \(\rightarrow\) NOM\_PROFESOR}
+\end{itemize}
+
+\textbf{Aplicación de 1FN:}  
+La relación cumple 1FN porque cada atributo almacena valores atómicos y no existen grupos repetitivos dentro de una celda.
+
+\textbf{Aplicación de 2FN:}  
+No cumple 2FN, ya que existen dependencias parciales. Por ejemplo, \texttt{NOM\_ALUMNO} y \texttt{APE\_ALUMNO} dependen solo de \texttt{ID\_ALUMNO}, mientras que \texttt{NOM\_MODULO}, \texttt{HORARIO} y \texttt{AULA} dependen solo de \texttt{COD\_MODULO}. Para corregirlo, la relación se descompone.
+
+\textbf{Aplicación de 3FN:}  
+Tampoco cumple inicialmente 3FN, porque existe una dependencia transitiva: \texttt{COD\_MODULO \(\rightarrow\) CI\_PROFESOR} y \texttt{CI\_PROFESOR \(\rightarrow\) NOM\_PROFESOR}. Por ello, la información del profesor debe almacenarse en una relación independiente.
+
+El esquema lógico normalizado hasta Tercera Forma Normal queda así:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{ALUMNO(ID\_ALUMNO, NOM\_ALUMNO, APE\_ALUMNO)}
+    \item \texttt{PROFESOR(CI\_PROFESOR, NOM\_PROFESOR)}
+    \item \texttt{MODULO(COD\_MODULO, NOM\_MODULO, HORARIO, AULA, CI\_PROFESOR)}
+    \item \texttt{MATRICULA(ID\_ALUMNO, COD\_MODULO)}
+\end{itemize}
+
+De esta manera, la información queda distribuida en relaciones independientes, evitando redundancia y garantizando mayor integridad estructural en la base de datos.
 
 \subsection{Listado de equipos, materiales y recursos}
+
 \textbf{Listado de equipos y materiales generales empleados en la tarea:}
-\begin{itemize}
-    \item Computador portátil o de escritorio con acceso a internet.
-    \item Herramientas de modelado de datos.
-    \item Editor de texto especializado (Overleaf / LaTeX).
-    \item Repositorio de código (GitHub / Git) para control de versiones del proyecto.
+\begin{itemize}[leftmargin=1.2cm]
+    \item Computador personal.
+    \item Editor de texto \LaTeX{} en Visual Studio Code.
+    \item Compilador PDF para documentos académicos.
+    \item PlantUML para el diseño de diagramas.
+    \item Oracle como sistema gestor de base de datos.
+    \item Guía práctica proporcionada por el docente.
+    \item Material bibliográfico de apoyo sobre modelo entidad/relación, modelo relacional y normalización.
 \end{itemize}
 
-\textbf{TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la tarea:}
+\textbf{TAC (Tecnologías para el Aprendizaje y el Conocimiento) empleadas en la tarea:}
 \begin{itemize}
     \item[$\boxtimes$] Plataformas educativas
     \item[$\square$] Simuladores y laboratorios virtuales
     \item[$\boxtimes$] Aplicaciones educativas
-    \item[$\boxtimes$] Recursos audiovisuales
+    \item[$\square$] Recursos audiovisuales
     \item[$\square$] Gamificación
     \item[$\boxtimes$] Inteligencia Artificial
-    \item Otros (Especifique)
+    \item Otros (Especifique): editor \LaTeX{}, PlantUML y Oracle
 \end{itemize}
 
 \subsection{Desarrollo de la Tarea (Actividades a Desarrollar)}
 
-El desarrollo de la presente práctica se desglosa en las siguientes actividades secuenciales orientadas al diseño del sistema de préstamo de equipos:
-\begin{enumerate}
-    \item \textbf{Análisis de requerimientos y contexto:} Identificación de 10 ejemplos prácticos de datos e información aplicados al entorno de la Universidad Técnica de Ambato para comprender el flujo de entrada y salida del sistema.
-    \item \textbf{Modelado conceptual de datos:} Definición de un esquema relacional que incluye un mínimo de 8 entidades fundamentales, estableciendo sus respectivos atributos y relaciones de cardinalidad.
-    \item \textbf{Establecimiento de la lógica de negocio:} Formulación de 5 reglas de negocio iniciales que regirán el comportamiento del sistema ante eventos de préstamo, devolución y gestión de usuarios.
-    \item \textbf{Documentación técnica del proyecto:} Elaboración del acta constitutiva del grupo y definición del alcance del proyecto, delimitando las fronteras del software y sus entregables inmediatos.
-\end{enumerate}
+Para resolver la guía se analizaron los cuatro enunciados propuestos, identificando en cada caso las entidades principales, sus atributos, las relaciones entre ellas y las cardinalidades correspondientes. Posteriormente, cada modelo entidad/relación fue transformado al modelo relacional, incorporando claves primarias y claves foráneas para garantizar integridad y coherencia estructural. Finalmente, se añadieron registros de ejemplo por tabla y se construyó el modelo físico en Oracle mediante sentencias \texttt{CREATE TABLE}.
+
+\subsubsection{Ejercicio 1}
+En el primer ejercicio se modeló una empresa que vende productos a clientes y trabaja con proveedores. Se identificaron como entidades principales \textbf{Cliente}, \textbf{Producto} y \textbf{Proveedor}. La relación \textbf{Compra} se estableció entre Cliente y Producto con cardinalidad muchos a muchos, mientras que la relación de suministro se definió entre Proveedor y Producto. A partir de ello se construyó el esquema relacional correspondiente, incluyendo la tabla intermedia para representar la compra.
+
+\subsubsection{Ejercicio 2}
+En el segundo ejercicio se diseñó la base de datos de un instituto. Se determinaron las entidades \textbf{Profesor}, \textbf{Alumno} y \textbf{Módulo}. La relación \textbf{Matrícula} se modeló entre Alumno y Módulo, mientras que la relación \textbf{Imparte} se estableció entre Profesor y Módulo. Además, se consideró una autorrelación de supervisión dentro de la entidad Profesor, ya que un profesor puede supervisar a otros profesores.
+
+\subsubsection{Ejercicio 3}
+En el tercer ejercicio se desarrolló el modelo para una tienda informática. Se identificaron las entidades \textbf{Cliente}, \textbf{Producto} y \textbf{Proveedor}. La relación \textbf{Compra} incorporó atributos propios como número de compra, fecha de compra y forma de pago. Del mismo modo, la relación \textbf{Entrega} entre Proveedor y Producto incluyó atributos adicionales como fecha de entrega, cantidad suministrada y precio de adquisición. Después se construyó el esquema relacional con sus claves correspondientes.
+
+\subsubsection{Ejercicio 4}
+En el cuarto ejercicio se modeló la organización interna de una empresa. Las entidades principales fueron \textbf{Centro\_Trabajo}, \textbf{Departamento}, \textbf{Empleado}, \textbf{Hijo} y \textbf{Habilidad}. Las relaciones definidas fueron de uno a muchos entre Centro\_Trabajo y Departamento, entre Departamento y Empleado, y entre Empleado e Hijo. Además, se definió una relación muchos a muchos entre Empleado y Habilidad, agregando el atributo \textbf{porcentaje} como característica de la relación.
+
+\subsection{Aplicación de normalización en los ejercicios}
+
+\subsubsection{Normalización del ejercicio 1}
+En el ejercicio 1, la estructura obtenida cumple con la Primera Forma Normal porque todos los atributos almacenan valores atómicos. Además, la separación de las entidades \texttt{CLIENTE}, \texttt{PRODUCTO} y \texttt{PROVEEDOR}, junto con la tabla intermedia \texttt{COMPRA}, permite evitar grupos repetitivos. La relación también puede considerarse en Segunda y Tercera Forma Normal, ya que los atributos dependen de sus respectivas claves primarias y no se presentan dependencias transitivas entre atributos no clave.
+
+\subsubsection{Normalización del ejercicio 2}
+En el ejercicio 2, la normalización se evidencia al descomponer la información académica en las relaciones \texttt{PROFESOR}, \texttt{ALUMNO}, \texttt{MODULO} y \texttt{MATRICULA}. La relación inicial de inscripción podía generar redundancia, especialmente al repetir datos del alumno, módulo y profesor. Al separar estas entidades, se eliminan dependencias parciales y transitivas, obteniéndose un esquema coherente hasta Tercera Forma Normal.
+
+\subsubsection{Normalización del ejercicio 3}
+En el ejercicio 3, la información de clientes, productos y proveedores se organizó en relaciones independientes, mientras que las transacciones de compra y entrega se representaron mediante tablas específicas con atributos propios. Esta estructura evita repetir datos descriptivos dentro de cada operación y permite que cada atributo dependa únicamente de la clave correspondiente. Por ello, el esquema resultante cumple con 1FN, 2FN y 3FN.
+
+\subsubsection{Normalización del ejercicio 4}
+En el ejercicio 4, la normalización se logró separando las entidades \texttt{CENTRO\_TRABAJO}, \texttt{DEPARTAMENTO}, \texttt{EMPLEADO}, \texttt{HIJO} y \texttt{HABILIDAD}. La relación muchos a muchos entre empleado y habilidad se resolvió mediante la tabla intermedia \texttt{EMPLEADO\_HABILIDAD}, lo que evita redundancias y facilita el control del atributo \texttt{PORCENTAJE}. De esta forma, cada relación mantiene dependencias adecuadas respecto de su clave primaria y el esquema puede considerarse normalizado hasta Tercera Forma Normal.
 
 \subsection{Resultados obtenidos}
-De acuerdo con el tipo de trabajo, se plasmarán los resultados alcanzados en la guía tarea una vez ejecutadas las actividades. Se pueden emplear figuras y tablas las cuales deben ser numeradas.
+
+Como resultado del desarrollo de la guía, se obtuvieron modelos entidad/relación y modelos relacionales coherentes para los cuatro ejercicios propuestos. En cada caso se identificaron correctamente las entidades, atributos, relaciones y cardinalidades, y se logró traducir la información a esquemas de tablas con claves primarias y foráneas. También se generaron registros de ejemplo para comprobar la estructura lógica de las bases de datos diseñadas.
+
+\begin{table}[H]
+\centering
+\caption{Resumen de resultados por ejercicio}
+\begin{tabular}{p{1.8cm} p{4.0cm} p{4.2cm} p{2.0cm} p{1.7cm}}
+\toprule
+\textbf{Ejercicio} & \textbf{Modelo E/R} & \textbf{Modelo relacional} & \textbf{Modelo físico} & \textbf{Registros} \\
+\midrule
+1 & Cliente, Producto, Proveedor y relaciones de compra y suministro & Tablas Cliente, Proveedor, Producto y Compra & Oracle & 3 por tabla \\
+2 & Profesor, Alumno, Módulo y relaciones de matrícula, docencia y supervisión & Tablas Profesor, Alumno, Módulo y Matrícula & Oracle & 3 por tabla \\
+3 & Cliente, Producto, Proveedor y relaciones Compra y Entrega con atributos propios & Tablas Cliente, Producto, Proveedor, Compra y Entrega & Oracle & 3 por tabla \\
+4 & Centro\_Trabajo, Departamento, Empleado, Hijo y Habilidad & Tablas Centro\_Trabajo, Departamento, Empleado, Hijo, Habilidad y Empleado\_Habilidad & Oracle & 3 por tabla \\
+Adic. 1 & Cliente, Compra, Detalle\_Compra, Producto y Proveedor & Tablas Clientes, Compras, Detalle\_Compra, Productos y Proveedores & Oracle & 3 o más \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Modelo físico en Oracle}
+
+Como complemento del modelo entidad/relación y del modelo relacional, se desarrolló el modelo físico en Oracle para los cuatro ejercicios propuestos. En esta fase se definieron usuarios, tablas, claves primarias y claves foráneas, siguiendo la estructura lógica obtenida en el análisis previo.
+
+\subsubsection{Script inicial de creación de usuario}
+\begin{lstlisting}[language=SQL, caption={Creación del usuario en Oracle}]
+CREATE USER FISEI IDENTIFIED BY FISEI123;
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO FISEI;
+
+CONNECT FISEI/FISEI123;
+\end{lstlisting}
+
+\subsubsection{Modelo físico en Oracle del ejercicio 1}
+\begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 1}]
+CREATE TABLE CLIENTE_E1 (
+    CI                VARCHAR2(10) PRIMARY KEY,
+    NOMBRE            VARCHAR2(15) NOT NULL,
+    APELLIDOS         VARCHAR2(20) NOT NULL,
+    DIRECCION         VARCHAR2(30) NOT NULL,
+    FECHA_NACIMIENTO  DATE NOT NULL
+);
+
+CREATE TABLE PROVEEDOR_E1 (
+    RUC               VARCHAR2(13) PRIMARY KEY,
+    NOMBRE            VARCHAR2(20) NOT NULL,
+    DIRECCION         VARCHAR2(30) NOT NULL
+);
+
+CREATE TABLE PRODUCTO_E1 (
+    COD_PRODUCTO      VARCHAR2(5) PRIMARY KEY,
+    NOMBRE            VARCHAR2(20) NOT NULL,
+    PRECIO_UNITARIO   NUMBER(8,2) NOT NULL,
+    MARCA             VARCHAR2(15) NOT NULL,
+    RUC_PROVEEDOR     VARCHAR2(13) NOT NULL,
+    CONSTRAINT FK_PROD_E1_PROV
+        FOREIGN KEY (RUC_PROVEEDOR) REFERENCES PROVEEDOR_E1(RUC)
+);
+
+CREATE TABLE COMPRA_E1 (
+    CI_CLIENTE        VARCHAR2(10) NOT NULL,
+    COD_PRODUCTO      VARCHAR2(5) NOT NULL,
+    CONSTRAINT PK_COMPRA_E1
+        PRIMARY KEY (CI_CLIENTE, COD_PRODUCTO),
+    CONSTRAINT FK_COMPRA_E1_CLI
+        FOREIGN KEY (CI_CLIENTE) REFERENCES CLIENTE_E1(CI),
+    CONSTRAINT FK_COMPRA_E1_PROD
+        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO_E1(COD_PRODUCTO)
+);
+\end{lstlisting}
+
+\subsubsection{Modelo físico en Oracle del ejercicio 2}
+\begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 2}]
+CREATE TABLE PROFESOR_E2 (
+    CI                VARCHAR2(10) PRIMARY KEY,
+    NOMBRE            VARCHAR2(15) NOT NULL,
+    APELLIDO          VARCHAR2(15) NOT NULL,
+    DIRECCION         VARCHAR2(30) NOT NULL,
+    TELEFONO          VARCHAR2(10) NOT NULL,
+    CI_JEFE           VARCHAR2(10),
+    CONSTRAINT FK_PROF_E2_JEFE
+        FOREIGN KEY (CI_JEFE) REFERENCES PROFESOR_E2(CI)
+);
+
+CREATE TABLE ALUMNO_E2 (
+    ID_ALUMNO         VARCHAR2(5) PRIMARY KEY,
+    NOMBRE            VARCHAR2(15) NOT NULL,
+    APELLIDO          VARCHAR2(15) NOT NULL,
+    FECHA_NACIMIENTO  DATE NOT NULL
+);
+
+CREATE TABLE MODULO_E2 (
+    COD_MODULO        VARCHAR2(5) PRIMARY KEY,
+    NOMBRE            VARCHAR2(20) NOT NULL,
+    HORARIO           VARCHAR2(20) NOT NULL,
+    AULA              VARCHAR2(10) NOT NULL,
+    CI_PROFESOR       VARCHAR2(10) NOT NULL,
+    CONSTRAINT FK_MOD_E2_PROF
+        FOREIGN KEY (CI_PROFESOR) REFERENCES PROFESOR_E2(CI)
+);
+
+CREATE TABLE MATRICULA_E2 (
+    ID_ALUMNO         VARCHAR2(5) NOT NULL,
+    COD_MODULO        VARCHAR2(5) NOT NULL,
+    CONSTRAINT PK_MATRICULA_E2
+        PRIMARY KEY (ID_ALUMNO, COD_MODULO),
+    CONSTRAINT FK_MAT_E2_ALU
+        FOREIGN KEY (ID_ALUMNO) REFERENCES ALUMNO_E2(ID_ALUMNO),
+    CONSTRAINT FK_MAT_E2_MOD
+        FOREIGN KEY (COD_MODULO) REFERENCES MODULO_E2(COD_MODULO)
+);
+\end{lstlisting}
+
+\subsubsection{Modelo físico en Oracle del ejercicio 3}
+\begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 3}]
+CREATE TABLE CLIENTE_E3 (
+    COD_CLIENTE       VARCHAR2(5) PRIMARY KEY,
+    NOMBRE            VARCHAR2(15) NOT NULL,
+    APELLIDO          VARCHAR2(15) NOT NULL,
+    DIRECCION         VARCHAR2(30) NOT NULL,
+    TELEFONO          VARCHAR2(10) NOT NULL
+);
+
+CREATE TABLE PRODUCTO_E3 (
+    COD_PRODUCTO      VARCHAR2(5) PRIMARY KEY,
+    DESCRIPCION       VARCHAR2(30) NOT NULL,
+    PRECIO            NUMBER(8,2) NOT NULL,
+    EXISTENCIAS       NUMBER(5) NOT NULL
+);
+
+CREATE TABLE PROVEEDOR_E3 (
+    COD_PROVEEDOR     VARCHAR2(5) PRIMARY KEY,
+    NOMBRE            VARCHAR2(15) NOT NULL,
+    APELLIDOS         VARCHAR2(20) NOT NULL,
+    DIRECCION         VARCHAR2(30) NOT NULL,
+    PROVINCIA         VARCHAR2(20) NOT NULL,
+    TELEFONO          VARCHAR2(10) NOT NULL
+);
+
+CREATE TABLE COMPRA_E3 (
+    NUMERO_COMPRA     VARCHAR2(5) PRIMARY KEY,
+    COD_CLIENTE       VARCHAR2(5) NOT NULL,
+    COD_PRODUCTO      VARCHAR2(5) NOT NULL,
+    FECHA_COMPRA      DATE NOT NULL,
+    FORMA_PAGO        VARCHAR2(15) NOT NULL,
+    CONSTRAINT FK_COMPRA_E3_CLI
+        FOREIGN KEY (COD_CLIENTE) REFERENCES CLIENTE_E3(COD_CLIENTE),
+    CONSTRAINT FK_COMPRA_E3_PROD
+        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO_E3(COD_PRODUCTO)
+);
+
+CREATE TABLE ENTREGA_E3 (
+    ID_ENTREGA              VARCHAR2(5) PRIMARY KEY,
+    COD_PROVEEDOR           VARCHAR2(5) NOT NULL,
+    COD_PRODUCTO            VARCHAR2(5) NOT NULL,
+    FECHA_ENTREGA           DATE NOT NULL,
+    CANTIDAD_SUMINISTRADA   NUMBER(5) NOT NULL,
+    PRECIO_ADQUISICION      NUMBER(8,2) NOT NULL,
+    CONSTRAINT FK_ENTREGA_E3_PROV
+        FOREIGN KEY (COD_PROVEEDOR) REFERENCES PROVEEDOR_E3(COD_PROVEEDOR),
+    CONSTRAINT FK_ENTREGA_E3_PROD
+        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO_E3(COD_PRODUCTO)
+);
+\end{lstlisting}
+
+\subsubsection{Modelo físico en Oracle del ejercicio 4}
+\begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 4}]
+CREATE TABLE CENTRO_TRABAJO_E4 (
+    COD_CENTRO        VARCHAR2(5) PRIMARY KEY,
+    NOMBRE            VARCHAR2(20) NOT NULL,
+    POBLACION         VARCHAR2(20) NOT NULL,
+    DIRECCION         VARCHAR2(30) NOT NULL
+);
+
+CREATE TABLE DEPARTAMENTO_E4 (
+    COD_DEPARTAMENTO  VARCHAR2(5) PRIMARY KEY,
+    NOMBRE            VARCHAR2(20) NOT NULL,
+    PRESUPUESTO_ANUAL NUMBER(10,2) NOT NULL,
+    COD_CENTRO        VARCHAR2(5) NOT NULL,
+    CONSTRAINT FK_DEP_E4_CENTRO
+        FOREIGN KEY (COD_CENTRO) REFERENCES CENTRO_TRABAJO_E4(COD_CENTRO)
+);
+
+CREATE TABLE EMPLEADO_E4 (
+    CI                VARCHAR2(10) PRIMARY KEY,
+    NOMBRE            VARCHAR2(15) NOT NULL,
+    APELLIDO          VARCHAR2(15) NOT NULL,
+    TELEFONO          VARCHAR2(10) NOT NULL,
+    FECHA_ALTA        DATE NOT NULL,
+    SALARIO           NUMBER(8,2) NOT NULL,
+    COD_DEPARTAMENTO  VARCHAR2(5) NOT NULL,
+    CONSTRAINT FK_EMP_E4_DEP
+        FOREIGN KEY (COD_DEPARTAMENTO) REFERENCES DEPARTAMENTO_E4(COD_DEPARTAMENTO)
+);
+
+CREATE TABLE HIJO_E4 (
+    COD_HIJO          VARCHAR2(5) PRIMARY KEY,
+    NOMBRE            VARCHAR2(15) NOT NULL,
+    APELLIDO          VARCHAR2(15) NOT NULL,
+    FECHA_NACIMIENTO  DATE NOT NULL,
+    CI_EMPLEADO       VARCHAR2(10) NOT NULL,
+    CONSTRAINT FK_HIJO_E4_EMP
+        FOREIGN KEY (CI_EMPLEADO) REFERENCES EMPLEADO_E4(CI)
+);
+
+CREATE TABLE HABILIDAD_E4 (
+    COD_HABILIDAD     VARCHAR2(5) PRIMARY KEY,
+    DESCRIPCION       VARCHAR2(30) NOT NULL
+);
+
+CREATE TABLE EMPLEADO_HABILIDAD_E4 (
+    CI_EMPLEADO       VARCHAR2(10) NOT NULL,
+    COD_HABILIDAD     VARCHAR2(5) NOT NULL,
+    PORCENTAJE        NUMBER(5,2) NOT NULL,
+    CONSTRAINT PK_EMP_HAB_E4
+        PRIMARY KEY (CI_EMPLEADO, COD_HABILIDAD),
+    CONSTRAINT FK_EMP_HAB_E4_EMP
+        FOREIGN KEY (CI_EMPLEADO) REFERENCES EMPLEADO_E4(CI),
+    CONSTRAINT FK_EMP_HAB_E4_HAB
+        FOREIGN KEY (COD_HABILIDAD) REFERENCES HABILIDAD_E4(COD_HABILIDAD),
+    CONSTRAINT CHK_PORC_E4
+        CHECK (PORCENTAJE >= 0 AND PORCENTAJE <= 100)
+);
+\end{lstlisting}
+\subsection{Ejercicio adicional 1: modelo transaccional de ventas}
+
+\subsubsection*{Enunciado}
+
+``Una empresa vende productos a sus clientes. Se necesita conocer los datos personales de los clientes (nombre, apellidos, CI, dirección y fecha de nacimiento). Cada producto tiene un código y un nombre, así como un precio unitario y una marca. Un cliente puede comprar varios productos, y un mismo producto puede ser comprado por varios clientes. Los productos son suministrados por diferentes proveedores. Se debe tener en cuenta que un proveedor puede suministrar diferentes productos y que un producto sólo puede ser suministrado por un proveedor. De cada proveedor se conoce el RUC, nombre y dirección.''
 
 
-\subsubsection{Identificación de Datos e Información en el Contexto UTA}
+\subsubsection*{1. Analisis del problema}
 
-A continuación, se presentan 10 ejemplos que ilustran la diferencia entre un \textbf{dato} (hecho en bruto) y la \textbf{información} (dato procesado con contexto y utilidad), aplicados al sistema de préstamos de equipos de la carrera de Ingeniería en Software.
+Del enunciado se identifican primero los objetos principales del negocio:
 
-\vspace{0.5cm}
-
-\begin{enumerate}
-
-\item \textbf{Control del proyector Epson} \\
-\textit{Dato}: ``Control: Epson CB-695Wi'' \\
-\textit{Información}: El control del proyector Epson del aula 304 se ha prestado 8 veces esta semana, pero en 3 ocasiones lo devolvieron sin pilas, lo que indica la necesidad de mantener un stock de repuestos en el laboratorio.
-
-\item \textbf{Control del aire acondicionado} \\
-\textit{Dato}: ``Aire acondicionado: LG - Laboratorio 2'' \\
-\textit{Información}: El control del aire acondicionado del Laboratorio 2 solo es solicitado por profesores en horarios de 3 a 5 PM, coincidiendo con las prácticas intensivas de programación, por lo que debe estar siempre disponible en esa franja.
-
-\item \textbf{Computadora de laboratorio} \\
-\textit{Dato}: ``PC: HP ProDesk 400 G5'' \\
-\textit{Información}: La PC \#12 del laboratorio de cómputo ha sido la más solicitada (50 préstamos en el semestre) por ser la única con Android Studio instalado correctamente, justificando la clonación de su software a otros equipos.
-
-\item \textbf{Horario de préstamos} \\
-\textit{Dato}: ``Horario: 7:00 AM'' \\
-\textit{Información}: Las 7:00 AM concentran la mayor demanda de préstamo de computadoras, justo antes de la clase de Estructura de Datos, lo que sugiere abrir el laboratorio 15 minutos antes para evitar demoras.
-
-\item \textbf{Usuario frecuente} \\
-\textit{Dato}: ``Usuario: Ana López - 5to semestre'' \\
-\textit{Información}: La estudiante Ana López ha solicitado el control del proyector en 4 materias diferentes durante el mes (Inglés, Redacción, Web y Proyectos), evidenciando la necesidad de asignarle un equipo de uso temporal.
-
-\item \textbf{Periféricos dañados} \\
-\textit{Dato}: ``Estado: Mouse no funciona'' \\
-\textit{Información}: El 40\% de las computadoras del Laboratorio 3 presentan fallas en el mouse óptico, afectando directamente las prácticas de Interacción Humano-Computador, por lo que se requiere un reemplazo inmediato.
-
-\item \textbf{Software más utilizado} \\
-\textit{Dato}: ``Software: Visual Studio 2022'' \\
-\textit{Información}: Visual Studio 2022 es el IDE con mayor tiempo de uso en los préstamos, principalmente para proyectos de Programación Avanzada, lo que exige priorizar mantenimiento en las PCs que lo ejecutan.
-
-\item \textbf{Accesorios complementarios} \\
-\textit{Dato}: ``Cable: HDMI - 2 metros'' \\
-\textit{Información}: Los cables HDMI se prestan generalmente junto con los controles de proyector para presentaciones de Proyecto Integrador, sugiriendo la creación de ``kits de exposición'' completos.
-
-\item \textbf{Incumplimiento recurrente} \\
-\textit{Dato}: ``Devolución: Tardía - 20 min'' \\
-\textit{Información}: El grupo de Sexto semestre de la materia Integrador acumula 4 devoluciones tardías en el mes, lo que amerita restringir sus préstamos múltiples o aplicar multas más estrictas.
-
-\item \textbf{Fallas técnicas recurrentes} \\
-\textit{Dato}: ``PC \#08 - Sin Internet'' \\
-\textit{Información}: La PC \#08 ha sido reportada 5 veces por conexión lenta a internet, afectando las prácticas de Cloud Computing, por lo que se debe revisar su tarjeta de red o el puerto del switch correspondiente.
-
-\end{enumerate}
-
-\vspace{0.5cm}
-
-% ---------------------------------------------------------------------------
-% 2. Listar entidades y atributos del caso (mín. 8 entidades)
-% ---------------------------------------------------------------------------
-\subsubsection{Entidades y Atributos del Caso}
-
-A continuación, se listan las entidades principales del sistema de préstamos de equipos, junto con sus atributos:
-
-\begin{itemize}
-    \item \textbf{LABORATORISTAS} = (id\_lab, nom\_lab, ape\_lab, sue\_lab)
-    \item \textbf{USUARIOS} = (id\_cli, nom\_cli, ape\_cli, tel\_cli, dir\_cli, cor\_cli, ID\_CAR\_PER, habilitado)
-    \item \textbf{CARRERAS} = (ID\_CAR, NOM\_CAR)
-    \item \textbf{PERIODOS} = (ID\_PER\_ACA, FEC\_INI\_PER, FEC\_FIN\_PER)
-    \item \textbf{CATEGORIAS} = (ID\_CAT, NOM\_CAT)
-    \item \textbf{EQUIPOS} = (ID\_EQUI, MAR\_EQUI, SISTEMA\_OP\_EQUI, DIS\_EQUI, EST\_EQUI, MOD\_EQUI, ID\_CAT\_PER)
-    \item \textbf{PRESTAMOS} = (NUM\_PRE, FEC\_PRE, ID\_LAB\_PRESTA, ID\_USUA\_PRE, ID\_EQUI\_PRE, ESTADO\_PRE, ID\_LAB\_DEV, FEC\_DEV, FEC\_REAL, ESTADO\_DEV, ID\_PER\_PER)
-    \item \textbf{MULTAS} = (NUM\_MUL, FEC\_MUL, PRES\_PER\_MUL, VAL\_PAGAR, EST\_MUL)
-    \item \textbf{OBSERVACIONES} = (ID\_OBS, DES\_OBS, ID\_PRES\_PER)
+\begin{itemize}[leftmargin=1.2cm]
+    \item Cliente
+    \item Producto
+    \item Proveedor
 \end{itemize}
 
-% ---------------------------------------------------------------------------
-% 3. Definir 5 reglas de negocio
-% ---------------------------------------------------------------------------
-\subsubsection{Reglas de Negocio}
+Ademas, para representar correctamente la operacion de compra, conviene agregar dos entidades transaccionales:
 
-\begin{enumerate}
-    \item \textbf{Regla de Unicidad de Préstamo por Usuario}
-    \begin{itemize}
-        \item \textbf{Regla:} Un usuario está autorizado a poseer únicamente un equipo bajo su responsabilidad de forma simultánea. No se permitirá la apertura de un nuevo préstamo si el usuario tiene uno previo sin devolver.
-        \item \textbf{Justificación de Negocio:} Esta medida protege el patrimonio tecnológico de la universidad. Al ser equipos de alto costo (laptops, proyectores), se mitiga el riesgo de pérdida masiva y se garantiza que más estudiantes tengan acceso a los recursos disponibles, evitando el acaparamiento.
-        \item \textbf{Impacto en BD:}
-        \begin{itemize}
-            \item Estado del Préstamo: Un préstamo se considera "Activo" o "Pendiente" mientras el campo FEC\_REAL sea NULL (vacío), lo que indica que el equipo aún no ha reingresado al laboratorio.
-            \item Validación de Inserción: Antes de registrar un nuevo préstamo en la tabla PRESTAMOS, el sistema debe realizar una consulta para verificar que el ID\_USUA\_PRE no aparezca en ningún registro donde la fecha de devolución real aún no haya sido marcada.
-        \end{itemize}
-    \end{itemize}
+\begin{itemize}[leftmargin=1.2cm]
+    \item Compra
+    \item Detalle\_Compra
+\end{itemize}
 
-    \item \textbf{Condición de Usuario Habilitado}
-    \begin{itemize}
-        \item \textbf{Regla:} Solo los usuarios con el atributo habilitado = 'S' pueden solicitar préstamos.
-        \item \textbf{Justificación:} Si un estudiante tiene multas pendientes o dañó un equipo anteriormente, el sistema debe bloquearle el acceso automáticamente.
-        \item \textbf{Impacto en la BD:} El campo habilitado en la tabla USUARIOS debe cambiar a 'N' automáticamente si se genera una multa.
-    \end{itemize}
+Esto se hace porque:
 
-    \item \textbf{Integridad de la Devolución (Doble Verificación)}
-    \begin{itemize}
-        \item \textbf{Regla:} Todo préstamo debe registrar obligatoriamente al laboratorista que entrega (ID\_LAB\_PRESTA) y, posteriormente, al que recibe (ID\_LAB\_DEV).
-        \item \textbf{Justificación:} Esto asegura la trazabilidad (responsabilidad) en caso de que el equipo regrese dañado.
-        \item \textbf{Impacto en la BD:} El campo ID\_LAB\_DEV debe ser obligatorio al momento de actualizar la FEC\_REAL.
-    \end{itemize}
+\begin{itemize}[leftmargin=1.2cm]
+    \item un cliente puede comprar muchos productos;
+    \item un producto puede ser comprado por muchos clientes;
+    \item esa relacion es de tipo muchos a muchos (N:M);
+    \item y en el modelo relacional una relacion N:M debe resolverse con una tabla intermedia.
+\end{itemize}
 
-    \item \textbf{Generación Automática de Multas por Mora}
-    \begin{itemize}
-        \item \textbf{Regla:} Si la FEC\_REAL (fecha de entrega real) es mayor a la FEC\_DEV (fecha máxima pactada), se debe generar automáticamente un registro en la tabla MULTAS.
-        \item \textbf{Justificación:} Garantiza que los equipos roten y estén disponibles para otros usuarios en los tiempos previstos.
-        \item \textbf{Impacto en la BD:} Se requiere un cálculo de ($FEC\_REAL - FEC\_DEV$) para determinar el VAL\_PAGAR.
-    \end{itemize}
+\subsubsection*{2. Modelo conceptual}
 
-    \item \textbf{Vigencia por Periodo Académico}
-    \begin{itemize}
-        \item \textbf{Regla:} No se pueden realizar préstamos cuyas fechas estén fuera del rango de FEC\_INI\_PER y FEC\_FIN\_PER del periodo activo.
-        \item \textbf{Justificación:} Evita que los equipos se queden en manos de los usuarios durante las vacaciones o periodos donde no hay supervisión de laboratorio.
-        \item \textbf{Impacto en la BD:} Validación de fechas cruzando PRESTAMOS con PERIODOS.
-    \end{itemize}
+\noindent\textbf{2.1 Entidades del negocio}
 
-    \item \textbf{Exclusividad de Disponibilidad del Equipo}
-    \begin{itemize}
-        \item \textbf{Regla:} Un equipo solo puede ser objeto de un nuevo préstamo si su atributo DIS\_EQUI tiene el valor 'D' (Disponible). Al momento de registrar el préstamo, este valor debe cambiar automáticamente a 'P' (Prestado).
-        \item \textbf{Justificación:} Evita la duplicidad de préstamos sobre un mismo activo físico y garantiza que el inventario mostrado al laboratorista sea real.
-        \item \textbf{Impacto en la BD:}
-        \begin{itemize}
-            \item Antes del Préstamo: Una consulta SELECT debe filtrar solo equipos con DIS\_EQUI = 'D'.
-            \item Durante el Préstamo: Se ejecuta un UPDATE en la tabla EQUIPOS para cambiar el estado a 'P'.
-            \item En la Devolución: Cuando se registra la FEC\_REAL en la tabla PRESTAMOS, el estado en EQUIPOS debe volver a 'D'.
-        \end{itemize}
-    \end{itemize}
+\vspace{0.2cm}
 
-    \item \textbf{Regla de Integridad del Estado Físico (Entregas vs. Devoluciones)}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El ESTADO\_DEV (estado de devolución) no puede ser superior en calidad al ESTADO\_PRE (estado de préstamo). Si un equipo sale como "ANTIGUO", no puede regresar como "NUEVO".
-        \item \textbf{Justificación:} Detecta errores de digitación o posibles cambios de piezas/equipos por parte del usuario. Si hay una discrepancia negativa (sale "NUEVO" y regresa "DAÑADO"), el sistema debe obligar a registrar una OBSERVACIÓN.
-        \item \textbf{Impacto en la BD:} El sistema debe comparar el texto o nivel de calidad de ambos atributos antes de cerrar el préstamo.
-    \end{itemize}
+\textbf{Cliente}
 
-    \item \textbf{Regla de Consistencia de Categoría}
-    \begin{itemize}
-        \item \textbf{Enunciado:} Todo equipo registrado en la tabla EQUIPOS debe tener obligatoriamente un ID\_CAT\_PER válido que exista en la tabla CATEGORIAS.
-        \item \textbf{Justificación:} Evita tener equipos "huérfanos" en el sistema. Si no sabemos si es una Laptop o un Proyector, no podemos aplicar reglas de tiempo (por ejemplo, las laptops se prestan por 2 días, pero los proyectores quizás solo por 3 horas).
-        \item \textbf{Impacto en la BD:} Aplicación de Integridad Referencial (Foreign Key). No se puede borrar una categoría si todavía tiene equipos asignados a ella.
-    \end{itemize}
+Representa a las personas que compran productos.
 
-    \item \textbf{Regla de Liquidación de Multas para Rehabilitación}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El atributo habilitado del usuario solo puede volver a 'S' (Sí) cuando todos los registros relacionados en la tabla MULTAS tengan el EST\_MUL como "PAGADO".
-        \item \textbf{Justificación:} Asegura que el proceso de cobro se complete. El laboratorista no debe habilitar a mano a un amigo si este aún debe dinero a la universidad.
-        \item \textbf{Impacto en la BD:} Al actualizar una multa a "PAGADO", el sistema debe hacer un COUNT de las multas pendientes del usuario; si el resultado es 0, entonces se ejecuta el UPDATE a habilitado = 'S'.
-    \end{itemize}
-\end{enumerate}
-%Especifique las TAC's utilizadas en la Tarea. 
-\subsection{Habilidades blandas empleadas en la tarea}
+Atributos:
+\begin{itemize}[leftmargin=1.2cm]
+    \item CI
+    \item Nombre
+    \item Apellidos
+    \item Direccion
+    \item Fecha de nacimiento
+\end{itemize}
+
+\textbf{Proveedor}
+
+Representa a las empresas o personas que suministran productos.
+
+Atributos:
+\begin{itemize}[leftmargin=1.2cm]
+    \item RUC
+    \item Nombre
+    \item Direccion
+\end{itemize}
+
+\textbf{Producto}
+
+Representa los bienes que la empresa vende.
+
+Atributos:
+\begin{itemize}[leftmargin=1.2cm]
+    \item Codigo
+    \item Nombre
+    \item Precio unitario
+    \item Marca
+\end{itemize}
+
+\textbf{Compra}
+
+Representa una transaccion realizada por un cliente.
+
+Atributos:
+\begin{itemize}[leftmargin=1.2cm]
+    \item IdCompra
+    \item FechaCompra
+\end{itemize}
+
+\textbf{Detalle\_Compra}
+
+Representa los productos incluidos en una compra.
+
+Atributos:
+\begin{itemize}[leftmargin=1.2cm]
+    \item Cantidad
+    \item PrecioVenta
+\end{itemize}
+
+\noindent\textbf{2.2 Reglas de negocio}
+
+\vspace{0.2cm}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Un cliente puede realizar muchas compras.
+    \item Una compra pertenece a un solo cliente.
+    \item Una compra puede incluir uno o varios productos.
+    \item Un producto puede aparecer en muchas compras.
+    \item Un proveedor puede suministrar muchos productos.
+    \item Un producto es suministrado por un solo proveedor.
+\end{itemize}
+
+\subsubsection*{3. Modelo Entidad-Relacion (ER)}
+
+\noindent\textbf{3.1 Entidades con sus claves}
+
+\vspace{0.2cm}
+
+\textbf{CLIENTE}
+\begin{itemize}[leftmargin=1.2cm]
+    \item CI (clave primaria)
+    \item Nombre
+    \item Apellidos
+    \item Direccion
+    \item FechaNacimiento
+\end{itemize}
+
+\textbf{PROVEEDOR}
+\begin{itemize}[leftmargin=1.2cm]
+    \item RUC (clave primaria)
+    \item Nombre
+    \item Direccion
+\end{itemize}
+
+\textbf{PRODUCTO}
+\begin{itemize}[leftmargin=1.2cm]
+    \item CodigoProducto (clave primaria)
+    \item NombreProducto
+    \item PrecioUnitario
+    \item Marca
+\end{itemize}
+
+\textbf{COMPRA}
+\begin{itemize}[leftmargin=1.2cm]
+    \item IdCompra (clave primaria)
+    \item FechaCompra
+\end{itemize}
+
+\textbf{DETALLE\_COMPRA}
+\begin{itemize}[leftmargin=1.2cm]
+    \item IdCompra (parte de clave primaria y clave foranea)
+    \item CodigoProducto (parte de clave primaria y clave foranea)
+    \item Cantidad
+    \item PrecioVenta
+\end{itemize}
+
+\noindent\textbf{3.2 Relaciones y cardinalidades}
+
+\vspace{0.2cm}
+
+\textbf{PROVEEDOR --- SUMINISTRA --- PRODUCTO}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Un proveedor suministra muchos productos.
+    \item Un producto es suministrado por un solo proveedor.
+\end{itemize}
+
+Cardinalidad:
+
+\begin{center}
+\texttt{PROVEEDOR (1) ----- (N) PRODUCTO}
+\end{center}
+
+\textbf{CLIENTE --- REALIZA --- COMPRA}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Un cliente realiza muchas compras.
+    \item Una compra corresponde a un solo cliente.
+\end{itemize}
+
+Cardinalidad:
+
+\begin{center}
+\texttt{CLIENTE (1) ----- (N) COMPRA}
+\end{center}
+
+\textbf{COMPRA --- CONTIENE --- DETALLE\_COMPRA}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Una compra tiene varios detalles.
+    \item Cada detalle pertenece a una sola compra.
+\end{itemize}
+
+Cardinalidad:
+
+\begin{center}
+\texttt{COMPRA (1) ----- (N) DETALLE\_COMPRA}
+\end{center}
+
+\textbf{PRODUCTO --- APARECE\_EN --- DETALLE\_COMPRA}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Un producto puede aparecer en muchos detalles.
+    \item Cada detalle hace referencia a un solo producto.
+\end{itemize}
+
+Cardinalidad:
+
+\begin{center}
+\texttt{PRODUCTO (1) ----- (N) DETALLE\_COMPRA}
+\end{center}
+
+\subsubsection*{4. Paso del modelo ER al modelo relacional}
+
+\textbf{Regla 1. Cada entidad fuerte se convierte en una tabla}
+
+Por lo tanto se crean las tablas:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item CLIENTES
+    \item PROVEEDORES
+    \item PRODUCTOS
+    \item COMPRAS
+\end{itemize}
+
+\textbf{Regla 2. Relacion 1:N}
+
+En una relacion 1:N, la clave primaria del lado 1 pasa como clave foranea al lado N.
+
+\textbf{PROVEEDOR 1:N PRODUCTO}
+
+La clave primaria de PROVEEDORES pasa a PRODUCTOS.
+
+Entonces:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item RUC\_PROV sera FK en PRODUCTOS
+\end{itemize}
+
+\textbf{CLIENTE 1:N COMPRA}
+
+La clave primaria de CLIENTES pasa a COMPRAS.
+
+Entonces:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item CI\_CLI sera FK en COMPRAS
+\end{itemize}
+
+\textbf{Regla 3. Relacion N:M}
+
+La relacion N:M se transforma en una tabla intermedia.
+
+La compra de productos se resuelve con:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item COMPRAS
+    \item DETALLE\_COMPRA
+\end{itemize}
+
+En DETALLE\_COMPRA se almacenan:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item ID\_COMPRA
+    \item COD\_PROD
+    \item CANTIDAD
+    \item PRECIO\_VENTA
+\end{itemize}
+
+La clave primaria sera compuesta:
+
+\begin{center}
+\texttt{(ID\_COMPRA, COD\_PROD)}
+\end{center}
+
+\subsubsection*{5. Modelo relacional}
+
+\textbf{Esquema relacional final}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item \texttt{CLIENTES(CI\_CLI PK, NOM\_CLI, APE\_CLI, DIR\_CLI, FEC\_NAC)}
+    \item \texttt{PROVEEDORES(RUC\_PROV PK, NOM\_PROV, DIR\_PROV)}
+    \item \texttt{PRODUCTOS(COD\_PROD PK, NOM\_PROD, PRE\_UNIT, MARCA, RUC\_PROV FK)}
+    \item \texttt{COMPRAS(ID\_COMPRA PK, FEC\_COMPRA, CI\_CLI FK)}
+    \item \texttt{DETALLE\_COMPRA(ID\_COMPRA FK, COD\_PROD FK, CANTIDAD, PRECIO\_VENTA, PK(ID\_COMPRA, COD\_PROD))}
+\end{itemize}
+
+\subsubsection*{6. Modelo fisico en Oracle}
+
+Aqui ya se definen:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item tipos de datos Oracle;
+    \item restricciones;
+    \item nombres de claves primarias;
+    \item claves foraneas;
+    \item validaciones con CHECK.
+\end{itemize}
+
+\noindent\textbf{7.1 Eliminacion previa de tablas si ya existen}
+
+\vspace{0.3cm}
+
+Esto sirve para volver a ejecutar el script.
+
+\begin{lstlisting}[language=SQL, caption={Eliminacion previa de tablas del ejercicio adicional 1}]
+DROP TABLE DETALLE_COMPRA CASCADE CONSTRAINTS;
+DROP TABLE COMPRAS CASCADE CONSTRAINTS;
+DROP TABLE PRODUCTOS CASCADE CONSTRAINTS;
+DROP TABLE CLIENTES CASCADE CONSTRAINTS;
+DROP TABLE PROVEEDORES CASCADE CONSTRAINTS;
+\end{lstlisting}
+
+\noindent\textbf{7.2 Creacion de tablas}
+
+\vspace{0.3cm}
+
+\begin{lstlisting}[language=SQL, caption={Creacion de tablas del ejercicio adicional 1}]
+CREATE TABLE PROVEEDORES (
+    RUC_PROV    VARCHAR2(13) PRIMARY KEY,
+    NOM_PROV    VARCHAR2(20) NOT NULL,
+    DIR_PROV    VARCHAR2(30) NOT NULL
+);
+
+CREATE TABLE CLIENTES (
+    CI_CLI      VARCHAR2(10) PRIMARY KEY,
+    NOM_CLI     VARCHAR2(15) NOT NULL,
+    APE_CLI     VARCHAR2(20) NOT NULL,
+    DIR_CLI     VARCHAR2(30) NOT NULL,
+    FEC_NAC     DATE NOT NULL
+);
+
+CREATE TABLE PRODUCTOS (
+    COD_PROD    VARCHAR2(5) PRIMARY KEY,
+    NOM_PROD    VARCHAR2(20) NOT NULL,
+    PRE_UNIT    NUMBER(8,2) NOT NULL,
+    MARCA       VARCHAR2(15) NOT NULL,
+    RUC_PROV    VARCHAR2(13) NOT NULL,
+    CONSTRAINT FK_PROD_PROV
+        FOREIGN KEY (RUC_PROV) REFERENCES PROVEEDORES(RUC_PROV),
+    CONSTRAINT CHK_PRE_UNIT
+        CHECK (PRE_UNIT > 0)
+);
+
+CREATE TABLE COMPRAS (
+    ID_COMPRA   NUMBER(5) PRIMARY KEY,
+    FEC_COMPRA  DATE NOT NULL,
+    CI_CLI      VARCHAR2(10) NOT NULL,
+    CONSTRAINT FK_COMP_CLI
+        FOREIGN KEY (CI_CLI) REFERENCES CLIENTES(CI_CLI)
+);
+
+CREATE TABLE DETALLE_COMPRA (
+    ID_COMPRA      NUMBER(5) NOT NULL,
+    COD_PROD       VARCHAR2(5) NOT NULL,
+    CANTIDAD       NUMBER(5) NOT NULL,
+    PRECIO_VENTA   NUMBER(8,2) NOT NULL,
+    CONSTRAINT PK_DET_COMPRA
+        PRIMARY KEY (ID_COMPRA, COD_PROD),
+    CONSTRAINT FK_DET_COMPRA_COMP
+        FOREIGN KEY (ID_COMPRA) REFERENCES COMPRAS(ID_COMPRA),
+    CONSTRAINT FK_DET_COMPRA_PROD
+        FOREIGN KEY (COD_PROD) REFERENCES PRODUCTOS(COD_PROD),
+    CONSTRAINT CHK_CANTIDAD
+        CHECK (CANTIDAD > 0),
+    CONSTRAINT CHK_PRECIO_VENTA
+        CHECK (PRECIO_VENTA > 0)
+);
+\end{lstlisting}
+
+\subsubsection*{8. DML en Oracle}
+
+\noindent\textbf{8.1 Insercion de datos en PROVEEDORES}
+
+\noindent\textbf{8.2 Insercion de datos en CLIENTES}
+
+\noindent\textbf{8.3 Insercion de datos en PRODUCTOS}
+
+\noindent\textbf{8.4 Insercion de datos en COMPRAS}
+
+\noindent\textbf{8.5 Insercion de datos en DETALLE\_COMPRA}
+
+\noindent\textbf{8.6 Confirmar cambios}
+
+\vspace{0.4cm}
+
+\begin{lstlisting}[language=SQL, caption={Insercion de datos del ejercicio adicional 1}]
+-- PROVEEDORES
+INSERT INTO PROVEEDORES VALUES ('1790012345001', 'TecnoSur', 'Quito Norte');
+INSERT INTO PROVEEDORES VALUES ('1790012345002', 'AndesComp', 'Ambato Centro');
+INSERT INTO PROVEEDORES VALUES ('1790012345004', 'DataPlus', 'Cuenca Sur');
+
+-- CLIENTES
+INSERT INTO CLIENTES VALUES ('1801112223', 'Ana', 'Perez', 'Ambato Huachi', DATE '2001-05-10');
+INSERT INTO CLIENTES VALUES ('1802223334', 'Carlos', 'Mena', 'Quito Centro', DATE '2000-08-14');
+INSERT INTO CLIENTES VALUES ('1803334445', 'Sofia', 'Lara', 'Latacunga Norte', DATE '2003-11-02');
+
+-- PRODUCTOS
+INSERT INTO PRODUCTOS VALUES ('PR01', 'Laptop Lenovo', 850, 'Lenovo', '1790012345001');
+INSERT INTO PRODUCTOS VALUES ('PR02', 'Mouse Logitech', 25, 'Logitech', '1790012345002');
+INSERT INTO PRODUCTOS VALUES ('PR03', 'Teclado Redragon', 60, 'Redragon', '1790012345002');
+
+-- COMPRAS
+INSERT INTO COMPRAS VALUES (1, DATE '2026-04-01', '1801112223');
+INSERT INTO COMPRAS VALUES (2, DATE '2026-04-02', '1802223334');
+
+-- DETALLE_COMPRA
+INSERT INTO DETALLE_COMPRA VALUES (1, 'PR01', 1, 870);
+INSERT INTO DETALLE_COMPRA VALUES (1, 'PR02', 2, 28);
+INSERT INTO DETALLE_COMPRA VALUES (2, 'PR03', 1, 65);
+
+COMMIT;
+\end{lstlisting}
+
+\subsubsection*{9. Consultas de comprobacion}
+
+\textbf{Ver clientes, productos y compras}
+
+\begin{lstlisting}[language=SQL, caption={Consultas de comprobacion del ejercicio adicional 1}]
+SELECT * FROM CLIENTES;
+SELECT * FROM PRODUCTOS;
+SELECT * FROM COMPRAS;
+\end{lstlisting}
+
+\textbf{Consulta integrada}
+
+Muestra que compro cada cliente.
+
+\begin{lstlisting}[language=SQL, caption={Consulta integrada del ejercicio adicional 1}]
+SELECT
+    c.CI_CLI,
+    c.NOM_CLI,
+    c.APE_CLI,
+    co.ID_COMPRA,
+    co.FEC_COMPRA,
+    p.COD_PROD,
+    p.NOM_PROD,
+    d.CANTIDAD,
+    d.PRECIO_VENTA
+FROM CLIENTES c
+JOIN COMPRAS co ON c.CI_CLI = co.CI_CLI
+JOIN DETALLE_COMPRA d ON co.ID_COMPRA = d.ID_COMPRA
+JOIN PRODUCTOS p ON d.COD_PROD = p.COD_PROD
+ORDER BY co.ID_COMPRA;
+\end{lstlisting}
+
+\subsubsection*{10. Operaciones DML adicionales}
+
+\noindent\textbf{10.1 UPDATE}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Cambiar direccion de un cliente.
+    \item Cambiar precio unitario de un producto.
+    \item Cambiar marca de un producto.
+\end{itemize}
+
+\noindent\textbf{10.2 DELETE}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Eliminar un detalle de compra.
+    \item Eliminar una compra si ya no tiene detalles.
+\end{itemize}
+
+\noindent\textbf{10.3 Guardar cambios}
+
+\vspace{0.3cm}
+
+\begin{lstlisting}[language=SQL, caption={Operaciones UPDATE y DELETE del ejercicio adicional 1}]
+UPDATE CLIENTES
+SET DIR_CLI = 'Ambato Ficoa'
+WHERE CI_CLI = '1801112223';
+
+UPDATE PRODUCTOS
+SET PRE_UNIT = 27
+WHERE COD_PROD = 'PR02';
+
+UPDATE PRODUCTOS
+SET MARCA = 'Logitech G'
+WHERE COD_PROD = 'PR02';
+
+DELETE FROM DETALLE_COMPRA
+WHERE ID_COMPRA = 2 AND COD_PROD = 'PR03';
+
+DELETE FROM COMPRAS
+WHERE ID_COMPRA = 2;
+
+COMMIT;
+\end{lstlisting}
+
+\subsubsection*{11. Pruebas de errores de integridad en Oracle}
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item Error 1: clave primaria duplicada
+    \item Error 2: clave foranea inexistente
+    \item Error 3: eliminacion de registro padre con hijos
+    \item Error 4: violacion de CHECK
+\end{itemize}
+
+\begin{lstlisting}[language=SQL, caption={Pruebas de errores de integridad del ejercicio adicional 1}]
+-- Error 1: clave primaria duplicada
+INSERT INTO CLIENTES VALUES ('1801112223', 'Pedro', 'Lopez', 'Riobamba', DATE '2002-01-01');
+
+-- Error 2: clave foranea inexistente
+INSERT INTO PRODUCTOS VALUES ('PR99', 'Tablet', 300, 'Samsung', '1790000000000');
+
+-- Error 3: eliminacion de registro padre con hijos
+DELETE FROM COMPRAS WHERE ID_COMPRA = 1;
+
+-- Error 4: violacion de CHECK
+INSERT INTO DETALLE_COMPRA VALUES (1, 'PR02', -1, 20);
+\end{lstlisting}
+
+\subsubsection*{12. Ejercicios practicos en Oracle}
+
+\noindent\textbf{12.1 Ejercicio practico 1}
+
+Insertar un nuevo proveedor llamado ElectroGlobal, con RUC 1790012345003, direccion Guayaquil Norte.
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO PROVEEDORES VALUES ('1790012345003', 'ElectroGlobal', 'Guayaquil Norte');
+\end{lstlisting}
+
+\noindent\textbf{12.2 Ejercicio practico 2}
+
+Registrar un nuevo producto llamado Disco SSD 1TB, marca Kingston, precio 95, suministrado por 1790012345003.
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO PRODUCTOS VALUES ('PR06', 'Disco SSD 1TB', 95, 'Kingston', '1790012345003');
+\end{lstlisting}
+
+\noindent\textbf{12.3 Ejercicio practico 3}
+
+Registrar un nuevo cliente:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item CI: 1809998887
+    \item Nombre: Luis
+    \item Apellidos: Mora
+    \item Direccion: Riobamba Centro
+    \item Fecha de nacimiento: 2002-03-22
+\end{itemize}
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO CLIENTES VALUES ('1809998887', 'Luis', 'Mora', 'Riobamba Centro', DATE '2002-03-22');
+\end{lstlisting}
+
+\noindent\textbf{12.4 Ejercicio practico 4}
+
+Registrar una compra del cliente 1809998887 con ID\_COMPRA = 3 y fecha 2026-04-03.
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO COMPRAS VALUES (3, DATE '2026-04-03', '1809998887');
+\end{lstlisting}
+
+\noindent\textbf{12.5 Ejercicio practico 5}
+
+Registrar en la compra 3 los productos:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item PR03 cantidad 1, precio 60
+    \item PR06 cantidad 2, precio 95
+\end{itemize}
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO DETALLE_COMPRA VALUES (3, 'PR03', 1, 60);
+INSERT INTO DETALLE_COMPRA VALUES (3, 'PR06', 2, 95);
+\end{lstlisting}
+
+\noindent\textbf{12.6 Ejercicio practico 6}
+
+Crear dos nuevos clientes y registrar al menos una compra para cada uno.
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO CLIENTES VALUES ('1807776665', 'Marta', 'Vega', 'Ambato Sur', DATE '2001-07-11');
+INSERT INTO CLIENTES VALUES ('1806665554', 'Diego', 'Paz', 'Quito Norte', DATE '2000-10-19');
+
+INSERT INTO COMPRAS VALUES (4, DATE '2026-04-04', '1807776665');
+INSERT INTO COMPRAS VALUES (5, DATE '2026-04-05', '1806665554');
+
+INSERT INTO DETALLE_COMPRA VALUES (4, 'PR01', 1, 860);
+INSERT INTO DETALLE_COMPRA VALUES (5, 'PR02', 3, 27);
+\end{lstlisting}
+
+\noindent\textbf{12.7 Ejercicio practico 7}
+
+Insertar tres productos nuevos, todos asociados a proveedores ya existentes.
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO PRODUCTOS VALUES ('PR07', 'Monitor 24', 180, 'LG', '1790012345001');
+INSERT INTO PRODUCTOS VALUES ('PR08', 'Memoria USB 64GB', 18, 'Sandisk', '1790012345002');
+INSERT INTO PRODUCTOS VALUES ('PR09', 'Webcam HD', 45, 'Genius', '1790012345004');
+\end{lstlisting}
+
+\noindent\textbf{12.8 Ejercicio practico 8}
+
+Actualizar el precio unitario de todos los productos de un proveedor especifico.
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+UPDATE PRODUCTOS
+SET PRE_UNIT = PRE_UNIT * 1.05
+WHERE RUC_PROV = '1790012345002';
+\end{lstlisting}
+
+\noindent\textbf{12.9 Ejercicio practico 9}
+
+Eliminar correctamente una compra completa, considerando primero sus detalles.
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+DELETE FROM DETALLE_COMPRA WHERE ID_COMPRA = 4;
+DELETE FROM COMPRAS WHERE ID_COMPRA = 4;
+\end{lstlisting}
+
+\noindent\textbf{12.10 Ejercicio practico 10}
+
+Intentar insertar:
+
+\begin{itemize}[leftmargin=1.2cm]
+    \item un producto con proveedor inexistente;
+    \item un cliente con CI repetida;
+    \item un detalle con cantidad negativa.
+\end{itemize}
+
+\textbf{Solucion}
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO PRODUCTOS VALUES ('PR10', 'Impresora', 220, 'HP', '1790099999999');
+INSERT INTO CLIENTES VALUES ('1809998887', 'Luis', 'Mora', 'Riobamba Centro', DATE '2002-03-22');
+INSERT INTO DETALLE_COMPRA VALUES (3, 'PR06', -2, 95);
+\end{lstlisting}
+
+\textbf{Luego, explicar por que Oracle genera error:}
+
+Oracle genera error en el primer caso porque se intenta registrar un producto con un proveedor que no existe en la tabla \texttt{PROVEEDORES}; por lo tanto, se viola la clave foranea. En el segundo caso, se intenta insertar un cliente con una clave primaria ya registrada, por lo que se incumple la restriccion de unicidad de la llave primaria. En el tercer caso, Oracle genera error porque la cantidad es negativa y la tabla \texttt{DETALLE\_COMPRA} tiene una restriccion \texttt{CHECK} que solo permite valores mayores que cero.\subsection{Habilidades blandas empleadas en la tarea}
 \begin{itemize}
     \item[$\square$] Liderazgo
     \item[$\square$] Trabajo en equipo
-    \item[$\square$] Comunicación asertiva
+    \item[$\boxtimes$] Comunicación asertiva
     \item[$\square$] La empatía
-    \item[$\square$] Pensamiento crítico
-    \item[$\square$] Flexibilidad
+    \item[$\boxtimes$] Pensamiento crítico
+    \item[$\boxtimes$] Flexibilidad
     \item[$\square$] La resolución de conflictos
-    \item[$\square$] Adaptabilidad
-    \item[$\square$] Responsabilidad
+    \item[$\boxtimes$] Adaptabilidad
+    \item[$\boxtimes$] Responsabilidad
 \end{itemize}
-
 
 \subsection{Conclusiones}
-Se concluye que el diseño preliminar del sistema de gestión de préstamos, fundamentado en la correcta identificación de entidades y reglas de negocio, establece una base técnica sólida para el desarrollo de la base de datos. La aplicación de un enfoque estructurado permitió transformar los requerimientos institucionales en un modelo conceptual organizado, garantizando que la futura implementación responda eficazmente a las necesidades de control, integridad de la información y optimización de los procesos administrativos dentro del contexto universitario.
+El desarrollo de la guía permitió reforzar la comprensión del modelo entidad/relación, del modelo relacional, de las dependencias funcionales y del proceso de normalización, evidenciando que un buen análisis de los enunciados facilita la correcta identificación de entidades, relaciones y restricciones. Asimismo, la traducción de los modelos conceptuales a esquemas de tablas permitió consolidar el uso de claves primarias y foráneas como elementos esenciales de integridad en bases de datos relacionales.
+
+Por otra parte, el trabajo realizado demuestra que la organización adecuada de la información constituye una base importante para procesos posteriores de normalización, ya que reduce ambigüedades, mejora la consistencia del diseño lógico y facilita su implementación en Oracle.
 
 \subsection{Recomendaciones}
-\begin{itemize}
-    \item Realizar un análisis exhaustivo de la cardinalidad entre las 8 entidades identificadas para asegurar que las relaciones en el modelo entidad-relación reflejen fielmente la lógica del negocio.
-    \item Documentar de manera detallada cada regla de negocio establecida, con el fin de facilitar la posterior creación de restricciones (constraints) y disparadores (triggers) a nivel de base de datos.
-    \item Validar el listado de atributos propuesto mediante un proceso de normalización hasta la tercera forma normal (3NF), evitando así la redundancia de datos y posibles anomalías en futuras inserciones o actualizaciones.
-    \item Mantener una comunicación constante entre los integrantes del grupo para asegurar que el alcance definido se cumpla estrictamente dentro de los plazos establecidos por el docente. \cite{greenwade93}
-\end{itemize}
+Se recomienda revisar cuidadosamente cada enunciado antes de construir el modelo, a fin de distinguir correctamente entidades, atributos y relaciones. Además, es conveniente validar las cardinalidades antes de pasar al modelo relacional, ya que de ello depende la correcta definición de claves foráneas y tablas intermedias.
+
+También se recomienda continuar con ejercicios prácticos similares, complementar el análisis lógico con la implementación física en un gestor de base de datos y verificar el cumplimiento de 1FN, 2FN y 3FN para obtener esquemas mejor organizados y consistentes.
+
 \subsection{Referencias}
-Insertar las referencias bibliográficas empleadas aplicando la norma IEEE.
-
-\vspace{-3em} %reduce el espacio causado por refname vacío
 \renewcommand{\refname}{}
+\vspace{-2em}
+\nocite{martinez2019,ahijado2023,capacho2017}
 \bibliographystyle{ieeetr}
-\bibliography{citas}
+\bibliography{sample}
 
+\clearpage
 \subsection{Anexos}
-\vfill
+
+\subsubsection*{Anexo A. Ejercicio 1}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer1_modelo_Entidad_Relacion.png}
+    \caption{Modelo entidad/relación del ejercicio 1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer1_modelo_relacional.png}
+    \caption{Modelo relacional del ejercicio 1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer1_registro_de_datos.png}
+    \caption{Registros de datos del ejercicio 1}
+\end{figure}
+
+\clearpage
+\subsubsection*{Anexo B. Ejercicio 2}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer2_modelo_Entidad_Relacion.png}
+    \caption{Modelo entidad/relación del ejercicio 2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer2_modelo_relacional.png}
+    \caption{Modelo relacional del ejercicio 2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer2_registro_de_datos.png}
+    \caption{Registros de datos del ejercicio 2}
+\end{figure}
+
+\clearpage
+\subsubsection*{Anexo C. Ejercicio 3}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer3_modelo_Entidad_Relacion.png}
+    \caption{Modelo entidad/relación del ejercicio 3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer3_modelo_relacional.png}
+    \caption{Modelo relacional del ejercicio 3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer3_registro_de_datos.png}
+    \caption{Registros de datos del ejercicio 3}
+\end{figure}
+
+\clearpage
+\subsubsection*{Anexo D. Ejercicio 4}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer4_modelo_Entidad_Relacion.png}
+    \caption{Modelo entidad/relación del ejercicio 4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer4_modelo_relacional.png}
+    \caption{Modelo relacional del ejercicio 4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer4_registro_de_datos.png}
+    \caption{Registros de datos del ejercicio 4}
+\end{figure}
+
+\clearpage
+\subsubsection*{Anexo E. Ejercicio adicional 1}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer_Adicional1_modelo_Entidad_Relacion.png}
+    \caption{Modelo entidad/relación del ejercicio adicional 1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.92\textwidth]{ejer_Adicional1_modelo_relacional.png}
+    \caption{Modelo relacional del ejercicio adicional 1}
+\end{figure}
+
 \end{document}
