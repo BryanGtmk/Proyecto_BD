@@ -77,10 +77,11 @@
 \section{Portada}
 \begin{flushleft}
 \begin{tabular}{>{\bfseries}p{6.2cm} p{8.5cm}}
-Tema: & APE2. Formas Normales y Normalización \\
+Tema: & APE3. Modelo Fisico \\
 Unidad de Organización Curricular: & PROFESIONAL \\
 Nivel y Paralelo: & 4to Semestre ``B'' \\
 Alumno participante: & Guatemal Avilez Bryan Stalin \\
+& Bejarano Masabanda Carlos Fabian \\
 Asignatura: & Base de Datos \\
 Docente: & Ing. Jose Ruben Caiza Caizabuano Mg. \\
 Modalidad: & Presencial \\
@@ -1132,6 +1133,122 @@ INSERT INTO DETALLE_COMPRA VALUES (3, 'PR06', -2, 95);
 \textbf{Luego, explicar por que Oracle genera error:}
 
 Oracle genera error en el primer caso porque se intenta registrar un producto con un proveedor que no existe en la tabla \texttt{PROVEEDORES}; por lo tanto, se viola la clave foranea. En el segundo caso, se intenta insertar un cliente con una clave primaria ya registrada, por lo que se incumple la restriccion de unicidad de la llave primaria. En el tercer caso, Oracle genera error porque la cantidad es negativa y la tabla \texttt{DETALLE\_COMPRA} tiene una restriccion \texttt{CHECK} que solo permite valores mayores que cero.\subsection{Habilidades blandas empleadas en la tarea}
+
+\subsubsection*{13. Ejercicios practicos DQL o subconsultas}
+
+\section{Subconsultas en SQL}
+
+Las subconsultas son consultas anidadas dentro de otra consulta principal. Se utilizan para obtener datos intermedios que sirven como criterio para la consulta externa. Estas permiten realizar consultas más complejas y precisas sobre la base de datos.
+
+En la presente base de datos se aplicaron subconsultas sobre las tablas \textbf{PROFESOR, MATERIA, ESTUDIANTES, AULAS y MATRICULA}, con el objetivo de analizar relaciones entre docentes, materias y estudiantes.
+
+\subsection{1. Estudiantes que no están matriculados en la materia ``Fisica''}
+
+Ejemplo del uso de la cláusula NOT IN.
+
+\begin{verbatim}
+SELECT Nom_Est, Ape_Est
+FROM ESTUDIANTES
+WHERE Id_Est NOT IN (
+    SELECT Id_Est_Mat
+    FROM MATRICULA
+    WHERE Id_Mod_Mat = (
+        SELECT Id_Mat
+        FROM MATERIA
+        WHERE Nom_Mat = 'Fisica'
+    )
+);
+\end{verbatim}
+
+ \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio2L1.png}
+        \caption{Imagen referencial del ejercicio 1 en SQL}
+        \label{fig:placeholder}
+    \end{figure}
+
+\textbf{Descripción:} \\
+Se excluyen los estudiantes que están matriculados en la materia ``Fisica'', mostrando únicamente aquellos que no cursan dicha asignatura.
+
+\subsection{2. Estudiantes matriculados en la misma materia que el estudiante E02}
+
+Permite encontrar estudiantes que comparten una misma materia.
+
+\begin{verbatim}
+SELECT Nom_Est, Ape_Est
+FROM ESTUDIANTES
+WHERE Id_Est IN (
+    SELECT Id_Est_Mat
+    FROM MATRICULA
+    WHERE Id_Mod_Mat = (
+        SELECT Id_Mod_Mat
+        FROM MATRICULA
+        WHERE Id_Est_Mat = 'E02'
+    )
+);
+\end{verbatim}
+
+ \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio2L2.png}
+        \caption{Imagen referencial del ejercicio 2 en SQL}
+        \label{fig:placeholder}
+    \end{figure}
+
+\textbf{Descripción:} \\
+Se obtiene la materia en la que está matriculado el estudiante E02 y luego se buscan los demás estudiantes que también están inscritos en esa materia.
+
+\subsection{3. Materias que se dictan en el mismo aula que ``Matematica''}
+
+Permite identificar materias que comparten el mismo aula.
+
+\begin{verbatim}
+SELECT Nom_Mat
+FROM MATERIA
+WHERE Id_Aul_Per = (
+    SELECT Id_Aul_Per
+    FROM MATERIA
+    WHERE Nom_Mat = 'Matematica'
+);
+\end{verbatim}
+
+ \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio2L3.png}
+        \caption{Imagen referencial del ejercicio 3 en SQL}
+        \label{fig:placeholder}
+    \end{figure}
+\textbf{Descripción:} \\
+Se obtiene el aula donde se dicta la materia ``Matematica'' y luego se listan todas las materias que utilizan esa misma aula.
+
+\subsection{4. Profesores que dictan clases en aulas diferentes a ``Lab 01''}
+
+Permite identificar docentes que no utilizan un aula específica.
+
+\begin{verbatim}
+SELECT Nom_Pro, Ape_Pro
+FROM PROFESOR
+WHERE Id_Pro IN (
+    SELECT Id_Pro_Per
+    FROM MATERIA
+    WHERE Id_Aul_Per <> (
+        SELECT Id_Aul
+        FROM AULAS
+        WHERE Nom_Aul = 'Lab 01'
+    )
+);
+\end{verbatim}
+
+ \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio2L4.png}
+        \caption{Imagen referencial del ejercicio 4 en SQL}
+        \label{fig:placeholder}
+    \end{figure}
+
+\textbf{Descripción:} \\
+Se seleccionan los profesores que dictan materias en aulas distintas al aula ``Lab 01''.
+
 \begin{itemize}
     \item[$\square$] Liderazgo
     \item[$\square$] Trabajo en equipo
