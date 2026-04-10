@@ -1136,6 +1136,86 @@ Oracle genera error en el primer caso porque se intenta registrar un producto co
 
 \subsubsection*{13. Ejercicios practicos DQL o subconsultas}
 
+\section{Creacion de las tablas en SQL}
+
+\begin{lstlisting}
+-- TABLA PROFESOR
+CREATE TABLE PROFESOR (
+    Id_Pro VARCHAR2(5) PRIMARY KEY,
+    Ced_Pro VARCHAR2(15),
+    Nom_Pro VARCHAR2(50),
+    Ape_Pro VARCHAR2(50),
+    Dir_Pro VARCHAR2(50),
+    Fec_Nac_Pro DATE,
+    Id_Esp_Pro VARCHAR2(5)
+);
+
+-- TABLA AULAS
+CREATE TABLE AULAS (
+    Id_Aul VARCHAR2(5) PRIMARY KEY,
+    Nom_Aul VARCHAR2(20)
+);
+
+-- TABLA MATERIA
+CREATE TABLE MATERIA (
+    Id_Mat VARCHAR2(5) PRIMARY KEY,
+    Nom_Mat VARCHAR2(50),
+    Id_Pro_Per VARCHAR2(5),
+    Id_Aul_Per VARCHAR2(5),
+    FOREIGN KEY (Id_Pro_Per) REFERENCES PROFESOR(Id_Pro),
+    FOREIGN KEY (Id_Aul_Per) REFERENCES AULAS(Id_Aul)
+);
+
+-- TABLA ESTUDIANTES
+CREATE TABLE ESTUDIANTES (
+    Id_Est VARCHAR2(5) PRIMARY KEY,
+    Ct_Est VARCHAR2(15),
+    Nom_Est VARCHAR2(50),
+    Ape_Est VARCHAR2(50),
+    Fec_Nac_Est DATE
+);
+
+-- TABLA MATRICULA
+CREATE TABLE MATRICULA (
+    Id_Mat VARCHAR2(5) PRIMARY KEY,
+    Id_Mod_Mat VARCHAR2(5),
+    Id_Est_Mat VARCHAR2(5),
+    Fec_Mat DATE,
+    FOREIGN KEY (Id_Mod_Mat) REFERENCES MATERIA(Id_Mat),
+    FOREIGN KEY (Id_Est_Mat) REFERENCES ESTUDIANTES(Id_Est)
+);
+\end{lstlisting}
+
+
+\section{Insertar datos en las tablas en SQL}
+
+\begin{lstlisting}
+-- PROFESOR
+INSERT INTO PROFESOR VALUES ('P01','175425487','Juan','Lopez','Ambato', TO_DATE('06/05/1998','DD/MM/YYYY'),'P01');
+INSERT INTO PROFESOR VALUES ('P02','092758135','Julio','Lopez','Ambato', TO_DATE('05/03/1997','DD/MM/YYYY'),'P02');
+INSERT INTO PROFESOR VALUES ('P03','137123758','Carlos','Vela','Ambato', TO_DATE('06/12/1996','DD/MM/YYYY'),'P03');
+
+-- AULAS
+INSERT INTO AULAS VALUES ('A01','Lab 01');
+INSERT INTO AULAS VALUES ('A02','Lab 02');
+INSERT INTO AULAS VALUES ('A03','Lab 03');
+
+-- MATERIA
+INSERT INTO MATERIA VALUES ('M01','Matematica','P02','A01');
+INSERT INTO MATERIA VALUES ('M02','Fisica','P03','A02');
+INSERT INTO MATERIA VALUES ('M03','Algebra','P01','A03');
+
+-- ESTUDIANTES
+INSERT INTO ESTUDIANTES VALUES ('E01','181066581','Carlos','Buenano', TO_DATE('02/10/2002','DD/MM/YYYY'));
+INSERT INTO ESTUDIANTES VALUES ('E02','153467190','Bryan','Valle', TO_DATE('12/08/2001','DD/MM/YYYY'));
+INSERT INTO ESTUDIANTES VALUES ('E03','123123189','Luis','Quispe', TO_DATE('12/03/2003','DD/MM/YYYY'));
+
+-- MATRICULA
+INSERT INTO MATRICULA VALUES ('Ma01','M03','E02', TO_DATE('25/10/2024','DD/MM/YYYY'));
+INSERT INTO MATRICULA VALUES ('Ma02','M02','E03', TO_DATE('25/10/2024','DD/MM/YYYY'));
+INSERT INTO MATRICULA VALUES ('Ma03','M01','E01', TO_DATE('20/10/2024','DD/MM/YYYY'));
+\end{lstlisting}
+
 \section{Subconsultas en SQL}
 
 Las subconsultas son consultas anidadas dentro de otra consulta principal. Se utilizan para obtener datos intermedios que sirven como criterio para la consulta externa. Estas permiten realizar consultas más complejas y precisas sobre la base de datos.
