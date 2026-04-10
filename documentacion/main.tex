@@ -59,6 +59,7 @@
         \scriptsize \textbf{CARRERA SOFTWARE - BASE DE DATOS}\\[0.1cm]
         \scriptsize \textbf{CICLO ACADÉMICO: ENERO 2026 - JULIO 2026}
     \end{minipage}%
+    \vspace{0.2cm}
     \hfill
     \begin{minipage}[c]{2.0cm}
         \centering
@@ -77,7 +78,7 @@
 \section{Portada}
 \begin{flushleft}
 \begin{tabular}{>{\bfseries}p{6.2cm} p{8.5cm}}
-Tema: & APE3. Modelo Fisico \\
+Tema: & APE3. Modelo físico, ingreso de datos y consultas DQL en Oracle \\
 Unidad de Organización Curricular: & PROFESIONAL \\
 Nivel y Paralelo: & 4to Semestre ``B'' \\
 Alumno participante: & Guatemal Avilez Bryan Stalin \\
@@ -93,121 +94,61 @@ Modalidad: & Presencial \\
 \subsection{Objetivos}
 
 \subsubsection{General}
-Analizar las formas normales y las dependencias funcionales para construir esquemas lógicos relacionales normalizados e implementar su estructura física básica en Oracle.
+Implementar el modelo físico de los ejercicios propuestos en Oracle, mediante la creación de tablas, el ingreso de datos y la ejecución de consultas DQL, con el fin de comprobar la correcta organización, almacenamiento y recuperación de la información.
 
 \subsubsection{Específicos}
 \begin{itemize}[leftmargin=1.2cm]
-    \item Identificar entidades, atributos, relaciones y cardinalidades en los ejercicios propuestos.
-    \item Analizar dependencias funcionales y aplicar las reglas de normalización hasta Tercera Forma Normal.
-    \item Transformar los modelos obtenidos en esquemas relacionales e implementarlos físicamente en Oracle mediante tablas con claves primarias y foráneas.
+    \item Transformar los modelos analizados en estructuras físicas de base de datos, definiendo tablas, claves primarias y claves foráneas.
+    \item Ingresar registros de prueba en cada esquema para verificar el funcionamiento de las relaciones establecidas.
+    \item Ejecutar consultas DQL y subconsultas en Oracle para recuperar información y validar la consistencia de los datos almacenados.
 \end{itemize}
 
 \subsection{Instrucciones}
-La actividad consiste en desarrollar un documento en formato PDF con la resolución de la guía APE. Para ello, se realizó el análisis de los cuatro enunciados propuestos, identificando los componentes del modelo entidad/relación y su posterior traducción al modelo relacional. Además, se organizó la información de forma técnica y ordenada, considerando la lógica de diseño de bases de datos, la consistencia de las relaciones establecidas entre tablas y la implementación del modelo físico en Oracle.
+La actividad consiste en desarrollar la implementación física de varios ejercicios de bases de datos en Oracle. Para ello, primero se construyó la estructura de tablas correspondiente a cada caso, considerando claves primarias, claves foráneas y restricciones básicas de integridad. Después se ingresaron datos de prueba con sentencias \texttt{INSERT INTO}, con el propósito de poblar las tablas y disponer de información suficiente para la validación. Finalmente, se elaboraron consultas DQL y subconsultas orientadas a recuperar datos específicos, comprobar las relaciones entre tablas y evidenciar el correcto funcionamiento del esquema físico propuesto.
 
-\subsection{Fundamento teórico de normalización}
+\subsection{Fundamento teórico del modelo físico, DML y DQL}
 
-La normalización es un proceso de organización de datos que permite estructurar correctamente una base de datos relacional, reduciendo redundancia, evitando anomalías de inserción, actualización y eliminación, y mejorando la integridad de la información. Su propósito principal consiste en descomponer relaciones complejas en tablas más pequeñas y coherentes, sin perder la capacidad de reconstruir la información necesaria.
+El modelo físico de una base de datos representa la implementación concreta del diseño en un sistema gestor, en este caso Oracle. A diferencia del modelo conceptual y del modelo relacional, el modelo físico se centra en la creación real de usuarios, tablas, restricciones, tipos de datos y relaciones que permitirán almacenar la información dentro del sistema.
 
-\subsubsection{Dependencias funcionales}
+\subsubsection{Modelo físico de base de datos}
 
-Una dependencia funcional se presenta cuando el valor de un atributo determina de manera única el valor de otro atributo dentro de una relación. En otras palabras, si se conoce el valor del atributo determinante, entonces se puede conocer con precisión el valor del atributo dependiente.
+El modelo físico traduce el diseño lógico a una estructura ejecutable. En esta etapa se definen aspectos como nombres de tablas, columnas, tipos de datos, tamaños, restricciones de integridad y vínculos entre entidades. Esta fase resulta importante porque convierte el análisis previo en una base de datos funcional que puede ser creada y utilizada dentro del gestor.
 
-De forma general, una dependencia funcional se representa como:
+\subsubsection{Claves primarias y claves foráneas}
 
-\[
-X \rightarrow Y
-\]
+La clave primaria permite identificar de manera única cada registro dentro de una tabla. Su presencia evita duplicidad y garantiza que cada fila tenga una identidad propia. Por otro lado, la clave foránea establece una relación entre dos tablas, asegurando que los valores ingresados en una tabla dependiente correspondan a registros válidos existentes en la tabla principal.
 
-donde \(X\) es el atributo o conjunto de atributos determinantes, y \(Y\) es el atributo o conjunto de atributos dependientes.
+Estas restricciones son esenciales en el modelo físico porque permiten mantener la integridad referencial y asegurar coherencia entre los datos.
 
-Las dependencias funcionales son importantes porque permiten identificar:
-\begin{itemize}[leftmargin=1.2cm]
-    \item claves candidatas y claves primarias;
-    \item dependencias parciales;
-    \item dependencias transitivas;
-    \item posibles problemas de redundancia en una relación.
-\end{itemize}
+\subsubsection{Lenguaje DDL}
 
-\subsubsection{Primera Forma Normal (1FN)}
+El lenguaje DDL (\textit{Data Definition Language}) se utiliza para definir la estructura de la base de datos. Por medio de instrucciones como \texttt{CREATE USER}, \texttt{CREATE TABLE} y \texttt{ALTER TABLE}, es posible crear los objetos que formarán parte del sistema de almacenamiento.
 
-Una relación se encuentra en Primera Forma Normal cuando todos sus atributos contienen valores atómicos, es decir, indivisibles, y no existen grupos repetitivos ni listas dentro de un mismo campo. En esta forma, cada intersección fila-columna debe almacenar un único valor.
+En el contexto de esta práctica, el DDL permitió construir el esquema físico de cada ejercicio, incluyendo usuarios, tablas y restricciones.
 
-La 1FN exige que:
-\begin{itemize}[leftmargin=1.2cm]
-    \item cada atributo contenga un solo valor por celda;
-    \item no existan atributos multivaluados;
-    \item cada fila pueda identificarse de manera única mediante una clave.
-\end{itemize}
+\subsubsection{Lenguaje DML}
 
-\subsubsection{Segunda Forma Normal (2FN)}
+El lenguaje DML (\textit{Data Manipulation Language}) permite manipular los datos contenidos en la base de datos. Las instrucciones más comunes son \texttt{INSERT}, \texttt{UPDATE} y \texttt{DELETE}. En esta guía se empleó principalmente \texttt{INSERT INTO} para registrar datos de prueba dentro de las tablas creadas.
 
-Una relación se encuentra en Segunda Forma Normal cuando ya cumple con la 1FN y, además, todos los atributos no clave dependen completamente de la clave primaria. Esto significa que no deben existir dependencias parciales respecto de una clave compuesta.
+El ingreso de datos constituye una fase importante, ya que permite comprobar que las relaciones y restricciones fueron definidas correctamente y que la base de datos puede almacenar información real o simulada de manera consistente.
 
-La 2FN se aplica especialmente cuando la clave primaria está formada por más de un atributo. Si un atributo no clave depende solo de una parte de la clave compuesta, entonces existe una dependencia parcial y la relación no cumple con 2FN.
+\subsubsection{Lenguaje DQL}
 
-\subsubsection{Tercera Forma Normal (3FN)}
+El lenguaje DQL (\textit{Data Query Language}) está orientado a la recuperación de información. Su instrucción principal es \texttt{SELECT}, la cual permite consultar datos almacenados de acuerdo con distintos criterios. A través de DQL es posible visualizar registros, filtrar información, ordenar resultados y combinar datos de varias tablas.
 
-Una relación se encuentra en Tercera Forma Normal cuando cumple con la 2FN y no presenta dependencias transitivas. Esto significa que ningún atributo no clave debe depender de otro atributo no clave.
+En esta práctica, las consultas DQL se utilizaron para demostrar que los datos ingresados pueden recuperarse de forma correcta y que la estructura física responde adecuadamente a los requerimientos de información.
 
-La 3FN busca eliminar relaciones indirectas entre atributos no clave, con el fin de evitar redundancia y mejorar la consistencia del diseño. En esta forma, cada atributo no clave debe depender únicamente de la clave primaria.
+\subsubsection{Subconsultas en SQL}
 
-\subsubsection{Proceso de normalización}
+Una subconsulta es una consulta anidada dentro de otra consulta principal. Su función consiste en obtener un resultado intermedio que sirve como criterio para la consulta externa. Las subconsultas permiten formular consultas más expresivas y resolver problemas de recuperación de información que no siempre pueden abordarse con una sola instrucción simple.
 
-El proceso de normalización se desarrolla de manera progresiva. Primero, se parte de una relación inicial obtenida del análisis del problema. Después, se identifican los atributos clave y las dependencias funcionales. A continuación, se verifica el cumplimiento de la Primera Forma Normal eliminando grupos repetitivos y valores no atómicos. Luego, se analiza si existen dependencias parciales para pasar a Segunda Forma Normal. Finalmente, se revisa la presencia de dependencias transitivas para alcanzar la Tercera Forma Normal.
+En Oracle, las subconsultas resultan útiles para comparar valores, verificar pertenencia, excluir registros y establecer filtros basados en resultados previos. Por ello, su aplicación en esta guía permitió reforzar el análisis de relaciones entre tablas y la interpretación de la información almacenada.
 
-En términos generales, el procedimiento aplicado es el siguiente:
-\begin{enumerate}[leftmargin=1.2cm]
-    \item Identificar la relación inicial y sus atributos.
-    \item Determinar la clave primaria.
-    \item Establecer las dependencias funcionales.
-    \item Verificar el cumplimiento de 1FN.
-    \item Eliminar dependencias parciales para obtener 2FN.
-    \item Eliminar dependencias transitivas para obtener 3FN.
-    \item Construir el esquema lógico normalizado.
-\end{enumerate}
+\subsubsection{Integridad de datos}
 
-\subsubsection{Ejemplo de esquema normalizado}
+La integridad de datos hace referencia a la confiabilidad, consistencia y validez de la información guardada en la base de datos. En el modelo físico, esta integridad se mantiene mediante restricciones como \texttt{NOT NULL}, \texttt{PRIMARY KEY}, \texttt{FOREIGN KEY} y \texttt{CHECK}. Gracias a estas restricciones, se evitan registros inválidos, relaciones incoherentes o valores fuera de los rangos esperados.
 
-Como ejemplo de normalización, se puede tomar una relación inicial asociada al ejercicio 2 del instituto:
-
-\begin{center}
-\texttt{INSCRIPCION(ID\_ALUMNO, NOM\_ALUMNO, APE\_ALUMNO, COD\_MODULO, NOM\_MODULO, HORARIO, AULA, CI\_PROFESOR, NOM\_PROFESOR)}
-\end{center}
-
-En esta relación, la clave compuesta puede representarse mediante:
-
-\[
-(ID\_ALUMNO, COD\_MODULO)
-\]
-
-A partir de su análisis, se identifican las siguientes dependencias funcionales:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item \texttt{ID\_ALUMNO \(\rightarrow\) NOM\_ALUMNO, APE\_ALUMNO}
-    \item \texttt{COD\_MODULO \(\rightarrow\) NOM\_MODULO, HORARIO, AULA, CI\_PROFESOR}
-    \item \texttt{CI\_PROFESOR \(\rightarrow\) NOM\_PROFESOR}
-\end{itemize}
-
-\textbf{Aplicación de 1FN:}  
-La relación cumple 1FN porque cada atributo almacena valores atómicos y no existen grupos repetitivos dentro de una celda.
-
-\textbf{Aplicación de 2FN:}  
-No cumple 2FN, ya que existen dependencias parciales. Por ejemplo, \texttt{NOM\_ALUMNO} y \texttt{APE\_ALUMNO} dependen solo de \texttt{ID\_ALUMNO}, mientras que \texttt{NOM\_MODULO}, \texttt{HORARIO} y \texttt{AULA} dependen solo de \texttt{COD\_MODULO}. Para corregirlo, la relación se descompone.
-
-\textbf{Aplicación de 3FN:}  
-Tampoco cumple inicialmente 3FN, porque existe una dependencia transitiva: \texttt{COD\_MODULO \(\rightarrow\) CI\_PROFESOR} y \texttt{CI\_PROFESOR \(\rightarrow\) NOM\_PROFESOR}. Por ello, la información del profesor debe almacenarse en una relación independiente.
-
-El esquema lógico normalizado hasta Tercera Forma Normal queda así:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item \texttt{ALUMNO(ID\_ALUMNO, NOM\_ALUMNO, APE\_ALUMNO)}
-    \item \texttt{PROFESOR(CI\_PROFESOR, NOM\_PROFESOR)}
-    \item \texttt{MODULO(COD\_MODULO, NOM\_MODULO, HORARIO, AULA, CI\_PROFESOR)}
-    \item \texttt{MATRICULA(ID\_ALUMNO, COD\_MODULO)}
-\end{itemize}
-
-De esta manera, la información queda distribuida en relaciones independientes, evitando redundancia y garantizando mayor integridad estructural en la base de datos.
+En consecuencia, la correcta definición del esquema físico, junto con el ingreso adecuado de datos y la posterior consulta de la información, constituye una base importante para lograr un sistema de base de datos estructurado y funcional.
 
 \subsection{Listado de equipos, materiales y recursos}
 
@@ -215,11 +156,11 @@ De esta manera, la información queda distribuida en relaciones independientes, 
 \begin{itemize}[leftmargin=1.2cm]
     \item Computador personal.
     \item Editor de texto \LaTeX{} en Visual Studio Code.
-    \item Compilador PDF para documentos académicos.
-    \item PlantUML para el diseño de diagramas.
     \item Oracle como sistema gestor de base de datos.
+    \item PlantUML para el diseño y organización de diagramas.
     \item Guía práctica proporcionada por el docente.
-    \item Material bibliográfico de apoyo sobre modelo entidad/relación, modelo relacional y normalización.
+    \item Capturas de pantalla de la ejecución de sentencias SQL.
+    \item Material de apoyo sobre modelo físico, DML, DQL e integridad referencial.
 \end{itemize}
 
 \textbf{TAC (Tecnologías para el Aprendizaje y el Conocimiento) empleadas en la tarea:}
@@ -235,37 +176,43 @@ De esta manera, la información queda distribuida en relaciones independientes, 
 
 \subsection{Desarrollo de la Tarea (Actividades a Desarrollar)}
 
-Para resolver la guía se analizaron los cuatro enunciados propuestos, identificando en cada caso las entidades principales, sus atributos, las relaciones entre ellas y las cardinalidades correspondientes. Posteriormente, cada modelo entidad/relación fue transformado al modelo relacional, incorporando claves primarias y claves foráneas para garantizar integridad y coherencia estructural. Finalmente, se añadieron registros de ejemplo por tabla y se construyó el modelo físico en Oracle mediante sentencias \texttt{CREATE TABLE}.
+Para resolver la guía práctica se trabajó en tres momentos principales. En primer lugar, se construyó el esquema físico de los ejercicios planteados, definiendo tablas, atributos, claves primarias, claves foráneas y restricciones de integridad. En segundo lugar, se ingresaron datos de prueba mediante instrucciones DML, con el propósito de poblar las tablas y verificar que las relaciones funcionaran correctamente. En tercer lugar, se desarrollaron consultas DQL y subconsultas que permitieron recuperar información específica de la base de datos, validando así la funcionalidad del diseño implementado.
 
 \subsubsection{Ejercicio 1}
-En el primer ejercicio se modeló una empresa que vende productos a clientes y trabaja con proveedores. Se identificaron como entidades principales \textbf{Cliente}, \textbf{Producto} y \textbf{Proveedor}. La relación \textbf{Compra} se estableció entre Cliente y Producto con cardinalidad muchos a muchos, mientras que la relación de suministro se definió entre Proveedor y Producto. A partir de ello se construyó el esquema relacional correspondiente, incluyendo la tabla intermedia para representar la compra.
+En el primer ejercicio se implementó físicamente una base de datos orientada a una empresa que vende productos a clientes y trabaja con proveedores. Se crearon las tablas \textbf{CLIENTE}, \textbf{PROVEEDOR}, \textbf{PRODUCTO} y \textbf{COMPRA}, respetando las relaciones definidas en el modelo previo. Posteriormente, se insertaron registros de prueba y se ejecutaron consultas DQL para identificar clientes y productos a partir de relaciones de compra y suministro.
 
 \subsubsection{Ejercicio 2}
-En el segundo ejercicio se diseñó la base de datos de un instituto. Se determinaron las entidades \textbf{Profesor}, \textbf{Alumno} y \textbf{Módulo}. La relación \textbf{Matrícula} se modeló entre Alumno y Módulo, mientras que la relación \textbf{Imparte} se estableció entre Profesor y Módulo. Además, se consideró una autorrelación de supervisión dentro de la entidad Profesor, ya que un profesor puede supervisar a otros profesores.
+En el segundo ejercicio se desarrolló el esquema físico de una base de datos académica. Se implementaron tablas relacionadas con profesores, alumnos, módulos y matrículas. Aunque el énfasis principal estuvo en la estructura física, también se incorporaron consultas DQL orientadas a recuperar información académica, como estudiantes matriculados, materias compartidas y docentes relacionados con aulas determinadas.
 
 \subsubsection{Ejercicio 3}
-En el tercer ejercicio se desarrolló el modelo para una tienda informática. Se identificaron las entidades \textbf{Cliente}, \textbf{Producto} y \textbf{Proveedor}. La relación \textbf{Compra} incorporó atributos propios como número de compra, fecha de compra y forma de pago. Del mismo modo, la relación \textbf{Entrega} entre Proveedor y Producto incluyó atributos adicionales como fecha de entrega, cantidad suministrada y precio de adquisición. Después se construyó el esquema relacional con sus claves correspondientes.
+En el tercer ejercicio se construyó físicamente una base de datos para una tienda informática. Se definieron tablas para clientes, productos, proveedores, compras y entregas, incorporando atributos asociados a operaciones comerciales. En este caso, el trabajo se centró principalmente en la creación de la estructura física y la representación de sus relaciones dentro de Oracle.
 
 \subsubsection{Ejercicio 4}
-En el cuarto ejercicio se modeló la organización interna de una empresa. Las entidades principales fueron \textbf{Centro\_Trabajo}, \textbf{Departamento}, \textbf{Empleado}, \textbf{Hijo} y \textbf{Habilidad}. Las relaciones definidas fueron de uno a muchos entre Centro\_Trabajo y Departamento, entre Departamento y Empleado, y entre Empleado e Hijo. Además, se definió una relación muchos a muchos entre Empleado y Habilidad, agregando el atributo \textbf{porcentaje} como característica de la relación.
+En el cuarto ejercicio se implementó el esquema físico correspondiente a la organización interna de una empresa. Se crearon tablas para centros de trabajo, departamentos, empleados, hijos y habilidades, además de una tabla intermedia para resolver la relación muchos a muchos entre empleados y habilidades. Esta implementación permitió representar la estructura organizacional dentro de una base de datos relacional.
 
-\subsection{Aplicación de normalización en los ejercicios}
+\subsubsection{Ejercicio adicional 1}
+En el ejercicio adicional se desarrolló una versión transaccional del proceso de ventas, incorporando tablas de clientes, proveedores, productos, compras y detalle de compra. Además de la creación del esquema físico, se ingresaron datos de prueba y se realizaron subconsultas DQL para identificar clientes sin compras, productos no vendidos y proveedores cuyos productos participaron en operaciones de venta.
 
-\subsubsection{Normalización del ejercicio 1}
-En el ejercicio 1, la estructura obtenida cumple con la Primera Forma Normal porque todos los atributos almacenan valores atómicos. Además, la separación de las entidades \texttt{CLIENTE}, \texttt{PRODUCTO} y \texttt{PROVEEDOR}, junto con la tabla intermedia \texttt{COMPRA}, permite evitar grupos repetitivos. La relación también puede considerarse en Segunda y Tercera Forma Normal, ya que los atributos dependen de sus respectivas claves primarias y no se presentan dependencias transitivas entre atributos no clave.
+\subsection{Aplicación del esquema físico, ingreso de datos y consultas DQL en los ejercicios}
 
-\subsubsection{Normalización del ejercicio 2}
-En el ejercicio 2, la normalización se evidencia al descomponer la información académica en las relaciones \texttt{PROFESOR}, \texttt{ALUMNO}, \texttt{MODULO} y \texttt{MATRICULA}. La relación inicial de inscripción podía generar redundancia, especialmente al repetir datos del alumno, módulo y profesor. Al separar estas entidades, se eliminan dependencias parciales y transitivas, obteniéndose un esquema coherente hasta Tercera Forma Normal.
+\subsubsection{Aplicación en el ejercicio 1}
+En el ejercicio 1 se aplicó el modelo físico mediante la creación de tablas relacionadas entre sí por claves primarias y foráneas. Después se ingresaron datos representativos de clientes, proveedores, productos y compras. Finalmente, las consultas DQL permitieron verificar la recuperación correcta de información relacionada con adquisiciones de productos y proveedores asociados.
 
-\subsubsection{Normalización del ejercicio 3}
-En el ejercicio 3, la información de clientes, productos y proveedores se organizó en relaciones independientes, mientras que las transacciones de compra y entrega se representaron mediante tablas específicas con atributos propios. Esta estructura evita repetir datos descriptivos dentro de cada operación y permite que cada atributo dependa únicamente de la clave correspondiente. Por ello, el esquema resultante cumple con 1FN, 2FN y 3FN.
+\subsubsection{Aplicación en el ejercicio 2}
+En el ejercicio 2 se representó físicamente la estructura académica del problema por medio de tablas para alumnos, profesores, módulos y matrículas. A partir de este contexto se formularon consultas que permitieron analizar relaciones entre estudiantes, materias y aulas, evidenciando el uso de subconsultas en escenarios académicos.
 
-\subsubsection{Normalización del ejercicio 4}
-En el ejercicio 4, la normalización se logró separando las entidades \texttt{CENTRO\_TRABAJO}, \texttt{DEPARTAMENTO}, \texttt{EMPLEADO}, \texttt{HIJO} y \texttt{HABILIDAD}. La relación muchos a muchos entre empleado y habilidad se resolvió mediante la tabla intermedia \texttt{EMPLEADO\_HABILIDAD}, lo que evita redundancias y facilita el control del atributo \texttt{PORCENTAJE}. De esta forma, cada relación mantiene dependencias adecuadas respecto de su clave primaria y el esquema puede considerarse normalizado hasta Tercera Forma Normal.
+\subsubsection{Aplicación en el ejercicio 3}
+En el ejercicio 3 se implementó la estructura física de una tienda informática, integrando información de clientes, productos, proveedores, compras y entregas. Esta organización permitió reflejar operaciones comerciales dentro de Oracle y consolidar el diseño físico del caso propuesto.
+
+\subsubsection{Aplicación en el ejercicio 4}
+En el ejercicio 4 se construyó el esquema físico de una empresa con varios niveles de relación interna. La implementación permitió almacenar información sobre departamentos, empleados, hijos y habilidades, manteniendo la integridad referencial entre las tablas y resolviendo adecuadamente la relación muchos a muchos.
+
+\subsubsection{Aplicación en el ejercicio adicional 1}
+En el ejercicio adicional 1 se reforzó el trabajo con el esquema físico mediante una estructura orientada a transacciones de venta. La inserción de datos y la ejecución de subconsultas permitieron comprobar que la base de datos no solo almacena información, sino que también responde a requerimientos de análisis y recuperación de datos.
 
 \subsection{Resultados obtenidos}
 
-Como resultado del desarrollo de la guía, se obtuvieron modelos entidad/relación y modelos relacionales coherentes para los cuatro ejercicios propuestos. En cada caso se identificaron correctamente las entidades, atributos, relaciones y cardinalidades, y se logró traducir la información a esquemas de tablas con claves primarias y foráneas. También se generaron registros de ejemplo para comprobar la estructura lógica de las bases de datos diseñadas.
+Como resultado del desarrollo de la guía, se obtuvieron esquemas físicos funcionales para los ejercicios propuestos, implementados en Oracle mediante sentencias de definición de datos. Asimismo, se ingresaron registros de prueba que permitieron poblar las tablas y comprobar el cumplimiento de las restricciones establecidas. Finalmente, las consultas DQL y subconsultas desarrolladas evidenciaron que la información podía recuperarse de forma correcta, de acuerdo con distintos criterios de búsqueda y relación entre tablas.
 
 \begin{table}[H]
 \centering
@@ -274,18 +221,18 @@ Como resultado del desarrollo de la guía, se obtuvieron modelos entidad/relaci�
 \toprule
 \textbf{Ejercicio} & \textbf{Modelo E/R} & \textbf{Modelo relacional} & \textbf{Modelo físico} & \textbf{Registros} \\
 \midrule
-1 & Cliente, Producto, Proveedor y relaciones de compra y suministro & Tablas Cliente, Proveedor, Producto y Compra & Oracle & 3 por tabla \\
+1 & Cliente, Producto, Proveedor y relaciones de compra y suministro & Tablas Cliente, Proveedor, Producto y Compra & Oracle & 3 o más por tabla \\
 2 & Profesor, Alumno, Módulo y relaciones de matrícula, docencia y supervisión & Tablas Profesor, Alumno, Módulo y Matrícula & Oracle & 3 por tabla \\
 3 & Cliente, Producto, Proveedor y relaciones Compra y Entrega con atributos propios & Tablas Cliente, Producto, Proveedor, Compra y Entrega & Oracle & 3 por tabla \\
 4 & Centro\_Trabajo, Departamento, Empleado, Hijo y Habilidad & Tablas Centro\_Trabajo, Departamento, Empleado, Hijo, Habilidad y Empleado\_Habilidad & Oracle & 3 por tabla \\
-Adic. 1 & Cliente, Compra, Detalle\_Compra, Producto y Proveedor & Tablas Clientes, Compras, Detalle\_Compra, Productos y Proveedores & Oracle & 3 o más \\
+Adic. 1 & Cliente, Compra, Detalle\_Compra, Producto y Proveedor & Tablas Clientes, Compras, Detalle\_Compra, Productos y Proveedores & Oracle & 3 o más por tabla \\
 \bottomrule
 \end{tabular}
 \end{table}
 
 \subsection{Modelo físico en Oracle}
 
-Como complemento del modelo entidad/relación y del modelo relacional, se desarrolló el modelo físico en Oracle para los cuatro ejercicios propuestos. En esta fase se definieron usuarios, tablas, claves primarias y claves foráneas, siguiendo la estructura lógica obtenida en el análisis previo.
+Como complemento del modelo entidad/relación y del modelo relacional, se desarrolló el modelo físico en Oracle para los ejercicios propuestos. En esta fase se definieron usuarios, tablas, claves primarias y claves foráneas, siguiendo la estructura lógica obtenida en el análisis previo. Adicionalmente, para el ejercicio 1, el ejercicio 2 y el ejercicio adicional 1 se incorporaron secciones independientes de ingreso de datos y consultas DQL.
 
 \subsubsection{Script inicial de creación de usuario}
 \begin{lstlisting}[language=SQL, caption={Creación del usuario en Oracle}]
@@ -295,9 +242,17 @@ GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO FISEI;
 CONNECT FISEI/FISEI123;
 \end{lstlisting}
 
+\subsubsection{Script inicial de creación de usuario para el ejercicio 1}
+\begin{lstlisting}[language=SQL, caption={Creación del usuario en Oracle para el ejercicio 1}]
+CREATE USER EjerUno IDENTIFIED BY Ejer123;
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO EjerUno;
+
+CONNECT EjerUno/Ejer123;
+\end{lstlisting}
+
 \subsubsection{Modelo físico en Oracle del ejercicio 1}
 \begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 1}]
-CREATE TABLE CLIENTE_E1 (
+CREATE TABLE CLIENTE (
     CI                VARCHAR2(10) PRIMARY KEY,
     NOMBRE            VARCHAR2(15) NOT NULL,
     APELLIDOS         VARCHAR2(20) NOT NULL,
@@ -305,79 +260,346 @@ CREATE TABLE CLIENTE_E1 (
     FECHA_NACIMIENTO  DATE NOT NULL
 );
 
-CREATE TABLE PROVEEDOR_E1 (
+CREATE TABLE PROVEEDOR (
     RUC               VARCHAR2(13) PRIMARY KEY,
     NOMBRE            VARCHAR2(20) NOT NULL,
     DIRECCION         VARCHAR2(30) NOT NULL
 );
 
-CREATE TABLE PRODUCTO_E1 (
+CREATE TABLE PRODUCTO (
     COD_PRODUCTO      VARCHAR2(5) PRIMARY KEY,
     NOMBRE            VARCHAR2(20) NOT NULL,
     PRECIO_UNITARIO   NUMBER(8,2) NOT NULL,
     MARCA             VARCHAR2(15) NOT NULL,
     RUC_PROVEEDOR     VARCHAR2(13) NOT NULL,
-    CONSTRAINT FK_PROD_E1_PROV
-        FOREIGN KEY (RUC_PROVEEDOR) REFERENCES PROVEEDOR_E1(RUC)
+    CONSTRAINT FK_PROD_PROV
+        FOREIGN KEY (RUC_PROVEEDOR) REFERENCES PROVEEDOR(RUC)
 );
 
-CREATE TABLE COMPRA_E1 (
+CREATE TABLE COMPRA (
     CI_CLIENTE        VARCHAR2(10) NOT NULL,
     COD_PRODUCTO      VARCHAR2(5) NOT NULL,
-    CONSTRAINT PK_COMPRA_E1
+    CONSTRAINT PK_COMPRA
         PRIMARY KEY (CI_CLIENTE, COD_PRODUCTO),
-    CONSTRAINT FK_COMPRA_E1_CLI
-        FOREIGN KEY (CI_CLIENTE) REFERENCES CLIENTE_E1(CI),
-    CONSTRAINT FK_COMPRA_E1_PROD
-        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO_E1(COD_PRODUCTO)
+    CONSTRAINT FK_COMPRA_CLI
+        FOREIGN KEY (CI_CLIENTE) REFERENCES CLIENTE(CI),
+    CONSTRAINT FK_COMPRA_PROD
+        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO(COD_PRODUCTO)
 );
 \end{lstlisting}
 
+\subsubsection{Ingreso de datos del ejercicio 1}
+\noindent\textbf{Inserción de datos:} \\
+\vspace{0.2cm}
+\begin{lstlisting}[language=SQL, caption={Inserción de datos del ejercicio 1}]
+-- PROVEEDORES
+INSERT INTO PROVEEDOR VALUES ('1790012345001', 'TecnoSur', 'Quito Norte');
+INSERT INTO PROVEEDOR VALUES ('1790012345002', 'AndesComp', 'Ambato Centro');
+INSERT INTO PROVEEDOR VALUES ('1790012345003', 'DataPlus', 'Cuenca Sur');
+
+-- CLIENTES
+INSERT INTO CLIENTE VALUES ('1801112223', 'Ana', 'Perez', 'Ambato Huachi', DATE '2001-05-10');
+INSERT INTO CLIENTE VALUES ('1802223334', 'Carlos', 'Mena', 'Quito Centro', DATE '2000-08-14');
+INSERT INTO CLIENTE VALUES ('1803334445', 'Sofia', 'Lara', 'Latacunga Norte', DATE '2003-11-02');
+
+-- PRODUCTOS
+INSERT INTO PRODUCTO VALUES ('PR01', 'Laptop Lenovo', 850, 'Lenovo', '1790012345001');
+INSERT INTO PRODUCTO VALUES ('PR02', 'Mouse Logitech', 25, 'Logitech', '1790012345002');
+INSERT INTO PRODUCTO VALUES ('PR03', 'Teclado Redragon', 60, 'Redragon', '1790012345002');
+INSERT INTO PRODUCTO VALUES ('PR04', 'Monitor LG', 180, 'LG', '1790012345003');
+
+-- COMPRAS
+INSERT INTO COMPRA VALUES ('1801112223', 'PR01');
+INSERT INTO COMPRA VALUES ('1801112223', 'PR02');
+INSERT INTO COMPRA VALUES ('1802223334', 'PR02');
+INSERT INTO COMPRA VALUES ('1802223334', 'PR03');
+INSERT INTO COMPRA VALUES ('1803334445', 'PR04');
+
+COMMIT;
+\end{lstlisting}
+
+\subsubsection*{Consultas DQL del ejercicio 1}
+
+\subsubsection*{Subconsultas en SQL del ejercicio 1}
+
+Las subconsultas son consultas anidadas dentro de otra consulta principal. Se utilizan para obtener datos intermedios que sirven como criterio para la consulta externa. Estas permiten realizar consultas más complejas y precisas sobre la base de datos.
+
+En el ejercicio 1, las subconsultas se aplicaron sobre las tablas \textbf{CLIENTE, PROVEEDOR, PRODUCTO y COMPRA}, con el objetivo de analizar relaciones entre clientes, productos y proveedores.
+
+\subsubsection*{1. Clientes que no han comprado el producto ``Laptop Lenovo''}
+
+Ejemplo del uso de la cláusula NOT IN.
+
+\begin{verbatim}
+SELECT NOMBRE, APELLIDOS
+FROM CLIENTE
+WHERE CI NOT IN (
+    SELECT CI_CLIENTE
+    FROM COMPRA
+    WHERE COD_PRODUCTO = (
+        SELECT COD_PRODUCTO
+        FROM PRODUCTO
+        WHERE NOMBRE = 'Laptop Lenovo'
+    )
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio1L1.png}
+    \caption{Imagen referencial del ejercicio 1 en SQL}
+    \label{fig:ej1l1}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se excluyen los clientes que registran la compra del producto ``Laptop Lenovo'', mostrando únicamente aquellos que no han adquirido dicho producto.
+
+\subsubsection*{2. Clientes que han comprado al menos un producto que también compró el cliente con CI 1801112223}
+
+Permite encontrar clientes que comparten productos comprados con un cliente específico.
+
+\begin{verbatim}
+SELECT NOMBRE, APELLIDOS
+FROM CLIENTE
+WHERE CI IN (
+    SELECT CI_CLIENTE
+    FROM COMPRA
+    WHERE COD_PRODUCTO IN (
+        SELECT COD_PRODUCTO
+        FROM COMPRA
+        WHERE CI_CLIENTE = '1801112223'
+    )
+)
+AND CI <> '1801112223';
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio1L2.png}
+    \caption{Imagen referencial del ejercicio 2 en SQL}
+    \label{fig:ej1l2}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se obtiene el listado de productos comprados por el cliente con cédula 1801112223 y luego se buscan otros clientes que también hayan comprado alguno de esos mismos productos.
+
+\subsubsection*{3. Productos suministrados por el mismo proveedor que ``Mouse Logitech''}
+
+Permite identificar productos que pertenecen al mismo proveedor.
+
+\begin{verbatim}
+SELECT NOMBRE, MARCA
+FROM PRODUCTO
+WHERE RUC_PROVEEDOR = (
+    SELECT RUC_PROVEEDOR
+    FROM PRODUCTO
+    WHERE NOMBRE = 'Mouse Logitech'
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio1L3.png}
+    \caption{Imagen referencial del ejercicio 3 en SQL}
+    \label{fig:ej1l3}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se identifica el proveedor del producto ``Mouse Logitech'' y luego se listan todos los productos suministrados por ese mismo proveedor.
+
+\subsubsection*{4. Clientes que compraron productos de proveedores distintos a ``TecnoSur''}
+
+Permite identificar clientes que compraron productos de proveedores diferentes a uno determinado.
+
+\begin{verbatim}
+SELECT NOMBRE, APELLIDOS
+FROM CLIENTE
+WHERE CI IN (
+    SELECT CI_CLIENTE
+    FROM COMPRA
+    WHERE COD_PRODUCTO IN (
+        SELECT COD_PRODUCTO
+        FROM PRODUCTO
+        WHERE RUC_PROVEEDOR <> (
+            SELECT RUC
+            FROM PROVEEDOR
+            WHERE NOMBRE = 'TecnoSur'
+        )
+    )
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio1L4.png}
+    \caption{Imagen referencial del ejercicio 4 en SQL}
+    \label{fig:ej1l4}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se seleccionan los clientes que han comprado productos suministrados por proveedores distintos de ``TecnoSur''.
+
 \subsubsection{Modelo físico en Oracle del ejercicio 2}
 \begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 2}]
-CREATE TABLE PROFESOR_E2 (
+CREATE TABLE PROFESOR (
     CI                VARCHAR2(10) PRIMARY KEY,
     NOMBRE            VARCHAR2(15) NOT NULL,
     APELLIDO          VARCHAR2(15) NOT NULL,
     DIRECCION         VARCHAR2(30) NOT NULL,
     TELEFONO          VARCHAR2(10) NOT NULL,
     CI_JEFE           VARCHAR2(10),
-    CONSTRAINT FK_PROF_E2_JEFE
-        FOREIGN KEY (CI_JEFE) REFERENCES PROFESOR_E2(CI)
+    CONSTRAINT FK_PROF_JEFE
+        FOREIGN KEY (CI_JEFE) REFERENCES PROFESOR(CI)
 );
 
-CREATE TABLE ALUMNO_E2 (
+CREATE TABLE ALUMNO (
     ID_ALUMNO         VARCHAR2(5) PRIMARY KEY,
     NOMBRE            VARCHAR2(15) NOT NULL,
     APELLIDO          VARCHAR2(15) NOT NULL,
     FECHA_NACIMIENTO  DATE NOT NULL
 );
 
-CREATE TABLE MODULO_E2 (
+CREATE TABLE MODULO (
     COD_MODULO        VARCHAR2(5) PRIMARY KEY,
     NOMBRE            VARCHAR2(20) NOT NULL,
     HORARIO           VARCHAR2(20) NOT NULL,
     AULA              VARCHAR2(10) NOT NULL,
     CI_PROFESOR       VARCHAR2(10) NOT NULL,
-    CONSTRAINT FK_MOD_E2_PROF
-        FOREIGN KEY (CI_PROFESOR) REFERENCES PROFESOR_E2(CI)
+    CONSTRAINT FK_MOD_PROF
+        FOREIGN KEY (CI_PROFESOR) REFERENCES PROFESOR(CI)
 );
 
-CREATE TABLE MATRICULA_E2 (
+CREATE TABLE MATRICULA (
     ID_ALUMNO         VARCHAR2(5) NOT NULL,
     COD_MODULO        VARCHAR2(5) NOT NULL,
-    CONSTRAINT PK_MATRICULA_E2
+    CONSTRAINT PK_MATRICULA
         PRIMARY KEY (ID_ALUMNO, COD_MODULO),
-    CONSTRAINT FK_MAT_E2_ALU
-        FOREIGN KEY (ID_ALUMNO) REFERENCES ALUMNO_E2(ID_ALUMNO),
-    CONSTRAINT FK_MAT_E2_MOD
-        FOREIGN KEY (COD_MODULO) REFERENCES MODULO_E2(COD_MODULO)
+    CONSTRAINT FK_MAT_ALU
+        FOREIGN KEY (ID_ALUMNO) REFERENCES ALUMNO(ID_ALUMNO),
+    CONSTRAINT FK_MAT_MOD
+        FOREIGN KEY (COD_MODULO) REFERENCES MODULO(COD_MODULO)
 );
 \end{lstlisting}
 
+\subsubsection*{13. Ejercicios practicos DQL o subconsultas del ejercicio 2}
+
+\subsubsection*{Subconsultas en SQL del ejercicio 2}
+
+Las subconsultas son consultas anidadas dentro de otra consulta principal. Se utilizan para obtener datos intermedios que sirven como criterio para la consulta externa. Estas permiten realizar consultas más complejas y precisas sobre la base de datos.
+
+En la presente base de datos se aplicaron subconsultas sobre las tablas \textbf{PROFESOR, MATERIA, ESTUDIANTES, AULAS y MATRICULA}, con el objetivo de analizar relaciones entre docentes, materias y estudiantes.
+
+\subsubsection*{1. Estudiantes que no están matriculados en la materia ``Fisica''}
+
+Ejemplo del uso de la cláusula NOT IN.
+
+\begin{verbatim}
+SELECT Nom_Est, Ape_Est
+FROM ESTUDIANTES
+WHERE Id_Est NOT IN (
+    SELECT Id_Est_Mat
+    FROM MATRICULA
+    WHERE Id_Mod_Mat = (
+        SELECT Id_Mat
+        FROM MATERIA
+        WHERE Nom_Mat = 'Fisica'
+    )
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio2L1.png}
+    \caption{Imagen referencial del ejercicio 1 en SQL}
+    \label{fig:ej2l1}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se excluyen los estudiantes que están matriculados en la materia ``Fisica'', mostrando únicamente aquellos que no cursan dicha asignatura.
+
+\subsubsection*{2. Estudiantes matriculados en la misma materia que el estudiante E02}
+
+Permite encontrar estudiantes que comparten una misma materia.
+
+\begin{verbatim}
+SELECT Nom_Est, Ape_Est
+FROM ESTUDIANTES
+WHERE Id_Est IN (
+    SELECT Id_Est_Mat
+    FROM MATRICULA
+    WHERE Id_Mod_Mat = (
+        SELECT Id_Mod_Mat
+        FROM MATRICULA
+        WHERE Id_Est_Mat = 'E02'
+    )
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio2L2.png}
+    \caption{Imagen referencial del ejercicio 2 en SQL}
+    \label{fig:ej2l2}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se obtiene la materia en la que está matriculado el estudiante E02 y luego se buscan los demás estudiantes que también están inscritos en esa materia.
+
+\subsubsection*{3. Materias que se dictan en el mismo aula que ``Matematica''}
+
+Permite identificar materias que comparten el mismo aula.
+
+\begin{verbatim}
+SELECT Nom_Mat
+FROM MATERIA
+WHERE Id_Aul_Per = (
+    SELECT Id_Aul_Per
+    FROM MATERIA
+    WHERE Nom_Mat = 'Matematica'
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio2L3.png}
+    \caption{Imagen referencial del ejercicio 3 en SQL}
+    \label{fig:ej2l3}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se obtiene el aula donde se dicta la materia ``Matematica'' y luego se listan todas las materias que utilizan esa misma aula.
+
+\subsubsection*{4. Profesores que dictan clases en aulas diferentes a ``Lab 01''}
+
+Permite identificar docentes que no utilizan un aula específica.
+
+\begin{verbatim}
+SELECT Nom_Pro, Ape_Pro
+FROM PROFESOR
+WHERE Id_Pro IN (
+    SELECT Id_Pro_Per
+    FROM MATERIA
+    WHERE Id_Aul_Per <> (
+        SELECT Id_Aul
+        FROM AULAS
+        WHERE Nom_Aul = 'Lab 01'
+    )
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/Ejercicio2L4.png}
+    \caption{Imagen referencial del ejercicio 4 en SQL}
+    \label{fig:ej2l4}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se seleccionan los profesores que dictan materias en aulas distintas al aula ``Lab 01''.
+
 \subsubsection{Modelo físico en Oracle del ejercicio 3}
 \begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 3}]
-CREATE TABLE CLIENTE_E3 (
+CREATE TABLE CLIENTE (
     COD_CLIENTE       VARCHAR2(5) PRIMARY KEY,
     NOMBRE            VARCHAR2(15) NOT NULL,
     APELLIDO          VARCHAR2(15) NOT NULL,
@@ -385,14 +607,14 @@ CREATE TABLE CLIENTE_E3 (
     TELEFONO          VARCHAR2(10) NOT NULL
 );
 
-CREATE TABLE PRODUCTO_E3 (
+CREATE TABLE PRODUCTO (
     COD_PRODUCTO      VARCHAR2(5) PRIMARY KEY,
     DESCRIPCION       VARCHAR2(30) NOT NULL,
     PRECIO            NUMBER(8,2) NOT NULL,
     EXISTENCIAS       NUMBER(5) NOT NULL
 );
 
-CREATE TABLE PROVEEDOR_E3 (
+CREATE TABLE PROVEEDOR (
     COD_PROVEEDOR     VARCHAR2(5) PRIMARY KEY,
     NOMBRE            VARCHAR2(15) NOT NULL,
     APELLIDOS         VARCHAR2(20) NOT NULL,
@@ -401,51 +623,51 @@ CREATE TABLE PROVEEDOR_E3 (
     TELEFONO          VARCHAR2(10) NOT NULL
 );
 
-CREATE TABLE COMPRA_E3 (
+CREATE TABLE COMPRA (
     NUMERO_COMPRA     VARCHAR2(5) PRIMARY KEY,
     COD_CLIENTE       VARCHAR2(5) NOT NULL,
     COD_PRODUCTO      VARCHAR2(5) NOT NULL,
     FECHA_COMPRA      DATE NOT NULL,
     FORMA_PAGO        VARCHAR2(15) NOT NULL,
-    CONSTRAINT FK_COMPRA_E3_CLI
-        FOREIGN KEY (COD_CLIENTE) REFERENCES CLIENTE_E3(COD_CLIENTE),
-    CONSTRAINT FK_COMPRA_E3_PROD
-        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO_E3(COD_PRODUCTO)
+    CONSTRAINT FK_COMPRA_CLI
+        FOREIGN KEY (COD_CLIENTE) REFERENCES CLIENTE(COD_CLIENTE),
+    CONSTRAINT FK_COMPRA_PROD
+        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO(COD_PRODUCTO)
 );
 
-CREATE TABLE ENTREGA_E3 (
+CREATE TABLE ENTREGA (
     ID_ENTREGA              VARCHAR2(5) PRIMARY KEY,
     COD_PROVEEDOR           VARCHAR2(5) NOT NULL,
     COD_PRODUCTO            VARCHAR2(5) NOT NULL,
     FECHA_ENTREGA           DATE NOT NULL,
     CANTIDAD_SUMINISTRADA   NUMBER(5) NOT NULL,
     PRECIO_ADQUISICION      NUMBER(8,2) NOT NULL,
-    CONSTRAINT FK_ENTREGA_E3_PROV
-        FOREIGN KEY (COD_PROVEEDOR) REFERENCES PROVEEDOR_E3(COD_PROVEEDOR),
-    CONSTRAINT FK_ENTREGA_E3_PROD
-        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO_E3(COD_PRODUCTO)
+    CONSTRAINT FK_ENTREGA_PROV
+        FOREIGN KEY (COD_PROVEEDOR) REFERENCES PROVEEDOR(COD_PROVEEDOR),
+    CONSTRAINT FK_ENTREGA_PROD
+        FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO(COD_PRODUCTO)
 );
 \end{lstlisting}
 
 \subsubsection{Modelo físico en Oracle del ejercicio 4}
 \begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 4}]
-CREATE TABLE CENTRO_TRABAJO_E4 (
+CREATE TABLE CENTRO_TRABAJO (
     COD_CENTRO        VARCHAR2(5) PRIMARY KEY,
     NOMBRE            VARCHAR2(20) NOT NULL,
     POBLACION         VARCHAR2(20) NOT NULL,
     DIRECCION         VARCHAR2(30) NOT NULL
 );
 
-CREATE TABLE DEPARTAMENTO_E4 (
+CREATE TABLE DEPARTAMENTO (
     COD_DEPARTAMENTO  VARCHAR2(5) PRIMARY KEY,
     NOMBRE            VARCHAR2(20) NOT NULL,
     PRESUPUESTO_ANUAL NUMBER(10,2) NOT NULL,
     COD_CENTRO        VARCHAR2(5) NOT NULL,
-    CONSTRAINT FK_DEP_E4_CENTRO
-        FOREIGN KEY (COD_CENTRO) REFERENCES CENTRO_TRABAJO_E4(COD_CENTRO)
+    CONSTRAINT FK_DEP_CENTRO
+        FOREIGN KEY (COD_CENTRO) REFERENCES CENTRO_TRABAJO(COD_CENTRO)
 );
 
-CREATE TABLE EMPLEADO_E4 (
+CREATE TABLE EMPLEADO (
     CI                VARCHAR2(10) PRIMARY KEY,
     NOMBRE            VARCHAR2(15) NOT NULL,
     APELLIDO          VARCHAR2(15) NOT NULL,
@@ -453,353 +675,56 @@ CREATE TABLE EMPLEADO_E4 (
     FECHA_ALTA        DATE NOT NULL,
     SALARIO           NUMBER(8,2) NOT NULL,
     COD_DEPARTAMENTO  VARCHAR2(5) NOT NULL,
-    CONSTRAINT FK_EMP_E4_DEP
-        FOREIGN KEY (COD_DEPARTAMENTO) REFERENCES DEPARTAMENTO_E4(COD_DEPARTAMENTO)
+    CONSTRAINT FK_EMP_DEP
+        FOREIGN KEY (COD_DEPARTAMENTO) REFERENCES DEPARTAMENTO(COD_DEPARTAMENTO)
 );
 
-CREATE TABLE HIJO_E4 (
+CREATE TABLE HIJO (
     COD_HIJO          VARCHAR2(5) PRIMARY KEY,
     NOMBRE            VARCHAR2(15) NOT NULL,
     APELLIDO          VARCHAR2(15) NOT NULL,
     FECHA_NACIMIENTO  DATE NOT NULL,
     CI_EMPLEADO       VARCHAR2(10) NOT NULL,
-    CONSTRAINT FK_HIJO_E4_EMP
-        FOREIGN KEY (CI_EMPLEADO) REFERENCES EMPLEADO_E4(CI)
+    CONSTRAINT FK_HIJO_EMP
+        FOREIGN KEY (CI_EMPLEADO) REFERENCES EMPLEADO(CI)
 );
 
-CREATE TABLE HABILIDAD_E4 (
+CREATE TABLE HABILIDAD (
     COD_HABILIDAD     VARCHAR2(5) PRIMARY KEY,
     DESCRIPCION       VARCHAR2(30) NOT NULL
 );
 
-CREATE TABLE EMPLEADO_HABILIDAD_E4 (
+CREATE TABLE EMPLEADO_HABILIDAD (
     CI_EMPLEADO       VARCHAR2(10) NOT NULL,
     COD_HABILIDAD     VARCHAR2(5) NOT NULL,
     PORCENTAJE        NUMBER(5,2) NOT NULL,
-    CONSTRAINT PK_EMP_HAB_E4
+    CONSTRAINT PK_EMP_HAB
         PRIMARY KEY (CI_EMPLEADO, COD_HABILIDAD),
-    CONSTRAINT FK_EMP_HAB_E4_EMP
-        FOREIGN KEY (CI_EMPLEADO) REFERENCES EMPLEADO_E4(CI),
-    CONSTRAINT FK_EMP_HAB_E4_HAB
-        FOREIGN KEY (COD_HABILIDAD) REFERENCES HABILIDAD_E4(COD_HABILIDAD),
-    CONSTRAINT CHK_PORC_E4
+    CONSTRAINT FK_EMP_HAB_EMP
+        FOREIGN KEY (CI_EMPLEADO) REFERENCES EMPLEADO(CI),
+    CONSTRAINT FK_EMP_HAB_HAB
+        FOREIGN KEY (COD_HABILIDAD) REFERENCES HABILIDAD(COD_HABILIDAD),
+    CONSTRAINT CHK_PORC
         CHECK (PORCENTAJE >= 0 AND PORCENTAJE <= 100)
 );
 \end{lstlisting}
+
 \subsection{Ejercicio adicional 1: modelo transaccional de ventas}
 
 \subsubsection*{Enunciado}
 
 ``Una empresa vende productos a sus clientes. Se necesita conocer los datos personales de los clientes (nombre, apellidos, CI, dirección y fecha de nacimiento). Cada producto tiene un código y un nombre, así como un precio unitario y una marca. Un cliente puede comprar varios productos, y un mismo producto puede ser comprado por varios clientes. Los productos son suministrados por diferentes proveedores. Se debe tener en cuenta que un proveedor puede suministrar diferentes productos y que un producto sólo puede ser suministrado por un proveedor. De cada proveedor se conoce el RUC, nombre y dirección.''
 
-
-\subsubsection*{1. Analisis del problema}
-
-Del enunciado se identifican primero los objetos principales del negocio:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Cliente
-    \item Producto
-    \item Proveedor
-\end{itemize}
-
-Ademas, para representar correctamente la operacion de compra, conviene agregar dos entidades transaccionales:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Compra
-    \item Detalle\_Compra
-\end{itemize}
-
-Esto se hace porque:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item un cliente puede comprar muchos productos;
-    \item un producto puede ser comprado por muchos clientes;
-    \item esa relacion es de tipo muchos a muchos (N:M);
-    \item y en el modelo relacional una relacion N:M debe resolverse con una tabla intermedia.
-\end{itemize}
-
-\subsubsection*{2. Modelo conceptual}
-
-\noindent\textbf{2.1 Entidades del negocio}
-
-\vspace{0.2cm}
-
-\textbf{Cliente}
-
-Representa a las personas que compran productos.
-
-Atributos:
-\begin{itemize}[leftmargin=1.2cm]
-    \item CI
-    \item Nombre
-    \item Apellidos
-    \item Direccion
-    \item Fecha de nacimiento
-\end{itemize}
-
-\textbf{Proveedor}
-
-Representa a las empresas o personas que suministran productos.
-
-Atributos:
-\begin{itemize}[leftmargin=1.2cm]
-    \item RUC
-    \item Nombre
-    \item Direccion
-\end{itemize}
-
-\textbf{Producto}
-
-Representa los bienes que la empresa vende.
-
-Atributos:
-\begin{itemize}[leftmargin=1.2cm]
-    \item Codigo
-    \item Nombre
-    \item Precio unitario
-    \item Marca
-\end{itemize}
-
-\textbf{Compra}
-
-Representa una transaccion realizada por un cliente.
-
-Atributos:
-\begin{itemize}[leftmargin=1.2cm]
-    \item IdCompra
-    \item FechaCompra
-\end{itemize}
-
-\textbf{Detalle\_Compra}
-
-Representa los productos incluidos en una compra.
-
-Atributos:
-\begin{itemize}[leftmargin=1.2cm]
-    \item Cantidad
-    \item PrecioVenta
-\end{itemize}
-
-\noindent\textbf{2.2 Reglas de negocio}
-
-\vspace{0.2cm}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Un cliente puede realizar muchas compras.
-    \item Una compra pertenece a un solo cliente.
-    \item Una compra puede incluir uno o varios productos.
-    \item Un producto puede aparecer en muchas compras.
-    \item Un proveedor puede suministrar muchos productos.
-    \item Un producto es suministrado por un solo proveedor.
-\end{itemize}
-
-\subsubsection*{3. Modelo Entidad-Relacion (ER)}
-
-\noindent\textbf{3.1 Entidades con sus claves}
-
-\vspace{0.2cm}
-
-\textbf{CLIENTE}
-\begin{itemize}[leftmargin=1.2cm]
-    \item CI (clave primaria)
-    \item Nombre
-    \item Apellidos
-    \item Direccion
-    \item FechaNacimiento
-\end{itemize}
-
-\textbf{PROVEEDOR}
-\begin{itemize}[leftmargin=1.2cm]
-    \item RUC (clave primaria)
-    \item Nombre
-    \item Direccion
-\end{itemize}
-
-\textbf{PRODUCTO}
-\begin{itemize}[leftmargin=1.2cm]
-    \item CodigoProducto (clave primaria)
-    \item NombreProducto
-    \item PrecioUnitario
-    \item Marca
-\end{itemize}
-
-\textbf{COMPRA}
-\begin{itemize}[leftmargin=1.2cm]
-    \item IdCompra (clave primaria)
-    \item FechaCompra
-\end{itemize}
-
-\textbf{DETALLE\_COMPRA}
-\begin{itemize}[leftmargin=1.2cm]
-    \item IdCompra (parte de clave primaria y clave foranea)
-    \item CodigoProducto (parte de clave primaria y clave foranea)
-    \item Cantidad
-    \item PrecioVenta
-\end{itemize}
-
-\noindent\textbf{3.2 Relaciones y cardinalidades}
-
-\vspace{0.2cm}
-
-\textbf{PROVEEDOR --- SUMINISTRA --- PRODUCTO}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Un proveedor suministra muchos productos.
-    \item Un producto es suministrado por un solo proveedor.
-\end{itemize}
-
-Cardinalidad:
-
-\begin{center}
-\texttt{PROVEEDOR (1) ----- (N) PRODUCTO}
-\end{center}
-
-\textbf{CLIENTE --- REALIZA --- COMPRA}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Un cliente realiza muchas compras.
-    \item Una compra corresponde a un solo cliente.
-\end{itemize}
-
-Cardinalidad:
-
-\begin{center}
-\texttt{CLIENTE (1) ----- (N) COMPRA}
-\end{center}
-
-\textbf{COMPRA --- CONTIENE --- DETALLE\_COMPRA}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Una compra tiene varios detalles.
-    \item Cada detalle pertenece a una sola compra.
-\end{itemize}
-
-Cardinalidad:
-
-\begin{center}
-\texttt{COMPRA (1) ----- (N) DETALLE\_COMPRA}
-\end{center}
-
-\textbf{PRODUCTO --- APARECE\_EN --- DETALLE\_COMPRA}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Un producto puede aparecer en muchos detalles.
-    \item Cada detalle hace referencia a un solo producto.
-\end{itemize}
-
-Cardinalidad:
-
-\begin{center}
-\texttt{PRODUCTO (1) ----- (N) DETALLE\_COMPRA}
-\end{center}
-
-\subsubsection*{4. Paso del modelo ER al modelo relacional}
-
-\textbf{Regla 1. Cada entidad fuerte se convierte en una tabla}
-
-Por lo tanto se crean las tablas:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item CLIENTES
-    \item PROVEEDORES
-    \item PRODUCTOS
-    \item COMPRAS
-\end{itemize}
-
-\textbf{Regla 2. Relacion 1:N}
-
-En una relacion 1:N, la clave primaria del lado 1 pasa como clave foranea al lado N.
-
-\textbf{PROVEEDOR 1:N PRODUCTO}
-
-La clave primaria de PROVEEDORES pasa a PRODUCTOS.
-
-Entonces:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item RUC\_PROV sera FK en PRODUCTOS
-\end{itemize}
-
-\textbf{CLIENTE 1:N COMPRA}
-
-La clave primaria de CLIENTES pasa a COMPRAS.
-
-Entonces:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item CI\_CLI sera FK en COMPRAS
-\end{itemize}
-
-\textbf{Regla 3. Relacion N:M}
-
-La relacion N:M se transforma en una tabla intermedia.
-
-La compra de productos se resuelve con:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item COMPRAS
-    \item DETALLE\_COMPRA
-\end{itemize}
-
-En DETALLE\_COMPRA se almacenan:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item ID\_COMPRA
-    \item COD\_PROD
-    \item CANTIDAD
-    \item PRECIO\_VENTA
-\end{itemize}
-
-La clave primaria sera compuesta:
-
-\begin{center}
-\texttt{(ID\_COMPRA, COD\_PROD)}
-\end{center}
-
-\subsubsection*{5. Modelo relacional}
-
-\textbf{Esquema relacional final}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item \texttt{CLIENTES(CI\_CLI PK, NOM\_CLI, APE\_CLI, DIR\_CLI, FEC\_NAC)}
-    \item \texttt{PROVEEDORES(RUC\_PROV PK, NOM\_PROV, DIR\_PROV)}
-    \item \texttt{PRODUCTOS(COD\_PROD PK, NOM\_PROD, PRE\_UNIT, MARCA, RUC\_PROV FK)}
-    \item \texttt{COMPRAS(ID\_COMPRA PK, FEC\_COMPRA, CI\_CLI FK)}
-    \item \texttt{DETALLE\_COMPRA(ID\_COMPRA FK, COD\_PROD FK, CANTIDAD, PRECIO\_VENTA, PK(ID\_COMPRA, COD\_PROD))}
-\end{itemize}
-
-\subsubsection*{6. Modelo fisico en Oracle}
-
-Aqui ya se definen:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item tipos de datos Oracle;
-    \item restricciones;
-    \item nombres de claves primarias;
-    \item claves foraneas;
-    \item validaciones con CHECK.
-\end{itemize}
-
-\noindent\textbf{7.1 Eliminacion previa de tablas si ya existen}
-
-\vspace{0.3cm}
-
-Esto sirve para volver a ejecutar el script.
-
-\begin{lstlisting}[language=SQL, caption={Eliminacion previa de tablas del ejercicio adicional 1}]
-DROP TABLE DETALLE_COMPRA CASCADE CONSTRAINTS;
-DROP TABLE COMPRAS CASCADE CONSTRAINTS;
-DROP TABLE PRODUCTOS CASCADE CONSTRAINTS;
-DROP TABLE CLIENTES CASCADE CONSTRAINTS;
-DROP TABLE PROVEEDORES CASCADE CONSTRAINTS;
+\subsubsection{Script inicial de creación de usuario para el ejercicio adicional 1}
+\begin{lstlisting}[language=SQL, caption={Creación del usuario en Oracle para el ejercicio adicional 1}]
+CREATE USER EjerAdicionalUno IDENTIFIED BY EjerAdicionalUno123;
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO EjerAdicionalUno;
+
+CONNECT EjerAdicionalUno/EjerAdicionalUno123;
 \end{lstlisting}
 
-\noindent\textbf{7.2 Creacion de tablas}
-
-\vspace{0.3cm}
-
-\begin{lstlisting}[language=SQL, caption={Creacion de tablas del ejercicio adicional 1}]
+\subsubsection{Modelo físico en Oracle del ejercicio adicional 1}
+\begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio adicional 1}]
 CREATE TABLE PROVEEDORES (
     RUC_PROV    VARCHAR2(13) PRIMARY KEY,
     NOM_PROV    VARCHAR2(20) NOT NULL,
@@ -820,7 +745,7 @@ CREATE TABLE PRODUCTOS (
     PRE_UNIT    NUMBER(8,2) NOT NULL,
     MARCA       VARCHAR2(15) NOT NULL,
     RUC_PROV    VARCHAR2(13) NOT NULL,
-    CONSTRAINT FK_PROD_PROV
+    CONSTRAINT FK_PROD_PROV_AD
         FOREIGN KEY (RUC_PROV) REFERENCES PROVEEDORES(RUC_PROV),
     CONSTRAINT CHK_PRE_UNIT
         CHECK (PRE_UNIT > 0)
@@ -852,23 +777,10 @@ CREATE TABLE DETALLE_COMPRA (
 );
 \end{lstlisting}
 
-\subsubsection*{8. DML en Oracle}
-
-\noindent\textbf{8.1 Insercion de datos en PROVEEDORES}
-
-\noindent\textbf{8.2 Insercion de datos en CLIENTES}
-
-\noindent\textbf{8.3 Insercion de datos en PRODUCTOS}
-
-\noindent\textbf{8.4 Insercion de datos en COMPRAS}
-
-\noindent\textbf{8.5 Insercion de datos en DETALLE\_COMPRA}
-
-\noindent\textbf{8.6 Confirmar cambios}
-
-\vspace{0.4cm}
-
-\begin{lstlisting}[language=SQL, caption={Insercion de datos del ejercicio adicional 1}]
+\subsubsection{Ingreso de datos del ejercicio adicional 1}
+\noindent\textbf{Inserción de datos:} \\
+\vspace{0.2cm}
+\begin{lstlisting}[language=SQL, caption={Inserción de datos del ejercicio adicional 1}]
 -- PROVEEDORES
 INSERT INTO PROVEEDORES VALUES ('1790012345001', 'TecnoSur', 'Quito Norte');
 INSERT INTO PROVEEDORES VALUES ('1790012345002', 'AndesComp', 'Ambato Centro');
@@ -883,6 +795,7 @@ INSERT INTO CLIENTES VALUES ('1803334445', 'Sofia', 'Lara', 'Latacunga Norte', D
 INSERT INTO PRODUCTOS VALUES ('PR01', 'Laptop Lenovo', 850, 'Lenovo', '1790012345001');
 INSERT INTO PRODUCTOS VALUES ('PR02', 'Mouse Logitech', 25, 'Logitech', '1790012345002');
 INSERT INTO PRODUCTOS VALUES ('PR03', 'Teclado Redragon', 60, 'Redragon', '1790012345002');
+INSERT INTO PRODUCTOS VALUES ('PR04', 'Monitor LG', 180, 'LG', '1790012345004');
 
 -- COMPRAS
 INSERT INTO COMPRAS VALUES (1, DATE '2026-04-01', '1801112223');
@@ -896,245 +809,122 @@ INSERT INTO DETALLE_COMPRA VALUES (2, 'PR03', 1, 65);
 COMMIT;
 \end{lstlisting}
 
-\subsubsection*{9. Consultas de comprobacion}
-
-\textbf{Ver clientes, productos y compras}
-
-\begin{lstlisting}[language=SQL, caption={Consultas de comprobacion del ejercicio adicional 1}]
-SELECT * FROM CLIENTES;
-SELECT * FROM PRODUCTOS;
-SELECT * FROM COMPRAS;
-\end{lstlisting}
-
-\textbf{Consulta integrada}
-
-Muestra que compro cada cliente.
-
-\begin{lstlisting}[language=SQL, caption={Consulta integrada del ejercicio adicional 1}]
-SELECT
-    c.CI_CLI,
-    c.NOM_CLI,
-    c.APE_CLI,
-    co.ID_COMPRA,
-    co.FEC_COMPRA,
-    p.COD_PROD,
-    p.NOM_PROD,
-    d.CANTIDAD,
-    d.PRECIO_VENTA
-FROM CLIENTES c
-JOIN COMPRAS co ON c.CI_CLI = co.CI_CLI
-JOIN DETALLE_COMPRA d ON co.ID_COMPRA = d.ID_COMPRA
-JOIN PRODUCTOS p ON d.COD_PROD = p.COD_PROD
-ORDER BY co.ID_COMPRA;
-\end{lstlisting}
-
-\subsubsection*{10. Operaciones DML adicionales}
-
-\noindent\textbf{10.1 UPDATE}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Cambiar direccion de un cliente.
-    \item Cambiar precio unitario de un producto.
-    \item Cambiar marca de un producto.
-\end{itemize}
-
-\noindent\textbf{10.2 DELETE}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Eliminar un detalle de compra.
-    \item Eliminar una compra si ya no tiene detalles.
-\end{itemize}
-
-\noindent\textbf{10.3 Guardar cambios}
-
-\vspace{0.3cm}
-
-\begin{lstlisting}[language=SQL, caption={Operaciones UPDATE y DELETE del ejercicio adicional 1}]
-UPDATE CLIENTES
-SET DIR_CLI = 'Ambato Ficoa'
-WHERE CI_CLI = '1801112223';
-
-UPDATE PRODUCTOS
-SET PRE_UNIT = 27
-WHERE COD_PROD = 'PR02';
-
-UPDATE PRODUCTOS
-SET MARCA = 'Logitech G'
-WHERE COD_PROD = 'PR02';
-
-DELETE FROM DETALLE_COMPRA
-WHERE ID_COMPRA = 2 AND COD_PROD = 'PR03';
-
-DELETE FROM COMPRAS
-WHERE ID_COMPRA = 2;
-
-COMMIT;
-\end{lstlisting}
-
-\subsubsection*{11. Pruebas de errores de integridad en Oracle}
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item Error 1: clave primaria duplicada
-    \item Error 2: clave foranea inexistente
-    \item Error 3: eliminacion de registro padre con hijos
-    \item Error 4: violacion de CHECK
-\end{itemize}
-
-\begin{lstlisting}[language=SQL, caption={Pruebas de errores de integridad del ejercicio adicional 1}]
--- Error 1: clave primaria duplicada
-INSERT INTO CLIENTES VALUES ('1801112223', 'Pedro', 'Lopez', 'Riobamba', DATE '2002-01-01');
-
--- Error 2: clave foranea inexistente
-INSERT INTO PRODUCTOS VALUES ('PR99', 'Tablet', 300, 'Samsung', '1790000000000');
-
--- Error 3: eliminacion de registro padre con hijos
-DELETE FROM COMPRAS WHERE ID_COMPRA = 1;
-
--- Error 4: violacion de CHECK
-INSERT INTO DETALLE_COMPRA VALUES (1, 'PR02', -1, 20);
-\end{lstlisting}
-
-\subsubsection*{12. Ejercicios practicos en Oracle}
-
-\noindent\textbf{12.1 Ejercicio practico 1}
-
-Insertar un nuevo proveedor llamado ElectroGlobal, con RUC 1790012345003, direccion Guayaquil Norte.
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-INSERT INTO PROVEEDORES VALUES ('1790012345003', 'ElectroGlobal', 'Guayaquil Norte');
-\end{lstlisting}
-
-\noindent\textbf{12.2 Ejercicio practico 2}
-
-Registrar un nuevo producto llamado Disco SSD 1TB, marca Kingston, precio 95, suministrado por 1790012345003.
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-INSERT INTO PRODUCTOS VALUES ('PR06', 'Disco SSD 1TB', 95, 'Kingston', '1790012345003');
-\end{lstlisting}
-
-\noindent\textbf{12.3 Ejercicio practico 3}
-
-Registrar un nuevo cliente:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item CI: 1809998887
-    \item Nombre: Luis
-    \item Apellidos: Mora
-    \item Direccion: Riobamba Centro
-    \item Fecha de nacimiento: 2002-03-22
-\end{itemize}
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-INSERT INTO CLIENTES VALUES ('1809998887', 'Luis', 'Mora', 'Riobamba Centro', DATE '2002-03-22');
-\end{lstlisting}
-
-\noindent\textbf{12.4 Ejercicio practico 4}
-
-Registrar una compra del cliente 1809998887 con ID\_COMPRA = 3 y fecha 2026-04-03.
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-INSERT INTO COMPRAS VALUES (3, DATE '2026-04-03', '1809998887');
-\end{lstlisting}
-
-\noindent\textbf{12.5 Ejercicio practico 5}
-
-Registrar en la compra 3 los productos:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item PR03 cantidad 1, precio 60
-    \item PR06 cantidad 2, precio 95
-\end{itemize}
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-INSERT INTO DETALLE_COMPRA VALUES (3, 'PR03', 1, 60);
-INSERT INTO DETALLE_COMPRA VALUES (3, 'PR06', 2, 95);
-\end{lstlisting}
-
-\noindent\textbf{12.6 Ejercicio practico 6}
-
-Crear dos nuevos clientes y registrar al menos una compra para cada uno.
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-INSERT INTO CLIENTES VALUES ('1807776665', 'Marta', 'Vega', 'Ambato Sur', DATE '2001-07-11');
-INSERT INTO CLIENTES VALUES ('1806665554', 'Diego', 'Paz', 'Quito Norte', DATE '2000-10-19');
-
-INSERT INTO COMPRAS VALUES (4, DATE '2026-04-04', '1807776665');
-INSERT INTO COMPRAS VALUES (5, DATE '2026-04-05', '1806665554');
-
-INSERT INTO DETALLE_COMPRA VALUES (4, 'PR01', 1, 860);
-INSERT INTO DETALLE_COMPRA VALUES (5, 'PR02', 3, 27);
-\end{lstlisting}
-
-\noindent\textbf{12.7 Ejercicio practico 7}
-
-Insertar tres productos nuevos, todos asociados a proveedores ya existentes.
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-INSERT INTO PRODUCTOS VALUES ('PR07', 'Monitor 24', 180, 'LG', '1790012345001');
-INSERT INTO PRODUCTOS VALUES ('PR08', 'Memoria USB 64GB', 18, 'Sandisk', '1790012345002');
-INSERT INTO PRODUCTOS VALUES ('PR09', 'Webcam HD', 45, 'Genius', '1790012345004');
-\end{lstlisting}
-
-\noindent\textbf{12.8 Ejercicio practico 8}
-
-Actualizar el precio unitario de todos los productos de un proveedor especifico.
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-UPDATE PRODUCTOS
-SET PRE_UNIT = PRE_UNIT * 1.05
-WHERE RUC_PROV = '1790012345002';
-\end{lstlisting}
-
-\noindent\textbf{12.9 Ejercicio practico 9}
-
-Eliminar correctamente una compra completa, considerando primero sus detalles.
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-DELETE FROM DETALLE_COMPRA WHERE ID_COMPRA = 4;
-DELETE FROM COMPRAS WHERE ID_COMPRA = 4;
-\end{lstlisting}
-
-\noindent\textbf{12.10 Ejercicio practico 10}
-
-Intentar insertar:
-
-\begin{itemize}[leftmargin=1.2cm]
-    \item un producto con proveedor inexistente;
-    \item un cliente con CI repetida;
-    \item un detalle con cantidad negativa.
-\end{itemize}
-
-\textbf{Solucion}
-
-\begin{lstlisting}[language=SQL]
-INSERT INTO PRODUCTOS VALUES ('PR10', 'Impresora', 220, 'HP', '1790099999999');
-INSERT INTO CLIENTES VALUES ('1809998887', 'Luis', 'Mora', 'Riobamba Centro', DATE '2002-03-22');
-INSERT INTO DETALLE_COMPRA VALUES (3, 'PR06', -2, 95);
-\end{lstlisting}
-
-\textbf{Luego, explicar por que Oracle genera error:}
-
-Oracle genera error en el primer caso porque se intenta registrar un producto con un proveedor que no existe en la tabla \texttt{PROVEEDORES}; por lo tanto, se viola la clave foranea. En el segundo caso, se intenta insertar un cliente con una clave primaria ya registrada, por lo que se incumple la restriccion de unicidad de la llave primaria. En el tercer caso, Oracle genera error porque la cantidad es negativa y la tabla \texttt{DETALLE\_COMPRA} tiene una restriccion \texttt{CHECK} que solo permite valores mayores que cero.\subsection{Habilidades blandas empleadas en la tarea}
-
-\subsubsection*{13. Ejercicios practicos DQL o subconsultas}
+\subsubsection*{13. Ejercicios practicos DQL o subconsultas del ejercicio adicional 1}
+
+Las subconsultas son consultas anidadas dentro de otra consulta principal. Se utilizan para obtener datos intermedios que sirven como criterio para la consulta externa. Estas permiten realizar consultas más complejas y precisas sobre la base de datos.
+
+En el ejercicio adicional 1, las subconsultas se aplicaron sobre las tablas \textbf{CLIENTES, PROVEEDORES, PRODUCTOS, COMPRAS y DETALLE\_COMPRA}, con el objetivo de analizar relaciones entre clientes, productos y proveedores.
+
+\subsubsection*{1. Clientes que no han realizado compras}
+
+Ejemplo del uso de la cláusula NOT IN.
+
+\begin{verbatim}
+SELECT NOM_CLI, APE_CLI
+FROM CLIENTES
+WHERE CI_CLI NOT IN (
+    SELECT CI_CLI
+    FROM COMPRAS
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/EjercicioAd1L1.png}
+    \caption{Imagen referencial del ejercicio 1 en SQL}
+    \label{fig:ad1l1}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se excluyen los clientes que poseen compras registradas en la tabla ``COMPRAS'', mostrando únicamente aquellos que todavía no han realizado ninguna compra.
+
+\subsubsection*{2. Clientes que compraron productos del mismo proveedor que ``Laptop Lenovo''}
+
+Permite encontrar clientes que compraron productos asociados a un mismo proveedor.
+
+\begin{verbatim}
+SELECT NOM_CLI, APE_CLI
+FROM CLIENTES
+WHERE CI_CLI IN (
+    SELECT CI_CLI
+    FROM COMPRAS
+    WHERE ID_COMPRA IN (
+        SELECT ID_COMPRA
+        FROM DETALLE_COMPRA
+        WHERE COD_PROD IN (
+            SELECT COD_PROD
+            FROM PRODUCTOS
+            WHERE RUC_PROV = (
+                SELECT RUC_PROV
+                FROM PRODUCTOS
+                WHERE NOM_PROD = 'Laptop Lenovo'
+            )
+        )
+    )
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/EjercicioAd1L2.png}
+    \caption{Imagen referencial del ejercicio 2 en SQL}
+    \label{fig:ad1l2}
+\end{figure}
+
+\textbf{Descripción:} \\
+Primero se identifica el proveedor del producto ``Laptop Lenovo''. Después se localizan los productos de ese mismo proveedor y, finalmente, se muestran los clientes que compraron alguno de esos productos.
+
+\subsubsection*{3. Productos que no han sido vendidos}
+
+Permite identificar productos que todavía no aparecen en ventas registradas.
+
+\begin{verbatim}
+SELECT NOM_PROD, MARCA
+FROM PRODUCTOS
+WHERE COD_PROD NOT IN (
+    SELECT COD_PROD
+    FROM DETALLE_COMPRA
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/EjercicioAd1L3.png}
+    \caption{Imagen referencial del ejercicio 3 en SQL}
+    \label{fig:ad1l3}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se seleccionan los productos que todavía no aparecen en ningún detalle de compra, es decir, aquellos que aún no han sido vendidos.
+
+\subsubsection*{4. Proveedores cuyos productos sí han sido comprados}
+
+Permite identificar proveedores que tienen productos registrados en ventas.
+
+\begin{verbatim}
+SELECT NOM_PROV
+FROM PROVEEDORES
+WHERE RUC_PROV IN (
+    SELECT RUC_PROV
+    FROM PRODUCTOS
+    WHERE COD_PROD IN (
+        SELECT COD_PROD
+        FROM DETALLE_COMPRA
+    )
+);
+\end{verbatim}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/EjercicioAd1L4.png}
+    \caption{Imagen referencial del ejercicio 4 en SQL}
+    \label{fig:ad1l4}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se muestran los proveedores cuyos productos aparecen en ventas registradas dentro de la tabla ``DETALLE\_COMPRA''.
+
+\subsubsection*{Ejercicio 2}
 
 \subsubsection*{Creacion del usuario y de la Base de Datos}
 CREATE USER INSTITUTO IDENTIFIED BY INSTITUTO; 
@@ -1334,6 +1124,8 @@ WHERE Id_Pro IN (
 \textbf{Descripción:} \\
 Se seleccionan los profesores que dictan materias en aulas distintas al aula ``Lab 01''.
 
+
+\subsection{Habilidades blandas empleadas en la tarea}
 \begin{itemize}
     \item[$\square$] Liderazgo
     \item[$\square$] Trabajo en equipo
@@ -1347,14 +1139,14 @@ Se seleccionan los profesores que dictan materias en aulas distintas al aula ``L
 \end{itemize}
 
 \subsection{Conclusiones}
-El desarrollo de la guía permitió reforzar la comprensión del modelo entidad/relación, del modelo relacional, de las dependencias funcionales y del proceso de normalización, evidenciando que un buen análisis de los enunciados facilita la correcta identificación de entidades, relaciones y restricciones. Asimismo, la traducción de los modelos conceptuales a esquemas de tablas permitió consolidar el uso de claves primarias y foráneas como elementos esenciales de integridad en bases de datos relacionales.
+El desarrollo de la guía permitió comprender de manera práctica la implementación del modelo físico de una base de datos en Oracle, evidenciando que la creación adecuada de tablas, claves y restricciones constituye la base para el almacenamiento organizado de la información. Asimismo, el ingreso de datos de prueba permitió verificar la validez de las relaciones establecidas y comprobar el funcionamiento de la integridad referencial en los distintos ejercicios.
 
-Por otra parte, el trabajo realizado demuestra que la organización adecuada de la información constituye una base importante para procesos posteriores de normalización, ya que reduce ambigüedades, mejora la consistencia del diseño lógico y facilita su implementación en Oracle.
+De igual manera, la ejecución de consultas DQL y subconsultas demostró que una base de datos bien estructurada no solo permite guardar información, sino también recuperarla de forma precisa según diferentes criterios. En consecuencia, la práctica fortaleció la relación entre diseño, implementación y consulta de datos dentro de un entorno real de trabajo con Oracle.
 
 \subsection{Recomendaciones}
-Se recomienda revisar cuidadosamente cada enunciado antes de construir el modelo, a fin de distinguir correctamente entidades, atributos y relaciones. Además, es conveniente validar las cardinalidades antes de pasar al modelo relacional, ya que de ello depende la correcta definición de claves foráneas y tablas intermedias.
+Se recomienda verificar cuidadosamente la coherencia entre el modelo relacional y el modelo físico antes de crear las tablas en Oracle, con el fin de evitar errores en claves, nombres de campos o relaciones entre entidades. También es conveniente ingresar datos de prueba que representen distintos escenarios, ya que ello facilita la comprobación del correcto funcionamiento de las restricciones y relaciones definidas.
 
-También se recomienda continuar con ejercicios prácticos similares, complementar el análisis lógico con la implementación física en un gestor de base de datos y verificar el cumplimiento de 1FN, 2FN y 3FN para obtener esquemas mejor organizados y consistentes.
+Además, se recomienda continuar practicando consultas DQL y subconsultas sobre las bases de datos implementadas, puesto que esta fase permite interpretar la información almacenada y validar de manera más completa el trabajo realizado en la construcción del esquema físico.
 
 \subsection{Referencias}
 \renewcommand{\refname}{}
