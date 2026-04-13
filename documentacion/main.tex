@@ -83,6 +83,7 @@ Unidad de Organización Curricular: & PROFESIONAL \\
 Nivel y Paralelo: & 4to Semestre ``B'' \\
 Alumno participante: & Guatemal Avilez Bryan Stalin \\
 & Bejarano Masabanda Carlos Fabian \\
+& Molina Nuñez Karen Valeria \\
 Asignatura: & Base de Datos \\
 Docente: & Ing. Jose Ruben Caiza Caizabuano Mg. \\
 Modalidad: & Presencial \\
@@ -598,56 +599,210 @@ WHERE Id_Pro IN (
 Se seleccionan los profesores que dictan materias en aulas distintas al aula ``Lab 01''.
 
 \subsubsection{Modelo físico en Oracle del ejercicio 3}
-\begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 3}]
+
+\begin{lstlisting}[language=SQL, caption={Creación de tablas}]
+
+TABLA CLIENTE
 CREATE TABLE CLIENTE (
-    COD_CLIENTE       VARCHAR2(5) PRIMARY KEY,
-    NOMBRE            VARCHAR2(15) NOT NULL,
-    APELLIDO          VARCHAR2(15) NOT NULL,
-    DIRECCION         VARCHAR2(30) NOT NULL,
-    TELEFONO          VARCHAR2(10) NOT NULL
+    COD_CLIENTE VARCHAR2(5) PRIMARY KEY,
+    NOMBRE VARCHAR2(15) NOT NULL,
+    APELLIDO VARCHAR2(15) NOT NULL,
+    DIRECCION VARCHAR2(30) NOT NULL,
+    TELEFONO VARCHAR2(10) NOT NULL
 );
 
+TABLA PRODUCTO
 CREATE TABLE PRODUCTO (
-    COD_PRODUCTO      VARCHAR2(5) PRIMARY KEY,
-    DESCRIPCION       VARCHAR2(30) NOT NULL,
-    PRECIO            NUMBER(8,2) NOT NULL,
-    EXISTENCIAS       NUMBER(5) NOT NULL
+    COD_PRODUCTO VARCHAR2(5) PRIMARY KEY,
+    DESCRIPCION VARCHAR2(30) NOT NULL,
+    PRECIO NUMBER(8,2) NOT NULL,
+    EXISTENCIAS NUMBER(5) NOT NULL
 );
 
+TABLA PROVEEDOR
 CREATE TABLE PROVEEDOR (
-    COD_PROVEEDOR     VARCHAR2(5) PRIMARY KEY,
-    NOMBRE            VARCHAR2(15) NOT NULL,
-    APELLIDOS         VARCHAR2(20) NOT NULL,
-    DIRECCION         VARCHAR2(30) NOT NULL,
-    PROVINCIA         VARCHAR2(20) NOT NULL,
-    TELEFONO          VARCHAR2(10) NOT NULL
+    COD_PROVEEDOR VARCHAR2(5) PRIMARY KEY,
+    NOMBRE VARCHAR2(15) NOT NULL,
+    APELLIDOS VARCHAR2(20) NOT NULL,
+    DIRECCION VARCHAR2(30) NOT NULL,
+    PROVINCIA VARCHAR2(20) NOT NULL,
+    TELEFONO VARCHAR2(10) NOT NULL
 );
 
+TABLA COMPRA
 CREATE TABLE COMPRA (
-    NUMERO_COMPRA     VARCHAR2(5) PRIMARY KEY,
-    COD_CLIENTE       VARCHAR2(5) NOT NULL,
-    COD_PRODUCTO      VARCHAR2(5) NOT NULL,
-    FECHA_COMPRA      DATE NOT NULL,
-    FORMA_PAGO        VARCHAR2(15) NOT NULL,
+    NUMERO_COMPRA VARCHAR2(5) PRIMARY KEY,
+    COD_CLIENTE VARCHAR2(5) NOT NULL,
+    COD_PRODUCTO VARCHAR2(5) NOT NULL,
+    FECHA_COMPRA DATE NOT NULL,
+    FORMA_PAGO VARCHAR2(15) NOT NULL,
     CONSTRAINT FK_COMPRA_CLI
         FOREIGN KEY (COD_CLIENTE) REFERENCES CLIENTE(COD_CLIENTE),
     CONSTRAINT FK_COMPRA_PROD
         FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO(COD_PRODUCTO)
 );
 
+TABLA ENTREGA
 CREATE TABLE ENTREGA (
-    ID_ENTREGA              VARCHAR2(5) PRIMARY KEY,
-    COD_PROVEEDOR           VARCHAR2(5) NOT NULL,
-    COD_PRODUCTO            VARCHAR2(5) NOT NULL,
-    FECHA_ENTREGA           DATE NOT NULL,
-    CANTIDAD_SUMINISTRADA   NUMBER(5) NOT NULL,
-    PRECIO_ADQUISICION      NUMBER(8,2) NOT NULL,
+    ID_ENTREGA VARCHAR2(5) PRIMARY KEY,
+    COD_PROVEEDOR VARCHAR2(5) NOT NULL,
+    COD_PRODUCTO VARCHAR2(5) NOT NULL,
+    FECHA_ENTREGA DATE NOT NULL,
+    CANTIDAD_SUMINISTRADA NUMBER(5) NOT NULL,
+    PRECIO_ADQUISICION NUMBER(8,2) NOT NULL,
     CONSTRAINT FK_ENTREGA_PROV
         FOREIGN KEY (COD_PROVEEDOR) REFERENCES PROVEEDOR(COD_PROVEEDOR),
     CONSTRAINT FK_ENTREGA_PROD
         FOREIGN KEY (COD_PRODUCTO) REFERENCES PRODUCTO(COD_PRODUCTO)
 );
 \end{lstlisting}
+
+\subsection{Ingreso de datos}
+
+\noindent\textbf{Inserción de datos:}
+\vspace{0.2cm}
+
+\begin{lstlisting}[language=SQL, caption={Inserción de datos}]
+CLIENTES
+INSERT INTO CLIENTE VALUES ('C001', 'Ana', 'Gomez', 'Av Amazonas 123', '0987654321');
+INSERT INTO CLIENTE VALUES ('C002', 'Luis', 'Perez', 'Calle Larga 456', '0978123456');
+INSERT INTO CLIENTE VALUES ('C003', 'Maria', 'Lopez', 'Av Los Shyris 789', '0998765432');
+
+PROVEEDORES
+INSERT INTO PROVEEDOR VALUES ('P001', 'Carlos', 'Mendoza Rios', 'Industrial 100', 'Pichincha', '022345678');
+INSERT INTO PROVEEDOR VALUES ('P002', 'Lucia', 'Sanchez Mora', 'Comercial 200', 'Guayas', '042345678');
+INSERT INTO PROVEEDOR VALUES ('P003', 'Pedro', 'Ramirez Cruz', 'Norte 300', 'Azuay', '072345678');
+
+PRODUCTOS
+INSERT INTO PRODUCTO VALUES ('P001', 'Laptop Gamer', 1200.00, 15);
+INSERT INTO PRODUCTO VALUES ('P002', 'Mouse Inalambrico', 25.50, 50);
+INSERT INTO PRODUCTO VALUES ('P003', 'Monitor 4K', 1500.00, 8);
+INSERT INTO PRODUCTO VALUES ('P004', 'Teclado Mecanico', 80.00, 5);
+INSERT INTO PRODUCTO VALUES ('P005', 'Audifonos Bluetooth', 45.00, 20);
+INSERT INTO PRODUCTO VALUES ('P006', 'SSD 1TB', 95.00, 12);
+
+COMPRAS
+INSERT INTO COMPRA VALUES ('CO01', 'C001', 'P003', TO_DATE('2024-03-15', 'YYYY-MM-DD'), 'Tarjeta');
+INSERT INTO COMPRA VALUES ('CO02', 'C001', 'P001', TO_DATE('2024-03-15', 'YYYY-MM-DD'), 'Tarjeta');
+INSERT INTO COMPRA VALUES ('CO03', 'C002', 'P002', TO_DATE('2024-03-16', 'YYYY-MM-DD'), 'Efectivo');
+INSERT INTO COMPRA VALUES ('CO04', 'C003', 'P004', TO_DATE('2024-03-17', 'YYYY-MM-DD'), 'Transferencia');
+
+ENTREGAS
+INSERT INTO ENTREGA VALUES ('E001', 'P001', 'P004', TO_DATE('2024-03-10', 'YYYY-MM-DD'), 20, 70.00);
+INSERT INTO ENTREGA VALUES ('E002', 'P002', 'P003', TO_DATE('2024-03-12', 'YYYY-MM-DD'), 10, 1400.00);
+INSERT INTO ENTREGA VALUES ('E003', 'P003', 'P004', TO_DATE('2024-03-14', 'YYYY-MM-DD'), 15, 72.00);
+INSERT INTO ENTREGA VALUES ('E004', 'P001', 'P001', TO_DATE('2024-03-14', 'YYYY-MM-DD'), 30, 1100.00);
+
+COMMIT;
+\end{lstlisting}
+
+\subsection{Consultas DQL - Subconsultas}
+
+Las subconsultas son consultas anidadas dentro de otra consulta principal. Se utilizan para obtener datos intermedios que sirven como criterio para la consulta externa. Estas permiten realizar consultas más complejas y precisas sobre la base de datos.
+
+En este ejercicio, las subconsultas se aplicaron sobre las tablas \textbf{CLIENTE, PRODUCTO, PROVEEDOR, COMPRA y ENTREGA}, con el objetivo de analizar relaciones entre clientes, productos, proveedores y entregas.
+
+\subsubsection*{1. Clientes que compraron el producto más caro}
+
+Ejemplo del uso de subconsultas anidadas para encontrar el producto con mayor precio.
+
+\begin{lstlisting}[language=SQL, caption={Clientes que compraron el producto más caro}]
+SELECT NOMBRE, APELLIDO
+FROM CLIENTE
+WHERE COD_CLIENTE IN (
+    SELECT COD_CLIENTE
+    FROM COMPRA
+    WHERE COD_PRODUCTO = (
+        SELECT COD_PRODUCTO
+        FROM PRODUCTO
+        WHERE PRECIO = (SELECT MAX(PRECIO) FROM PRODUCTO)
+    )
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/subconsulta1.png}
+    \caption{Resultado: Clientes que compraron el producto más caro}
+    \label{fig:sub1}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se identifica el precio máximo de todos los productos, luego se obtiene el código del producto con ese precio, y finalmente se buscan los clientes que compraron dicho producto. En los datos de ejemplo, el producto más caro es el "Monitor 4K" con precio \$1500, comprado por Ana Gomez.
+
+\subsubsection*{2. Productos que nunca han sido comprados}
+
+Ejemplo del uso de la cláusula NOT IN para encontrar productos sin transacciones.
+
+\begin{lstlisting}[language=SQL, caption={Productos nunca comprados}]
+SELECT DESCRIPCION, PRECIO
+FROM PRODUCTO
+WHERE COD_PRODUCTO NOT IN (
+    SELECT DISTINCT COD_PRODUCTO
+    FROM COMPRA
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/subconsulta2.png}
+    \caption{Resultado: Productos nunca comprados}
+    \label{fig:sub2}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se obtienen todos los productos que han sido comprados (subconsulta) y luego se excluyen de la lista principal de productos. En los datos de ejemplo, los productos "Audífonos Bluetooth" (P005) y "SSD 1TB" (P006) nunca han sido comprados.
+
+\subsubsection*{3. Proveedores que suministran productos con existencias bajas (< 10)}
+
+Ejemplo de subconsulta anidada doble con NOT EXISTS.
+
+\begin{lstlisting}[language=SQL, caption={Proveedores que suministran productos con stock bajo}]
+SELECT NOMBRE, APELLIDOS
+FROM PROVEEDOR
+WHERE COD_PROVEEDOR IN (
+    SELECT DISTINCT COD_PROVEEDOR
+    FROM ENTREGA
+    WHERE COD_PRODUCTO IN (
+        SELECT COD_PRODUCTO
+        FROM PRODUCTO
+        WHERE EXISTENCIAS < 10
+    )
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/subconsulta3.png}
+    \caption{Resultado: Proveedores que suministran productos con stock bajo}
+    \label{fig:sub3}
+\end{figure}
+
+\textbf{Descripción:} \\
+Primero se identifican los productos con existencias menores a 10 (Teclado Mecánico con stock=5 y Monitor 4K con stock=8), luego se buscan las entregas de esos productos, y finalmente se obtienen los proveedores correspondientes. En los datos de ejemplo, los proveedores P001 (Carlos Mendoza) y P003 (Pedro Ramirez) suministran el producto P004 (Teclado Mecánico) con stock bajo.
+
+\subsubsection*{4. Productos con precio superior al promedio}
+
+Ejemplo del uso de AVG en una subconsulta.
+
+\begin{lstlisting}[language=SQL, caption={Productos con precio superior al promedio}]
+SELECT DESCRIPCION, PRECIO
+FROM PRODUCTO
+WHERE PRECIO > (
+    SELECT AVG(PRECIO)
+    FROM PRODUCTO
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\linewidth]{imagenes/subconsulta4.png}
+    \caption{Resultado: Productos con precio superior al promedio}
+    \label{fig:sub4}
+\end{figure}
+
+\textbf{Descripción:} \\
+Se calcula el precio promedio de todos los productos (aproximadamente \$490.75) y luego se filtran aquellos productos cuyo precio sea mayor a ese promedio. En los datos de ejemplo, "Laptop Gamer" (\$1200) y "Monitor 4K" (\$1500) cumplen esta condición.
 
 \subsubsection{Modelo físico en Oracle del ejercicio 4}
 \begin{lstlisting}[language=SQL, caption={Creación de tablas del ejercicio 4}]
