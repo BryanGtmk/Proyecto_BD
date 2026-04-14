@@ -264,10 +264,138 @@ END //
 
 DELIMITER ;
 
+-- SECCIÓN 7: EJERCICIO 4 - ORGANIZACIÓN INTERNA DE EMPRESA
+-- RESPONSABLE: [Ingrese su nombre]
+-- Descripción: Modelo relacional para organización interna de empresa (departamentos, empleados, hijos, habilidades)
 -- ============================================================================
--- FIN DEL SCRIPT
+
+-- 1. CREACIÓN DE TABLAS (EJERCICIO 4)
+CREATE TABLE centros_trabajo (
+    cod_cen VARCHAR(10) PRIMARY KEY,
+    nom_cen VARCHAR(50),
+    pob_cen VARCHAR(50),
+    dir_cen VARCHAR(100)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+COMMENT='Centros de trabajo de la empresa';
+
+CREATE TABLE departamentos (
+    cod_dep VARCHAR(10) PRIMARY KEY,
+    nom_dep VARCHAR(50),
+    pre_dep DECIMAL(12,2),
+    cod_cen_per VARCHAR(10),
+    FOREIGN KEY (cod_cen_per) REFERENCES centros_trabajo(cod_cen)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+COMMENT='Departamentos de la empresa';
+
+CREATE TABLE empleados (
+    id_emp VARCHAR(10) PRIMARY KEY,
+    nom_emp VARCHAR(50),
+    ape_emp VARCHAR(50),
+    tel_emp VARCHAR(15),
+    fech_alta DATE,
+    sal_emp DECIMAL(10,2),
+    cod_dep_per VARCHAR(10),
+    FOREIGN KEY (cod_dep_per) REFERENCES departamentos(cod_dep)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+COMMENT='Empleados de la empresa';
+
+CREATE TABLE hijos_empleados (
+    cod_hij VARCHAR(10) PRIMARY KEY,
+    nom_hij VARCHAR(50),
+    ape_hij VARCHAR(50),
+    fec_nac DATE,
+    id_emp_per VARCHAR(10),
+    FOREIGN KEY (id_emp_per) REFERENCES empleados(id_emp)
+        ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+COMMENT='Hijos de empleados';
+
+CREATE TABLE habilidades (
+    cod_hab VARCHAR(10) PRIMARY KEY,
+    des_hab VARCHAR(100)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+COMMENT='Catálogo de habilidades';
+
+CREATE TABLE detalle_habilidad (
+    id_det VARCHAR(10) PRIMARY KEY,
+    id_emp_per VARCHAR(10),
+    cod_hab_per VARCHAR(10),
+    porcentaje VARCHAR(10),
+    FOREIGN KEY (id_emp_per) REFERENCES empleados(id_emp)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (cod_hab_per) REFERENCES habilidades(cod_hab)
+        ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+COMMENT='Relación empleados-habilidades';
+
+-- 2. INSERCIÓN DE DATOS DE PRUEBA (EJERCICIO 4)
+INSERT INTO centros_trabajo VALUES
+('CEN-01', 'Matriz Ambato', 'Ambato', 'Av. Capulies'),
+('CEN-02', 'Sucursal Ficoa', 'Ambato', 'Guaytambos'),
+('CEN-03', 'Planta Izamba', 'Izamba', 'Av. Guayaquil');
+
+INSERT INTO departamentos VALUES
+('DEP-01', 'Sistemas', 50000, 'CEN-01'),
+('DEP-02', 'Marketing', 30000, 'CEN-01'),
+('DEP-03', 'Producción', 120000, 'CEN-03');
+
+INSERT INTO empleados VALUES
+('E-101', 'Giselle', 'Lopez', '0984119555', '2024-12-05', 1200.00, 'DEP-01'),
+('E-102', 'Henry', 'Castro', '0984113566', '2024-11-03', 1000.00, 'DEP-02'),
+('E-103', 'José', 'Perez', '0931063141', '2024-01-04', 950.00, 'DEP-03');
+
+INSERT INTO hijos_empleados VALUES
+('H-01', 'Luis', 'Lopez', '2018-06-12', 'E-101'),
+('H-02', 'Ana', 'Perez', '2016-02-12', 'E-103'),
+('H-03', 'Carlos', 'Perez', '2005-05-13', 'E-103');
+
+INSERT INTO habilidades VALUES
+('HAB-101', 'Mercadotecnia'),
+('HAB-102', 'Trato al cliente'),
+('HAB-103', 'Operador');
+
+INSERT INTO detalle_habilidad VALUES
+('DH-01', 'E-101', 'HAB-101', '90%'),
+('DH-02', 'E-102', 'HAB-102', '80%'),
+('DH-03', 'E-103', 'HAB-103', '70%');
+
+COMMIT;
+
+-- Consulta 1: Mostrar las habilidades de cada empleado y su porcentaje
+SELECT e.nom_emp, e.ape_emp, hab.des_hab, dh.porcentaje
+FROM detalle_habilidad dh
+JOIN empleados e ON dh.id_emp_per = e.id_emp
+JOIN habilidades hab ON dh.cod_hab_per = hab.cod_hab;
+--- Consulta 2: Mostrar el número de empleados por departamento
+SELECT d.nom_dep, d.pre_dep, COUNT(e.id_emp) AS num_empleados
+FROM departamentos d
+LEFT JOIN empleados e ON d.cod_dep = e.cod_dep_per
+GROUP BY d.cod_dep, d.nom_dep, d.pre_dep;
+
+-- ============================================================================ 
+-- PROCEDIMIENTOS ALMACENADOS PARA EJERCICIO 4
+
+
+-- Configuramos el formato primero para que se vea bien
+SET LINESIZE 150;
+COLUMN NOM_EMP FORMAT A15;
+COLUMN APE_EMP FORMAT A15;
+COLUMN SAL_EMP FORMAT 9999.99;
+
+SELECT id_emp, nom_emp, ape_emp, sal_emp, cod_dep_per 
+FROM empleados 
+WHERE id_emp = 'E-600';
+
+
 -- ============================================================================
--- Tabla de Control de Versiones:
--- Versión 1.0 - 04/03/2026 - Creación inicial del esquema
--- [Agregar cambios en futuras versiones aquí]
+-- FIN SECCIÓN EJERCICIO 4
+
 -- ============================================================================
+
+
+-- Explicación:
+-- - Muestra departamentos y centros con más de 1 empleado
+-- - Solo considera empleados que tengan alguna de las habilidades listadas
+-- - Muestra los nombres de empleados y habilidades presentes en cada departamento
