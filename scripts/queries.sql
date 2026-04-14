@@ -275,6 +275,75 @@ FROM productos
 GROUP BY categoria_id;
 
 -- ============================================================================
+-- SECCIÓN 8: CONSULTAS Y PROCEDIMIENTOS EJERCICIO 4
+-- ============================================================================
+
+-- QUERY 8.1: Mostrar las habilidades de cada empleado y su porcentaje
+SELECT e.nom_emp, e.ape_emp, hab.des_hab, dh.porcentaje
+FROM detalle_habilidad dh
+JOIN empleados e ON dh.id_emp_per = e.id_emp
+JOIN habilidades hab ON dh.cod_hab_per = hab.cod_hab;
+
+-- QUERY 8.2: Mostrar el número de empleados por departamento
+SELECT d.nom_dep, d.pre_dep, COUNT(e.id_emp) AS num_empleados
+FROM departamentos d
+LEFT JOIN empleados e ON d.cod_dep = e.cod_dep_per
+GROUP BY d.cod_dep, d.nom_dep, d.pre_dep;
+
+-- QUERY 8.3: Actualizar salario y departamento de un empleado (UPDATE ejemplo CRUD)
+UPDATE empleados 
+SET sal_emp = 1600.00, cod_dep_per = 'DEP-02' 
+WHERE id_emp = 'E-600';
+
+-- QUERY 8.4: Eliminar un empleado (DELETE ejemplo CRUD)
+DELETE FROM empleados WHERE id_emp = 'E-600';
+
+-- QUERY 8.5: Consulta avanzada - Departamentos con más de 1 empleado y habilidades específicas
+SELECT d.nom_dep AS DEPARTAMENTO,
+       e.nom_emp AS NOMBRE,
+       e.ape_emp AS APELLIDO,
+       h.des_hab AS HABILIDAD
+FROM departamentos d
+JOIN centros_trabajo c ON d.cod_cen_per = c.cod_cen
+JOIN empleados e ON d.cod_dep = e.cod_dep_per
+JOIN detalle_habilidad dh ON e.id_emp = dh.id_emp_per
+JOIN habilidades h ON dh.cod_hab_per = h.cod_hab
+WHERE h.cod_hab IN ('HAB-101', 'HAB-102', 'HAB-103')
+ORDER BY d.nom_dep, e.ape_emp;
+
+-- PROCEDIMIENTO 8.1: Registrar empleado completo 
+CREATE OR REPLACE PROCEDURE registrar_empleado_completo(
+    p_id_emp         IN VARCHAR2,
+    p_nom_emp        IN VARCHAR2,
+    p_ape_emp        IN VARCHAR2,
+    p_tel_emp        IN VARCHAR2,
+    p_fech_alta      IN DATE,
+    p_sal_emp        IN NUMBER,
+    p_cod_dep_per    IN VARCHAR2
+) IS
+BEGIN
+    -- 1. Insertar el empleado en la tabla principal
+    INSERT INTO empleados (id_emp, nom_emp, ape_emp, tel_emp, fech_alta, sal_emp, cod_dep_per)
+    VALUES (p_id_emp, p_nom_emp, p_ape_emp, p_tel_emp, p_fech_alta, p_sal_emp, p_cod_dep_per);
+
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Empleado registrado exitosamente.');
+
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20001, 'Error al registrar: ' || SQLERRM);
+END registrar_empleado_completo;
+/
+
+-- QUERY 8.6: Consultar empleado recién registrado
+SELECT id_emp, nom_emp, ape_emp, sal_emp, cod_dep_per 
+FROM empleados 
+WHERE id_emp = 'E-600';
+
+
+-- ============================================================================
 -- FIN DEL ARCHIVO
 -- ============================================================================
 -- Historial de versiones:

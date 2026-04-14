@@ -1279,6 +1279,175 @@ WHERE Id_Pro IN (
 \textbf{Descripción:} \\
 Se seleccionan los profesores que dictan materias en aulas distintas al aula ``Lab 01''.
 
+\subsubsection{Ejercicio 4}
+
+En el ejercicio 4 se implementó el modelo físico de una empresa que gestiona su estructura organizacional, incluyendo centros de trabajo, departamentos, empleados, hijos de empleados y habilidades. El objetivo fue demostrar la correcta aplicación de los principios de modelado relacional, integridad referencial y operaciones CRUD en Oracle.
+
+\paragraph{Creación de la base de datos y usuario}
+Para garantizar la independencia y seguridad de los datos, se creó un usuario específico en Oracle para el ejercicio:
+\begin{lstlisting}[language=SQL, caption={Creación de usuario y asignación de privilegios}]
+CREATE USER empresa_org IDENTIFIED BY empresa123;
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO empresa_org;
+CONNECT empresa_org/empresa123;
+\end{lstlisting}
+\textbf{Explicación:} Se crea un usuario dedicado y se le otorgan los privilegios necesarios para crear y manipular objetos de base de datos.
+
+\paragraph{Creación de tablas}
+Se definieron las tablas principales del modelo, considerando claves primarias y foráneas para mantener la integridad referencial:
+\begin{lstlisting}[language=SQL, caption={Definición de tablas del ejercicio 4}]
+CREATE TABLE centros_trabajo (
+    cod_cen VARCHAR(10) PRIMARY KEY,
+    nom_cen VARCHAR(50),
+    pob_cen VARCHAR(50),
+    dir_cen VARCHAR(100)
+);
+
+CREATE TABLE departamentos (
+    cod_dep VARCHAR(10) PRIMARY KEY,
+    nom_dep VARCHAR(50),
+    pre_dep DECIMAL(12,2),
+    cod_cen_per VARCHAR(10),
+    FOREIGN KEY (cod_cen_per) REFERENCES centros_trabajo(cod_cen)
+);
+
+CREATE TABLE empleados (
+    id_emp VARCHAR(10) PRIMARY KEY,
+    nom_emp VARCHAR(50),
+    ape_emp VARCHAR(50),
+    tel_emp VARCHAR(15),
+    fech_alta DATE,
+    sal_emp DECIMAL(10,2),
+    cod_dep_per VARCHAR(10),
+    FOREIGN KEY (cod_dep_per) REFERENCES departamentos(cod_dep)
+);
+
+CREATE TABLE hijos_empleados (
+    cod_hij VARCHAR(10) PRIMARY KEY,
+    nom_hij VARCHAR(50),
+    ape_hij VARCHAR(50),
+    fec_nac DATE,
+    id_emp_per VARCHAR(10),
+    FOREIGN KEY (id_emp_per) REFERENCES empleados(id_emp)
+);
+
+CREATE TABLE habilidades (
+    cod_hab VARCHAR(10) PRIMARY KEY,
+    des_hab VARCHAR(100)
+);
+
+CREATE TABLE detalle_habilidad (
+    id_det VARCHAR(10) PRIMARY KEY,
+    id_emp_per VARCHAR(10),
+    cod_hab_per VARCHAR(10),
+    porcentaje VARCHAR(10),
+    FOREIGN KEY (id_emp_per) REFERENCES empleados(id_emp),
+    FOREIGN KEY (cod_hab_per) REFERENCES habilidades(cod_hab)
+);
+\end{lstlisting}
+\textbf{Explicación:} Cada tabla representa una entidad del modelo. Se establecen relaciones uno a muchos y muchos a muchos mediante claves foráneas y la tabla intermedia \texttt{detalle\_habilidad}.
+
+\paragraph{Inserción de datos de prueba}
+Se insertaron registros de ejemplo para poblar las tablas y permitir la validación de las relaciones y restricciones:
+\begin{lstlisting}[language=SQL, caption={Inserción de datos de prueba}]
+INSERT INTO centros_trabajo VALUES
+('CEN-01', 'Matriz Ambato', 'Ambato', 'Av. Capulies'),
+('CEN-02', 'Sucursal Ficoa', 'Ambato', 'Guaytambos'),
+('CEN-03', 'Planta Izamba', 'Izamba', 'Av. Guayaquil');
+
+INSERT INTO departamentos VALUES
+('DEP-01', 'Sistemas', 50000, 'CEN-01'),
+('DEP-02', 'Marketing', 30000, 'CEN-01'),
+('DEP-03', 'Producción', 120000, 'CEN-03');
+
+INSERT INTO empleados VALUES
+('E-101', 'Giselle', 'Lopez', '0984119555', '2024-12-05', 1200.00, 'DEP-01'),
+('E-102', 'Henry', 'Castro', '0984113566', '2024-11-03', 1000.00, 'DEP-02'),
+('E-103', 'José', 'Perez', '0931063141', '2024-01-04', 950.00, 'DEP-03');
+
+INSERT INTO hijos_empleados VALUES
+('H-01', 'Luis', 'Lopez', '2018-06-12', 'E-101'),
+('H-02', 'Ana', 'Perez', '2016-02-12', 'E-103'),
+('H-03', 'Carlos', 'Perez', '2005-05-13', 'E-103');
+
+INSERT INTO habilidades VALUES
+('HAB-101', 'Mercadotecnia'),
+('HAB-102', 'Trato al cliente'),
+('HAB-103', 'Operador');
+
+INSERT INTO detalle_habilidad VALUES
+('DH-01', 'E-101', 'HAB-101', '90%'),
+('DH-02', 'E-102', 'HAB-102', '80%'),
+('DH-03', 'E-103', 'HAB-103', '70%');
+\end{lstlisting}
+\textbf{Explicación:} Los datos insertados permiten realizar pruebas de integridad y consultas complejas, asegurando que la base de datos es funcional y robusta.
+
+\paragraph{Consultas DQL y operaciones CRUD}
+Se desarrollaron consultas para validar la recuperación de información y el cumplimiento de los principios CRUD:
+\begin{lstlisting}[language=SQL, caption={Consultas y operaciones CRUD}]
+-- Consulta: Mostrar las habilidades de cada empleado y su porcentaje
+SELECT e.nom_emp, e.ape_emp, hab.des_hab, dh.porcentaje
+FROM detalle_habilidad dh
+JOIN empleados e ON dh.id_emp_per = e.id_emp
+JOIN habilidades hab ON dh.cod_hab_per = hab.cod_hab;
+
+-- Consulta: Mostrar el número de empleados por departamento
+SELECT d.nom_dep, d.pre_dep, COUNT(e.id_emp) AS num_empleados
+FROM departamentos d
+LEFT JOIN empleados e ON d.cod_dep = e.cod_dep_per
+GROUP BY d.cod_dep, d.nom_dep, d.pre_dep;
+
+-- Consulta avanzada: Departamentos con más de 1 empleado y habilidades específicas
+SELECT d.nom_dep AS DEPARTAMENTO,
+       e.nom_emp AS NOMBRE,
+       e.ape_emp AS APELLIDO,
+       h.des_hab AS HABILIDAD
+FROM departamentos d
+JOIN centros_trabajo c ON d.cod_cen_per = c.cod_cen
+JOIN empleados e ON d.cod_dep = e.cod_dep_per
+JOIN detalle_habilidad dh ON e.id_emp = dh.id_emp_per
+JOIN habilidades h ON dh.cod_hab_per = h.cod_hab
+WHERE h.cod_hab IN ('HAB-101', 'HAB-102', 'HAB-103')
+ORDER BY d.nom_dep, e.ape_emp;
+
+-- Ejemplo de actualización (UPDATE)
+UPDATE empleados 
+SET sal_emp = 1600.00, cod_dep_per = 'DEP-02' 
+WHERE id_emp = 'E-600';
+
+-- Ejemplo de eliminación (DELETE)
+DELETE FROM empleados WHERE id_emp = 'E-600';
+\end{lstlisting}
+\textbf{Explicación:} Estas consultas permiten analizar la información almacenada, realizar operaciones de actualización y eliminación, y comprobar la correcta aplicación de los principios CRUD.
+
+\paragraph{Procedimiento almacenado}
+Se implementó un procedimiento almacenado para automatizar el registro de empleados, demostrando el uso de PL/SQL en la gestión de la base de datos:
+\begin{lstlisting}[language=SQL, caption={Procedimiento para registrar empleados}]
+CREATE OR REPLACE PROCEDURE registrar_empleado_completo(
+    p_id_emp         IN VARCHAR2,
+    p_nom_emp        IN VARCHAR2,
+    p_ape_emp        IN VARCHAR2,
+    p_tel_emp        IN VARCHAR2,
+    p_fech_alta      IN DATE,
+    p_sal_emp        IN NUMBER,
+    p_cod_dep_per    IN VARCHAR2
+) IS
+BEGIN
+    INSERT INTO empleados (id_emp, nom_emp, ape_emp, tel_emp, fech_alta, sal_emp, cod_dep_per)
+    VALUES (p_id_emp, p_nom_emp, p_ape_emp, p_tel_emp, p_fech_alta, p_sal_emp, p_cod_dep_per);
+
+    COMMIT;
+    DBMS_OUTPUT.PUT_LINE('Empleado registrado exitosamente.');
+
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE_APPLICATION_ERROR(-20001, 'Error al registrar: ' || SQLERRM);
+END registrar_empleado_completo;
+/ 
+\end{lstlisting}
+\textbf{Explicación:} El procedimiento encapsula la lógica de inserción y manejo de errores, facilitando la gestión de empleados y asegurando la atomicidad de la operación.
+
+
 
 \subsection{Habilidades blandas empleadas en la tarea}
 \begin{itemize}
@@ -1405,5 +1574,45 @@ Además, se recomienda continuar practicando consultas DQL y subconsultas sobre 
     \includegraphics[width=0.92\textwidth]{ejer_Adicional1_modelo_relacional.png}
     \caption{Modelo relacional del ejercicio adicional 1}
 \end{figure}
+
+\clearpage
+\subsubsection*{Anexo F. Evidencias de consultas y operaciones - Ejercicio 4}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ejercicio4/consulta1-ejercicio4.png}
+    \caption{Evidencia: Consulta 1 - Mostrar habilidades de cada empleado y su porcentaje}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ejercicio4/consulta2-ejercicio 4.png}
+    \caption{Evidencia: Consulta 2 - Número de empleados por departamento}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ejercicio4/consulta3-ejercicio4.png}
+    \caption{Evidencia: Consulta avanzada - Departamentos y habilidades específicas}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ejercicio4/update-ejercicio4.png}
+    \caption{Evidencia: Operación UPDATE sobre empleados}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ejercicio4/delete - ejercicio4.png}
+    \caption{Evidencia: Operación DELETE sobre empleados}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ejercicio4/procedure-ejercicio4.png}
+    \caption{Evidencia: Ejecución del procedimiento almacenado para registrar empleados}
+\end{figure}
+
 
 \end{document}
