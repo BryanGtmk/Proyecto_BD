@@ -95,12 +95,14 @@ Modalidad: & Presencial \\
 \section{Informe de guía práctica}
 \subsection{Objetivos}
 \subsubsection{General}
-Implementar el modelo físico en Oracle para el caso de hospedaje empresarial y resolver seis consultas avanzadas con subconsultas enfocadas en análisis por tipo de habitación.
+Diseñar, implementar y documentar una base de datos relacional en Oracle para el control de hospedaje de ejecutivos en hoteles de convenio, aplicando reglas de negocio, modelado conceptual y relacional, e interpretando consultas avanzadas con subconsultas para el análisis por tipo de habitación.
 \subsubsection{Específicos}
 \begin{itemize}
-    \item Crear el usuario, tablas, restricciones e inserciones en Oracle de forma consistente con el modelo relacional.
-    \item Resolver consultas DQL avanzadas del grupo F usando subconsultas correlacionadas, ALL, AVG, NOT EXISTS y agregación.
-    \item Justificar técnicamente cada consulta para la defensa práctica y validar casos de prueba.
+    \item Definir las reglas de negocio del caso y representar la información mediante un diagrama Entidad-Relación con las entidades Empresa, Ejecutivo, Hotel, Recepcionista, Habitación, Hospedaje y Novedad.
+    \item Transformar el DER al modelo relacional, especificando claves primarias, foráneas y tipos de datos adecuados para Oracle.
+    \item Implementar el script DDL y DML necesario para crear la estructura de la base de datos y cargar datos de prueba suficientes y coherentes.
+    \item Resolver las seis consultas avanzadas asignadas al grupo F utilizando al menos una subconsulta por enunciado, combinando filtros, agregaciones, EXISTS, NOT EXISTS y ALL.
+    \item Sustentar la solución durante la defensa práctica mediante la explicación del modelo, las consultas y los casos de prueba utilizados.
 \end{itemize}
 \subsection{Modalidad}
 Presencial.
@@ -113,7 +115,16 @@ No presenciales: 2 horas
 
 \subsection{Instrucciones}
 
-Se construyó el script Oracle completo en cuatro etapas: creación de usuario, creación de tablas, carga de datos y consultas avanzadas. Luego se validaron resultados y se documentaron criterios de defensa.
+El trabajo debe desarrollarse con base en el caso de control de hospedaje para ejecutivos de empresas públicas y seguir el orden pedagógico del examen: reglas de negocio, modelo Entidad-Relación, modelo relacional y, finalmente, script de implementación. El informe debe evidenciar el diseño, la construcción de datos de prueba y la resolución de las consultas asignadas al grupo.
+
+\begin{itemize}
+    \item Elaborar el diagrama Entidad-Relación del caso, incluyendo la relación principal de hospedaje y la entidad de novedades u observaciones.
+    \item Transformar el DER al modelo relacional, definiendo claves primarias, claves foráneas, atributos obligatorios y tipos de datos.
+    \item Crear las tablas e insertar datos de prueba suficientes para que las 6 consultas del grupo devuelvan resultados coherentes.
+    \item Resolver las 6 consultas avanzadas asignadas. Cada consulta debe incorporar al menos una subconsulta.
+    \item Preparar una defensa práctica en la que se explique el modelo y se responda en vivo a las preguntas del bloque de defensa.
+    \item Entregar script DDL, script DML, script de consultas, capturas de ejecución y resultados obtenidos.
+\end{itemize}
 
 
 \subsection{Listado de equipos, materiales y recursos}
@@ -137,6 +148,36 @@ Se construyó el script Oracle completo en cuatro etapas: creación de usuario, 
 
 
 \subsection{Actividades por desarrollar}
+
+\textbf{1) Reglas de negocio}
+Las reglas de negocio deben redactarse antes de construir las tablas para dejar claras las restricciones del caso y la relación entre sus entidades.
+\begin{itemize}
+    \item Cada empresa puede tener varios ejecutivos, pero cada ejecutivo pertenece a una sola empresa.
+    \item Cada hotel puede registrar varios recepcionistas y varias habitaciones.
+    \item Cada habitación pertenece a un solo hotel y debe conservar un tipo, numero y precio definidos.
+    \item Un hospedaje relaciona a un ejecutivo, una habitación y un recepcionista en un rango de fechas determinado.
+    \item Un recepcionista puede registrar varios hospedajes, pero cada hospedaje debe ser atendido por un solo recepcionista.
+    \item Una novedad debe estar asociada a un hospedaje existente.
+    \item Los datos de prueba deben permitir validar consultas sobre uso de habitaciones, costos, empresas y novedades.
+\end{itemize}
+
+\textbf{2) Modelo Entidad-Relación}
+El modelo entidad-relación integra las entidades Empresa, Ejecutivo, Hotel, Recepcionista, Habitación, Hospedaje y Novedad. Debe incluir la relación de hospedaje como el vínculo principal entre la operación hotelera y los ejecutivos, así como la entidad de novedades asociadas a cada hospedaje.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../img/Modelo_ER_Examen_Parcial2.jpeg}
+    \caption{Modelo Entidad-Relación del caso de hospedaje empresarial}
+\end{figure}
+
+\textbf{3) Modelo Relacional}
+El modelo relacional deriva del DER y define las claves primarias y foráneas necesarias para mantener la integridad referencial entre empresas, hoteles, recepcionistas, habitaciones, hospedajes y novedades. En esta parte se justifican los atributos obligatorios y los tipos de datos seleccionados para Oracle.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../img/Modelo_relacional_Examen_Pacial2.jpeg}
+    \caption{Modelo relacional implementado en Oracle}
+\end{figure}
 
 \textbf{1) Creación de usuario y privilegios en Oracle}
 \begin{lstlisting}
@@ -322,6 +363,9 @@ INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('201', 'Individu
 INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('202', 'Doble', 80, 2);
 INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('203', 'Suite', 150, 3);
 INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('301', 'Suite', 160, 3);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('104', 'Individual', 55, 1);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('204', 'Doble', 85, 2);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('302', 'Suite', 140, 3);
 
 -- HOSPEDAJE
 INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
@@ -332,9 +376,34 @@ VALUES (2, 2, 2, DATE '2026-04-01', DATE '2026-04-05');
 
 INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
 VALUES (3, 3, 3, DATE '2026-04-02', DATE '2026-04-04');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 8, 1, DATE '2026-03-01', DATE '2026-03-03');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 4, 3, DATE '2026-03-07', DATE '2026-03-09');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (8, 9, 4, DATE '2026-03-04', DATE '2026-03-06');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 3, 1, DATE '2026-04-10', DATE '2026-04-12');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 3, 1, DATE '2026-04-13', DATE '2026-04-15');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (8, 3, 2, DATE '2026-04-16', DATE '2026-04-18');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 7, 5, DATE '2026-04-19', DATE '2026-04-23');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (1, 7, 5, DATE '2026-04-24', DATE '2026-04-28');
 
 -- NOVEDAD
 INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Aire acondicionado ruidoso', DATE '2026-04-01', 1);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Toallas extra solicitadas', DATE '2026-04-03', 2);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Late check-out', DATE '2026-04-04', 3);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Cambio de habitacion solicitado', DATE '2026-03-01', 4);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Control remoto sin pilas', DATE '2026-03-04', 5);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Limpieza impecable', DATE '2026-04-10', 6);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Frigobar incompleto', DATE '2026-04-13', 7);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Llave magnetica fallando', DATE '2026-04-16', 8);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Desayuno solicitado', DATE '2026-04-19', 9);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Observacion final de salida', DATE '2026-04-24', 10);
 INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Toallas extra solicitadas', DATE '2026-04-03', 2);
 INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Late check-out', DATE '2026-04-04', 3);
 INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Control remoto sin pilas', DATE '2026-04-05', 4);
@@ -375,6 +444,13 @@ WHERE h.id_hotel IN (
     SELECT ha.id_hotel
     FROM habitacion ha
     WHERE ha.precio = (SELECT MAX(precio) FROM habitacion)
+            AND ha.id_habitacion IN (
+                SELECT ho.id_habitacion
+                FROM hospedaje ho
+                JOIN ejecutivo e ON ho.id_ejecutivo = e.id_ejecutivo
+                GROUP BY ho.id_habitacion
+                HAVING COUNT(DISTINCT e.id_empresa) > 1
+            )
 );
 \end{lstlisting}
 
@@ -386,7 +462,15 @@ WHERE e.id_ejecutivo IN (
     SELECT ho.id_ejecutivo
     FROM hospedaje ho
     JOIN habitacion h ON ho.id_habitacion = h.id_habitacion
-    WHERE h.tipo = 'Suite'
+        WHERE h.tipo = 'Suite'
+            AND (ho.fecha_salida - ho.fecha_ingreso) * h.precio > ALL (
+                SELECT (ho2.fecha_salida - ho2.fecha_ingreso) * h2.precio
+                FROM hospedaje ho2
+                JOIN habitacion h2 ON ho2.id_habitacion = h2.id_habitacion
+                WHERE h2.tipo = 'Individual'
+                    AND EXTRACT(MONTH FROM ho2.fecha_ingreso) = 3
+                    AND EXTRACT(YEAR FROM ho2.fecha_ingreso) = 2026
+            )
 );
 \end{lstlisting}
 
@@ -397,11 +481,16 @@ FROM recepcionista r
 WHERE r.id_recepcionista IN (
     SELECT ho.id_recepcionista
     FROM hospedaje ho
-    GROUP BY ho.id_recepcionista
-    HAVING COUNT(*) = (
-        SELECT MAX(COUNT(*))
-        FROM hospedaje
-        GROUP BY id_recepcionista
+    JOIN habitacion h ON ho.id_habitacion = h.id_habitacion
+    WHERE h.tipo = 'Matrimonial'
+    GROUP BY ho.id_recepcionista, h.id_hotel
+    HAVING COUNT(*) >= ALL (
+        SELECT COUNT(*)
+        FROM hospedaje ho2
+        JOIN habitacion h2 ON ho2.id_habitacion = h2.id_habitacion
+        WHERE h2.tipo = 'Matrimonial'
+          AND h2.id_hotel = h.id_hotel
+        GROUP BY ho2.id_recepcionista
     )
 );
 \end{lstlisting}
@@ -411,7 +500,8 @@ WHERE r.id_recepcionista IN (
 SELECT *
 FROM empresa em
 WHERE NOT EXISTS (
-    SELECT tipo FROM habitacion
+    SELECT tipo
+    FROM habitacion
     MINUS
     SELECT DISTINCT h.tipo
     FROM hospedaje ho
@@ -424,9 +514,27 @@ WHERE NOT EXISTS (
 \textbf{Consulta 6: Habitación con menor hospedaje en su hotel y sin novedades}
 \begin{lstlisting}
 SELECT *
-FROM habitacion
-WHERE id_habitacion NOT IN (
-    SELECT DISTINCT id_habitacion FROM hospedaje
+FROM habitacion h
+WHERE h.id_habitacion IN (
+    SELECT ho.id_habitacion
+    FROM hospedaje ho
+    JOIN habitacion h2 ON ho.id_habitacion = h2.id_habitacion
+    GROUP BY ho.id_habitacion, h2.id_hotel
+    HAVING COUNT(*) <= ALL (
+        SELECT COUNT(*)
+        FROM hospedaje ho2
+        WHERE ho2.id_habitacion IN (
+            SELECT id_habitacion
+            FROM habitacion
+            WHERE id_hotel = h.id_hotel
+        )
+        GROUP BY ho2.id_habitacion
+    )
+)
+AND h.id_habitacion NOT IN (
+    SELECT ho.id_habitacion
+    FROM hospedaje ho
+    JOIN novedad n ON ho.id_hospedaje = n.id_hospedaje
 );
 \end{lstlisting}
 
@@ -533,8 +641,6 @@ Comparación breve:
     \item[$\square$] Responsabilidad
 \end{itemize}
 
-
-
 \subsection{Conclusiones}
 El desarrollo de la práctica permitió implementar de manera integral el modelo físico en Oracle, validando la coherencia entre entidades, claves primarias y claves foráneas del sistema de hospedaje empresarial.
 
@@ -557,20 +663,6 @@ Repositorio del proyecto para revisión del docente:\\
 
 
 \subsection{Anexos}
-\textbf{Modelo Entidad-Relación}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{../img/Modelo_ER_Examen_Parcial2.jpeg}
-    \caption{Modelo Entidad-Relación del caso de hospedaje empresarial}
-\end{figure}
-
-\textbf{Modelo Relacional}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.95\textwidth]{../img/Modelo_relacional_Examen_Pacial2.jpeg}
-    \caption{Modelo relacional implementado en Oracle}
-\end{figure}
-
 \textbf{Evidencia de ejecución del script en Oracle}
 \begin{figure}[H]
     \centering

@@ -195,6 +195,9 @@ INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('201', 'Individu
 INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('202', 'Doble', 80, 2);
 INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('203', 'Suite', 150, 3);
 INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('301', 'Suite', 160, 3);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('104', 'Individual', 55, 1);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('204', 'Doble', 85, 2);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('302', 'Suite', 140, 3);
 
 -- HOSPEDAJE
 INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
@@ -205,10 +208,35 @@ VALUES (2, 2, 2, DATE '2026-04-01', DATE '2026-04-05');
 
 INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
 VALUES (3, 3, 3, DATE '2026-04-02', DATE '2026-04-04');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 8, 1, DATE '2026-03-01', DATE '2026-03-03');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 4, 3, DATE '2026-03-07', DATE '2026-03-09');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (8, 9, 4, DATE '2026-03-04', DATE '2026-03-06');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 3, 1, DATE '2026-04-10', DATE '2026-04-12');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 3, 1, DATE '2026-04-13', DATE '2026-04-15');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (8, 3, 2, DATE '2026-04-16', DATE '2026-04-18');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 7, 5, DATE '2026-04-19', DATE '2026-04-23');
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (1, 7, 5, DATE '2026-04-24', DATE '2026-04-28');
 
 -- NOVEDAD
 INSERT INTO novedad (descripcion, fecha, id_hospedaje)
 VALUES ('Aire acondicionado ruidoso', DATE '2026-04-01', 1);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Toallas extra solicitadas', DATE '2026-04-03', 2);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Late check-out', DATE '2026-04-04', 3);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Cambio de habitacion solicitado', DATE '2026-03-01', 4);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Control remoto sin pilas', DATE '2026-03-04', 5);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Limpieza impecable', DATE '2026-04-10', 6);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Frigobar incompleto', DATE '2026-04-13', 7);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Llave magnetica fallando', DATE '2026-04-16', 8);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Desayuno solicitado', DATE '2026-04-19', 9);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Observacion final de salida', DATE '2026-04-24', 10);
 
 
 /* =========================================================
@@ -243,6 +271,13 @@ WHERE h.id_hotel IN (
     SELECT ha.id_hotel
     FROM habitacion ha
     WHERE ha.precio = (SELECT MAX(precio) FROM habitacion)
+      AND ha.id_habitacion IN (
+        SELECT ho.id_habitacion
+        FROM hospedaje ho
+        JOIN ejecutivo e ON ho.id_ejecutivo = e.id_ejecutivo
+        GROUP BY ho.id_habitacion
+        HAVING COUNT(DISTINCT e.id_empresa) > 1
+      )
 );
 
 -- 33
@@ -253,6 +288,14 @@ WHERE e.id_ejecutivo IN (
     FROM hospedaje ho
     JOIN habitacion h ON ho.id_habitacion = h.id_habitacion
     WHERE h.tipo = 'Suite'
+      AND (ho.fecha_salida - ho.fecha_ingreso) * h.precio > ALL (
+        SELECT (ho2.fecha_salida - ho2.fecha_ingreso) * h2.precio
+        FROM hospedaje ho2
+        JOIN habitacion h2 ON ho2.id_habitacion = h2.id_habitacion
+        WHERE h2.tipo = 'Individual'
+          AND EXTRACT(MONTH FROM ho2.fecha_ingreso) = 3
+          AND EXTRACT(YEAR FROM ho2.fecha_ingreso) = 2026
+      )
 );
 
 -- 34
@@ -261,11 +304,16 @@ FROM recepcionista r
 WHERE r.id_recepcionista IN (
     SELECT ho.id_recepcionista
     FROM hospedaje ho
-    GROUP BY ho.id_recepcionista
-    HAVING COUNT(*) = (
-        SELECT MAX(COUNT(*))
-        FROM hospedaje
-        GROUP BY id_recepcionista
+    JOIN habitacion h ON ho.id_habitacion = h.id_habitacion
+    WHERE h.tipo = 'Matrimonial'
+    GROUP BY ho.id_recepcionista, h.id_hotel
+    HAVING COUNT(*) >= ALL (
+        SELECT COUNT(*)
+        FROM hospedaje ho2
+        JOIN habitacion h2 ON ho2.id_habitacion = h2.id_habitacion
+        WHERE h2.tipo = 'Matrimonial'
+          AND h2.id_hotel = h.id_hotel
+        GROUP BY ho2.id_recepcionista
     )
 );
 
@@ -273,7 +321,8 @@ WHERE r.id_recepcionista IN (
 SELECT *
 FROM empresa em
 WHERE NOT EXISTS (
-    SELECT tipo FROM habitacion
+    SELECT tipo
+    FROM habitacion
     MINUS
     SELECT DISTINCT h.tipo
     FROM hospedaje ho
@@ -284,8 +333,26 @@ WHERE NOT EXISTS (
 
 -- 36
 SELECT *
-FROM habitacion
-WHERE id_habitacion NOT IN (
-    SELECT DISTINCT id_habitacion FROM hospedaje
+FROM habitacion h
+WHERE h.id_habitacion IN (
+    SELECT ho.id_habitacion
+    FROM hospedaje ho
+    JOIN habitacion h2 ON ho.id_habitacion = h2.id_habitacion
+    GROUP BY ho.id_habitacion, h2.id_hotel
+    HAVING COUNT(*) <= ALL (
+        SELECT COUNT(*)
+        FROM hospedaje ho2
+        WHERE ho2.id_habitacion IN (
+            SELECT id_habitacion
+            FROM habitacion
+            WHERE id_hotel = h.id_hotel
+        )
+        GROUP BY ho2.id_habitacion
+    )
+)
+AND h.id_habitacion NOT IN (
+    SELECT ho.id_habitacion
+    FROM hospedaje ho
+    JOIN novedad n ON ho.id_hospedaje = n.id_hospedaje
 );
 ------ FIN DEL SCRIPT
