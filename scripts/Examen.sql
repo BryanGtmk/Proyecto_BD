@@ -239,6 +239,26 @@ INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Desayuno solicit
 INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Observacion final de salida', DATE '2026-04-24', 10);
 
 
+-- Más hospedajes para CNT en tipo Doble
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 2, 1, DATE '2026-04-20', DATE '2026-04-22');
+
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (8, 2, 2, DATE '2026-04-23', DATE '2026-04-25');
+
+
+-- Usar la suite más cara (id 7 o 6)
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (1, 7, 5, DATE '2026-04-26', DATE '2026-04-28');
+
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (4, 7, 5, DATE '2026-04-29', DATE '2026-05-01');
+
+
+-- Estancia MUY alta en suite
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (5, 7, 5, DATE '2026-04-01', DATE '2026-04-20');
+
 /* =========================================================
    6. CONSULTAS 31 - 36
    ========================================================= */
