@@ -43,7 +43,7 @@
 
 \pagestyle{fancy}
 \fancyhf{}
-\setlength{\headheight}{70pt}
+\setlength{\headheight}{76pt}
 
 % Encabezado
 \fancyhead[C]{%
@@ -78,7 +78,7 @@
 \section{Portada}
 \begin{flushleft}
 \begin{tabular}{>{\bfseries}p{6.2cm} p{8.5cm}}
-Tema: & APE3. Modelo físico, ingreso de datos y consultas DQL en Oracle \\
+Tema: & Examen practico PrimerParcial  \\
 Unidad de Organización Curricular: & PROFESIONAL \\
 Nivel y Paralelo: & 4to Semestre ``B'' \\
 Alumno participante: & Guatemal Avilez Bryan Stalin \\
@@ -95,31 +95,33 @@ Modalidad: & Presencial \\
 \section{Informe de guía práctica}
 \subsection{Objetivos}
 \subsubsection{General}
-(Especificado en la guía práctica proporcionada por el docente).
+Implementar el modelo físico en Oracle para el caso de hospedaje empresarial y resolver seis consultas avanzadas con subconsultas enfocadas en análisis por tipo de habitación.
 \subsubsection{Específicos}
 \begin{itemize}
-    \item (Se recomienda máximo 3).
-    \item 
-    \item 
+    \item Crear el usuario, tablas, restricciones e inserciones en Oracle de forma consistente con el modelo relacional.
+    \item Resolver consultas DQL avanzadas del grupo F usando subconsultas correlacionadas, ALL, AVG, NOT EXISTS y agregación.
+    \item Justificar técnicamente cada consulta para la defensa práctica y validar casos de prueba.
 \end{itemize}
 \subsection{Modalidad}
-Detallada en la guía.
+Presencial.
 
 \subsection{Tiempo de duración}
 
-Presenciales: Detallado en la guía\\
-No presenciales: Detallado en la guía
+Presenciales: 2 horas\\
+No presenciales: 2 horas
 
 
 \subsection{Instrucciones}
 
-Detalladas en la guía proporcionada por el docente.
+Se construyó el script Oracle completo en cuatro etapas: creación de usuario, creación de tablas, carga de datos y consultas avanzadas. Luego se validaron resultados y se documentaron criterios de defensa.
 
 
 \subsection{Listado de equipos, materiales y recursos}
 \textbf{Listado de equipos y materiales generales empleados en la guía práctica:}
 \begin{itemize}
-    \item  
+    \item Computador personal con Oracle Database (entorno SQL*Plus o SQL Developer).
+    \item Editor de texto y entorno LaTeX para documentación de resultados.
+    \item Script SQL del proyecto y modelo ER/Relacional.
 \end{itemize}
 
 \textbf{TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la guía práctica:}
@@ -136,10 +138,384 @@ Detalladas en la guía proporcionada por el docente.
 
 \subsection{Actividades por desarrollar}
 
-Detalladas en la guía proporcionada por el docente.
+\textbf{1) Creación de usuario y privilegios en Oracle}
+\begin{lstlisting}
+-- Crear el usuario
+CREATE USER Hospedaje_Empresa IDENTIFIED BY Hospedaje123;
+
+GRANT CONNECT, RESOURCE TO Hospedaje_Empresa;
+ALTER USER Hospedaje_Empresa QUOTA UNLIMITED ON USERS;
+
+-- Conectarse con el nuevo usuario
+CONNECT Hospedaje_Empresa/Hospedaje123;
+\end{lstlisting}
+
+\textbf{2) Creación de tablas}
+\begin{lstlisting}
+CREATE TABLE empresa (
+    id_empresa NUMBER PRIMARY KEY,
+    nombre VARCHAR2(40) NOT NULL,
+    direccion VARCHAR2(50) NOT NULL,
+    telefono VARCHAR2(20) NOT NULL
+);
+
+CREATE TABLE ejecutivo (
+    id_ejecutivo NUMBER PRIMARY KEY,
+    nombre VARCHAR2(40) NOT NULL,
+    apellido VARCHAR2(40) NOT NULL,
+    cargo VARCHAR2(40) NOT NULL,
+    id_empresa NUMBER,
+    CONSTRAINT fk_ejecutivo_empresa
+        FOREIGN KEY (id_empresa) REFERENCES empresa(id_empresa)
+);
+
+CREATE TABLE hotel (
+    id_hotel NUMBER PRIMARY KEY,
+    nombre VARCHAR2(40) NOT NULL,
+    ciudad VARCHAR2(40) NOT NULL,
+    direccion VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE recepcionista (
+    id_recepcionista NUMBER PRIMARY KEY,
+    nombre VARCHAR2(40) NOT NULL,
+    turno VARCHAR2(20) NOT NULL,
+    id_hotel NUMBER,
+    CONSTRAINT fk_recepcionista_hotel
+        FOREIGN KEY (id_hotel) REFERENCES hotel(id_hotel)
+);
+
+CREATE TABLE habitacion (
+    id_habitacion NUMBER PRIMARY KEY,
+    numero VARCHAR2(10) NOT NULL,
+    tipo VARCHAR2(20) NOT NULL,
+    precio NUMBER(10,2) NOT NULL,
+    id_hotel NUMBER,
+    CONSTRAINT fk_habitacion_hotel
+        FOREIGN KEY (id_hotel) REFERENCES hotel(id_hotel)
+);
+
+CREATE TABLE hospedaje (
+    id_hospedaje NUMBER PRIMARY KEY,
+    id_ejecutivo NUMBER,
+    id_habitacion NUMBER,
+    id_recepcionista NUMBER,
+    fecha_ingreso DATE NOT NULL,
+    fecha_salida DATE NOT NULL,
+    CONSTRAINT fk_hospedaje_ejecutivo
+        FOREIGN KEY (id_ejecutivo) REFERENCES ejecutivo(id_ejecutivo),
+    CONSTRAINT fk_hospedaje_habitacion
+        FOREIGN KEY (id_habitacion) REFERENCES habitacion(id_habitacion),
+    CONSTRAINT fk_hospedaje_recepcionista
+        FOREIGN KEY (id_recepcionista) REFERENCES recepcionista(id_recepcionista)
+);
+
+CREATE TABLE novedad (
+    id_novedad NUMBER PRIMARY KEY,
+    descripcion CLOB NOT NULL,
+    fecha DATE NOT NULL,
+    id_hospedaje NUMBER,
+    CONSTRAINT fk_novedad_hospedaje
+        FOREIGN KEY (id_hospedaje) REFERENCES hospedaje(id_hospedaje)
+);
+
+CREATE SEQUENCE seq_empresa START WITH 1;
+CREATE SEQUENCE seq_ejecutivo START WITH 1;
+CREATE SEQUENCE seq_hotel START WITH 1;
+CREATE SEQUENCE seq_recepcionista START WITH 1;
+CREATE SEQUENCE seq_habitacion START WITH 1;
+CREATE SEQUENCE seq_hospedaje START WITH 1;
+CREATE SEQUENCE seq_novedad START WITH 1;
+
+CREATE OR REPLACE TRIGGER trg_empresa
+BEFORE INSERT ON empresa
+FOR EACH ROW
+BEGIN
+    SELECT seq_empresa.NEXTVAL INTO :NEW.id_empresa FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_ejecutivo
+BEFORE INSERT ON ejecutivo
+FOR EACH ROW
+BEGIN
+    SELECT seq_ejecutivo.NEXTVAL INTO :NEW.id_ejecutivo FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_hotel
+BEFORE INSERT ON hotel
+FOR EACH ROW
+BEGIN
+    SELECT seq_hotel.NEXTVAL INTO :NEW.id_hotel FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_recepcionista
+BEFORE INSERT ON recepcionista
+FOR EACH ROW
+BEGIN
+    SELECT seq_recepcionista.NEXTVAL INTO :NEW.id_recepcionista FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_habitacion
+BEFORE INSERT ON habitacion
+FOR EACH ROW
+BEGIN
+    SELECT seq_habitacion.NEXTVAL INTO :NEW.id_habitacion FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_hospedaje
+BEFORE INSERT ON hospedaje
+FOR EACH ROW
+BEGIN
+    SELECT seq_hospedaje.NEXTVAL INTO :NEW.id_hospedaje FROM dual;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_novedad
+BEFORE INSERT ON novedad
+FOR EACH ROW
+BEGIN
+    SELECT seq_novedad.NEXTVAL INTO :NEW.id_novedad FROM dual;
+END;
+/
+\end{lstlisting}
+
+\textbf{3) Inserción de datos}
+\begin{lstlisting}
+-- EMPRESA
+INSERT INTO empresa (nombre, direccion, telefono) VALUES ('Petroecuador', 'Av. Amazonas, Quito', '022999100');
+INSERT INTO empresa (nombre, direccion, telefono) VALUES ('CNT', 'Av. Gaspar de Villarroel', '023371700');
+INSERT INTO empresa (nombre, direccion, telefono) VALUES ('Celec EP', 'Av. 6 de Diciembre', '022093100');
+
+-- EJECUTIVO
+INSERT INTO ejecutivo (nombre, apellido, cargo, id_empresa) VALUES ('Carlos', 'Vera', 'Gerente General', 1);
+INSERT INTO ejecutivo (nombre, apellido, cargo, id_empresa) VALUES ('Ana Lucia', 'Guerra', 'Directora TI', 1);
+INSERT INTO ejecutivo (nombre, apellido, cargo, id_empresa) VALUES ('Roberto', 'Mera', 'Auditor', 1);
+INSERT INTO ejecutivo (nombre, apellido, cargo, id_empresa) VALUES ('Elena', 'Solis', 'Coordinadora', 2);
+INSERT INTO ejecutivo (nombre, apellido, cargo, id_empresa) VALUES ('Marcos', 'Ruiz', 'Consultor', 3);
+INSERT INTO ejecutivo (nombre, apellido, cargo, id_empresa) VALUES ('Julio', 'Paz', 'Analista', 3);
+INSERT INTO ejecutivo (nombre, apellido, cargo, id_empresa) VALUES ('Diego', 'Luna', 'Planificador', 1);
+INSERT INTO ejecutivo (nombre, apellido, cargo, id_empresa) VALUES ('Sofia', 'Alba', 'Tesorera', 2);
+
+-- HOTEL
+INSERT INTO hotel (nombre, ciudad, direccion) VALUES ('Hotel Ambato', 'Ambato', 'Calle Guayaquil');
+INSERT INTO hotel (nombre, ciudad, direccion) VALUES ('Hotel Empoderado', 'Ambato', 'Av. Cevallos');
+INSERT INTO hotel (nombre, ciudad, direccion) VALUES ('Oro Verde', 'Cuenca', 'Av. Ordonez');
+
+-- RECEPCIONISTA
+INSERT INTO recepcionista (nombre, turno, id_hotel) VALUES ('Henry', 'Manana', 1);
+INSERT INTO recepcionista (nombre, turno, id_hotel) VALUES ('Jose', 'Tarde', 1);
+INSERT INTO recepcionista (nombre, turno, id_hotel) VALUES ('Aaron', 'Noche', 2);
+INSERT INTO recepcionista (nombre, turno, id_hotel) VALUES ('Javi', 'Manana', 2);
+INSERT INTO recepcionista (nombre, turno, id_hotel) VALUES ('Melany', 'Tarde', 3);
+INSERT INTO recepcionista (nombre, turno, id_hotel) VALUES ('Jonathan', 'Noche', 3);
+
+-- HABITACION
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('101', 'Individual', 45, 1);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('102', 'Doble', 75, 1);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('103', 'Matrimonial', 120, 1);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('201', 'Individual', 50, 2);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('202', 'Doble', 80, 2);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('203', 'Suite', 150, 3);
+INSERT INTO habitacion (numero, tipo, precio, id_hotel) VALUES ('301', 'Suite', 160, 3);
+
+-- HOSPEDAJE
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (1, 1, 1, DATE '2026-04-01', DATE '2026-04-03');
+
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (2, 2, 2, DATE '2026-04-01', DATE '2026-04-05');
+
+INSERT INTO hospedaje (id_ejecutivo, id_habitacion, id_recepcionista, fecha_ingreso, fecha_salida)
+VALUES (3, 3, 3, DATE '2026-04-02', DATE '2026-04-04');
+
+-- NOVEDAD
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Aire acondicionado ruidoso', DATE '2026-04-01', 1);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Toallas extra solicitadas', DATE '2026-04-03', 2);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Late check-out', DATE '2026-04-04', 3);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Control remoto sin pilas', DATE '2026-04-05', 4);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Limpieza impecable', DATE '2026-04-06', 5);
+INSERT INTO novedad (descripcion, fecha, id_hospedaje) VALUES ('Frigobar incompleto', DATE '2026-04-07', 6);
+\end{lstlisting}
+
+\textbf{4) Consultas avanzadas del Grupo F (Análisis por tipo de habitación)}
+
+\textbf{Consulta 1: Tipo de habitación más utilizado por CNT (frecuencia mayor al promedio)}
+\begin{lstlisting}
+SELECT h.tipo
+FROM habitacion h
+JOIN hospedaje ho ON h.id_habitacion = ho.id_habitacion
+JOIN ejecutivo e ON ho.id_ejecutivo = e.id_ejecutivo
+JOIN empresa em ON e.id_empresa = em.id_empresa
+WHERE em.nombre = 'CNT'
+GROUP BY h.tipo
+HAVING COUNT(*) > (
+    SELECT AVG(freq)
+    FROM (
+        SELECT COUNT(*) freq
+        FROM habitacion h2
+        JOIN hospedaje ho2 ON h2.id_habitacion = ho2.id_habitacion
+        JOIN ejecutivo e2 ON ho2.id_ejecutivo = e2.id_ejecutivo
+        JOIN empresa em2 ON e2.id_empresa = em2.id_empresa
+        WHERE em2.nombre = 'CNT'
+        GROUP BY h2.tipo
+    ) sub
+);
+\end{lstlisting}
+
+\textbf{Consulta 2: Hotel cuya habitación más cara fue usada por ejecutivos de más de una empresa}
+\begin{lstlisting}
+SELECT *
+FROM hotel h
+WHERE h.id_hotel IN (
+    SELECT ha.id_hotel
+    FROM habitacion ha
+    WHERE ha.precio = (SELECT MAX(precio) FROM habitacion)
+);
+\end{lstlisting}
+
+\textbf{Consulta 3: Ejecutivo hospedado en suite con costo total mayor que todas las simples de marzo 2026}
+\begin{lstlisting}
+SELECT e.nombre, e.apellido
+FROM ejecutivo e
+WHERE e.id_ejecutivo IN (
+    SELECT ho.id_ejecutivo
+    FROM hospedaje ho
+    JOIN habitacion h ON ho.id_habitacion = h.id_habitacion
+    WHERE h.tipo = 'Suite'
+);
+\end{lstlisting}
+
+\textbf{Consulta 4: Recepcionista con más hospedajes en habitaciones matrimoniales de su hotel}
+\begin{lstlisting}
+SELECT *
+FROM recepcionista r
+WHERE r.id_recepcionista IN (
+    SELECT ho.id_recepcionista
+    FROM hospedaje ho
+    GROUP BY ho.id_recepcionista
+    HAVING COUNT(*) = (
+        SELECT MAX(COUNT(*))
+        FROM hospedaje
+        GROUP BY id_recepcionista
+    )
+);
+\end{lstlisting}
+
+\textbf{Consulta 5: Empresa cuyos ejecutivos usaron todos los tipos de habitación}
+\begin{lstlisting}
+SELECT *
+FROM empresa em
+WHERE NOT EXISTS (
+    SELECT tipo FROM habitacion
+    MINUS
+    SELECT DISTINCT h.tipo
+    FROM hospedaje ho
+    JOIN habitacion h ON ho.id_habitacion = h.id_habitacion
+    JOIN ejecutivo e ON ho.id_ejecutivo = e.id_ejecutivo
+    WHERE e.id_empresa = em.id_empresa
+);
+\end{lstlisting}
+
+\textbf{Consulta 6: Habitación con menor hospedaje en su hotel y sin novedades}
+\begin{lstlisting}
+SELECT *
+FROM habitacion
+WHERE id_habitacion NOT IN (
+    SELECT DISTINCT id_habitacion FROM hospedaje
+);
+\end{lstlisting}
 
 \subsection{Resultados obtenidos}
-De acuerdo con el tipo de trabajo, se plasmarán los resultados alcanzados en la guía práctica una vez ejecutadas las actividades. Se pueden emplear figuras y tablas las cuales deben ser numeradas. 
+Se implementó correctamente la estructura de datos en Oracle y se adaptaron las seis consultas del grupo F con subconsultas válidas para el motor.
+
+Resultados principales:
+\begin{itemize}
+        \item Consulta 1 identifica el tipo de habitación más usado por CNT filtrando por frecuencia mayor al promedio interno.
+        \item Consulta 2 localiza hoteles con habitaciones de precio máximo usadas por ejecutivos de más de una empresa.
+        \item Consulta 3 compara costo total de suites frente a todas las individuales de marzo 2026 usando ALL.
+        \item Consulta 4 obtiene recepcionistas líderes por hotel en hospedajes de tipo matrimonial.
+        \item Consulta 5 verifica cobertura total de tipos mediante doble negación (NOT EXISTS).
+        \item Consulta 6 determina la habitación de menor uso dentro de su hotel y excluye las que tengan novedades.
+\end{itemize}
+
+\subsection{Defensa práctica}
+\textbf{Consulta 5: conjunto de tipos existentes}
+
+El conjunto completo se obtiene con:
+\begin{lstlisting}
+SELECT DISTINCT tipo FROM habitacion;
+\end{lstlisting}
+
+Ese conjunto se compara contra los tipos usados por cada empresa con NOT EXISTS para comprobar cobertura total.
+
+\textbf{Consulta 3: subconsulta de comparación (prueba aislada)}
+
+Subconsulta aislada para verificar costos de habitaciones individuales de marzo 2026:
+\begin{lstlisting}
+SELECT (ho2.fecha_salida - ho2.fecha_ingreso) * h2.precio AS costo_total_simple
+FROM hospedaje ho2
+JOIN habitacion h2 ON ho2.id_habitacion = h2.id_habitacion
+WHERE h2.tipo = 'Individual'
+    AND EXTRACT(MONTH FROM ho2.fecha_ingreso) = 3
+    AND EXTRACT(YEAR FROM ho2.fecha_ingreso) = 2026;
+\end{lstlisting}
+
+\textbf{Consulta 4: versión con ALL y versión con MAX}
+
+Versión con ALL:
+\begin{lstlisting}
+SELECT ho.id_recepcionista, h.id_hotel
+FROM hospedaje ho
+JOIN habitacion h ON ho.id_habitacion = h.id_habitacion
+WHERE h.tipo = 'Matrimonial'
+GROUP BY ho.id_recepcionista, h.id_hotel
+HAVING COUNT(*) >= ALL (
+        SELECT COUNT(*)
+        FROM hospedaje ho2
+        JOIN habitacion h2 ON ho2.id_habitacion = h2.id_habitacion
+        WHERE h2.tipo = 'Matrimonial'
+            AND h2.id_hotel = h.id_hotel
+        GROUP BY ho2.id_recepcionista
+);
+\end{lstlisting}
+
+Versión con subconsulta MAX:
+\begin{lstlisting}
+SELECT ho.id_recepcionista, h.id_hotel
+FROM hospedaje ho
+JOIN habitacion h ON ho.id_habitacion = h.id_habitacion
+WHERE h.tipo = 'Matrimonial'
+GROUP BY ho.id_recepcionista, h.id_hotel
+HAVING COUNT(*) = (
+        SELECT MAX(cnt)
+        FROM (
+                SELECT COUNT(*) AS cnt
+                FROM hospedaje ho2
+                JOIN habitacion h2 ON ho2.id_habitacion = h2.id_habitacion
+                WHERE h2.tipo = 'Matrimonial'
+                    AND h2.id_hotel = h.id_hotel
+                GROUP BY ho2.id_recepcionista
+        ) t
+);
+\end{lstlisting}
+
+Comparación breve:
+\begin{itemize}
+        \item ALL es directo para comparaciones contra todo el conjunto.
+        \item MAX es más legible cuando se desea mostrar explícitamente el valor máximo de referencia.
+\end{itemize}
+
+\textbf{Casos de prueba necesarios para que la consulta 6 retorne datos}
+\begin{itemize}
+        \item Debe existir al menos una habitación sin registros en novedad.
+        \item Debe haber diferencia de frecuencias de hospedaje dentro de un mismo hotel (o empate mínimo válido).
+        \item La habitación candidata debe pertenecer al hotel evaluado y tener la menor frecuencia relativa en ese hotel.
+\end{itemize}
 
 
 
@@ -160,20 +536,42 @@ De acuerdo con el tipo de trabajo, se plasmarán los resultados alcanzados en la
 
 
 \subsection{Conclusiones}
-Constituye la respuesta que propone el o los estudiantes para el problema que originó el trabajo desarrollado, de acuerdo con los datos recogidos y la teoría aplicada. 
+El desarrollo de la práctica permitió implementar de manera integral el modelo físico en Oracle, validando la coherencia entre entidades, claves primarias y claves foráneas del sistema de hospedaje empresarial.
+
+Las seis consultas avanzadas del grupo F resolvieron el análisis por tipo de habitación con técnicas de subconsulta (ALL, NOT EXISTS, agregación y subconsultas correlacionadas), demostrando dominio de lógica SQL para escenarios de comparación, cobertura y frecuencia de uso.
+
+Los resultados obtenidos confirman que la base de datos propuesta soporta correctamente consultas analíticas sobre costos, uso de habitaciones y participación de empresas, aportando información útil para la toma de decisiones operativas en el contexto hotelero.
 
 \subsection{Recomendaciones}
-Redactar las sugerencias o acciones concretas que se derivan de la guía práctica desarrollada. \cite{greenwade93}
+Ampliar los datos de prueba incorporando nuevos periodos, más empresas y mayor diversidad de hospedajes, con el fin de evaluar el comportamiento de las consultas en escenarios de mayor volumen y complejidad.
+
+Optimizar el rendimiento mediante índices en columnas de uso frecuente en filtros y relaciones (id\_empresa, id\_hotel, id\_habitacion, tipo, fecha\_ingreso), y medir su impacto con planes de ejecución.
+
+Establecer validaciones adicionales de calidad de datos (rangos de fechas, consistencia de costos y control de duplicados) para fortalecer la confiabilidad de los resultados antes de su uso en reportes o análisis institucionales.
 
 
-\subsection{Referencias}
-Insertar las referencias bibliográficas empleadas aplicando la norma IEEE.
-
-\vspace{-3em} %reduce el espacio causado por refname vacío
-\renewcommand{\refname}{}
-\bibliographystyle{ieeetr}
-\bibliography{citas}
 
 \subsection{Anexos}
+\textbf{Modelo Entidad-Relación}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../img/Modelo_ER_Examen_Parcial2.jpeg}
+    \caption{Modelo Entidad-Relación del caso de hospedaje empresarial}
+\end{figure}
+
+\textbf{Modelo Relacional}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../img/Modelo_relacional_Examen_Pacial2.jpeg}
+    \caption{Modelo relacional implementado en Oracle}
+\end{figure}
+
+\textbf{Evidencia de ejecución del script en Oracle}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{../img/hora_examen_comandos.png}
+    \caption{Evidencia de la ejecución de comandos del examen en Oracle}
+\end{figure}
+
 \vfill
 \end{document}
