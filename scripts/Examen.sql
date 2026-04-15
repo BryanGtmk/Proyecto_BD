@@ -288,3 +288,4 @@ FROM habitacion
 WHERE id_habitacion NOT IN (
     SELECT DISTINCT id_habitacion FROM hospedaje
 );
+------ FIN DEL SCRIPT
