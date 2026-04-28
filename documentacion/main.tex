@@ -1,28 +1,22 @@
 \documentclass{article}
 
-% Language setting
-% Replace `english' with e.g. `spanish' to change the document language
 \usepackage[spanish]{babel}
-
 \usepackage[letterpaper,top=2cm,bottom=5cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
-
-% Useful packages
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\usepackage{amssymb} 
+\usepackage{amssymb}
 \usepackage{fancyhdr}
-\usepackage{lipsum} % Para generar texto de ejemplo
 \usepackage{multicol}
-\pagestyle{fancy} 
 \usepackage{url}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{xcolor}
 
-  
-
-\fancyhf{} % Limpiar encabezado y pie de página por defecto
-\setlength{\headheight}{70pt} % Ajuste del tamaño del encabezado (puedes aumentar este valor si es necesario)
-
-% Definición del encabezado
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{70pt}
 
 \fancyhead[C]{%
     \begin{minipage}[c]{2.0cm}
@@ -30,7 +24,7 @@
         \includegraphics[width=2.0cm]{img/uta.png}
     \end{minipage}%
     \hfill
-    \begin{minipage}[c]{8cm} 
+    \begin{minipage}[c]{8cm}
         \centering
         \small {\textbf{UNIVERSIDAD TÉCNICA DE AMBATO}} \\[0.1cm]
         \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL} \\[0.1cm]
@@ -44,268 +38,682 @@
     \end{minipage}%
 }
 
+\lstdefinestyle{sqlstyle}{
+    language=SQL,
+    basicstyle=\ttfamily\scriptsize,
+    breaklines=true,
+    frame=single,
+    backgroundcolor=\color{gray!8},
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{red!60!black},
+    showstringspaces=false
+}
+
 \begin{document}
+
 \begin{center}
-    {\large \textbf{INFORME DE TAREA}} \\    
+    {\large \textbf{INFORME DE TAREA}} \\
 \end{center}
 
 \section{Portada}
+
 \begin{flushleft}
 \begin{tabular}{ l l }
-    \textbf{Tema:} & Proyecto de base de datos \\
+    \textbf{Tema:} & Ejercicios de Implementación - Oracle \\
     \textbf{Unidad de Organización Curricular:} & Profesional \\
-    \textbf{Nivel y Paralelo:} & 4to Semestre "B"\\
-    \textbf{Alumnos participantes:} & Molina Karen \\
-    & Guatemal Bryan \\
-    &  Gisselle Espín\\
-    & Benjarano Carlos \\
+    \textbf{Nivel y Paralelo:} & 4to Semestre ``B''\\
+    \textbf{Alumnos participantes:} & Guatemal Bryan \\
     \textbf{Asignatura:} & Base de Datos\\
-    \textbf{Docente:} & Ing.Jose Ruben Caiza Caizabuano Mg. \\
+    \textbf{Docente:} & Ing. José Rubén Caiza Caizabuano Mg. \\
 \end{tabular}
 \end{flushleft}
 
+\section{Informe de guía práctica}
 
-\section{Informe de la Tarea}
 \subsection{Objetivos}
 
 \subsubsection{General}
-Desarrollar un modelo de base de datos eficiente para el control y seguimiento del préstamo de equipos tecnológicos, permitiendo la organización centralizada de la información y el cumplimiento de las normativas de uso institucional.
+
+Implementar bases de datos en Oracle mediante el uso de sentencias DDL, restricciones de integridad, claves primarias, claves foráneas, modificación de estructura y recuperación de tablas eliminadas.
 
 \subsubsection{Específicos}
+
 \begin{itemize}
-    \item Identificar las entidades y atributos fundamentales del dominio para establecer una estructura de datos sólida que soporte al menos 8 entidades principales.
-    \item Definir y normalizar las reglas de negocio para garantizar la integridad y el flujo correcto de los procesos de préstamo y devolución de equipos.
-    \item Establecer el alcance técnico y funcional del proyecto, delimitando las responsabilidades del sistema y los requerimientos iniciales para el entregable de la Fase 1.
+    \item Crear tablas en Oracle utilizando claves primarias, claves foráneas y restricciones.
+    \item Insertar datos de prueba para comprobar el funcionamiento de las relaciones entre tablas.
+    \item Aplicar comandos \texttt{ALTER TABLE}, \texttt{DROP TABLE} y \texttt{FLASHBACK TABLE} para modificar y recuperar estructuras.
 \end{itemize}
 
+\subsection{Modalidad}
+
+La práctica se desarrolló de forma individual, utilizando Oracle como gestor de base de datos y sentencias SQL para la implementación de los dos ejercicios propuestos.
+
+\subsection{Tiempo de duración}
+
+Presenciales: Detallado en la guía.\\
+No presenciales: Detallado en la guía.
 
 \subsection{Instrucciones}
 
-De acuerdo con la planificación de la asignatura para la Semana 1-2, el desarrollo de la presente práctica se rige bajo las siguientes directrices:
-
-\begin{itemize}
-    \item \textbf{Análisis de Conceptos:} Identificar y diferenciar ejemplos prácticos de datos frente a información dentro del contexto de la Universidad Técnica de Ambato (UTA).
-    \item \textbf{Modelado Inicial:} Listar y estructurar un mínimo de 8 entidades con sus respectivos atributos basados en el caso de estudio "Préstamos de equipos".
-    \item \textbf{Reglas de Negocio:} Definir al menos 5 reglas de negocio que condicionen el funcionamiento del sistema (estados, plazos y restricciones).
-    \item \textbf{Documentación:} Elaborar el acta de grupo que integre el alcance técnico y las reglas iniciales como primer entregable del proyecto.
-\end{itemize}
+La práctica consistió en implementar dos sistemas de base de datos. El primer sistema corresponde a un Inventario Académico y el segundo a un Sistema de Biblioteca. En ambos ejercicios se crearon tablas base, tablas relacionadas, restricciones, claves foráneas y pruebas de modificación y recuperación.
 
 \subsection{Listado de equipos, materiales y recursos}
-\textbf{Listado de equipos y materiales generales empleados en la tarea:}
+
+\textbf{Listado de equipos y materiales generales empleados en la guía práctica:}
+
 \begin{itemize}
-    \item Computador portátil o de escritorio con acceso a internet.
-    \item Herramientas de modelado de datos.
-    \item Editor de texto especializado (Overleaf / LaTeX).
-    \item Repositorio de código (GitHub / Git) para control de versiones del proyecto.
+    \item Computador personal.
+    \item Oracle Database.
+    \item SQL Plus o herramienta compatible con Oracle.
+    \item Visual Studio Code.
+    \item LaTeX para la elaboración del informe.
 \end{itemize}
 
-\textbf{TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la tarea:}
+\textbf{TAC empleadas en la guía práctica:}
+
 \begin{itemize}
     \item[$\boxtimes$] Plataformas educativas
     \item[$\square$] Simuladores y laboratorios virtuales
     \item[$\boxtimes$] Aplicaciones educativas
-    \item[$\boxtimes$] Recursos audiovisuales
+    \item[$\square$] Recursos audiovisuales
     \item[$\square$] Gamificación
     \item[$\boxtimes$] Inteligencia Artificial
-    \item Otros (Especifique)
+    \item Otros: \underline{Oracle Database, SQL Plus, Visual Studio Code}
 \end{itemize}
 
-\subsection{Desarrollo de la Tarea (Actividades a Desarrollar)}
+\subsection{Actividades por desarrollar}
 
-El desarrollo de la presente práctica se desglosa en las siguientes actividades secuenciales orientadas al diseño del sistema de préstamo de equipos:
-\begin{enumerate}
-    \item \textbf{Análisis de requerimientos y contexto:} Identificación de 10 ejemplos prácticos de datos e información aplicados al entorno de la Universidad Técnica de Ambato para comprender el flujo de entrada y salida del sistema.
-    \item \textbf{Modelado conceptual de datos:} Definición de un esquema relacional que incluye un mínimo de 8 entidades fundamentales, estableciendo sus respectivos atributos y relaciones de cardinalidad.
-    \item \textbf{Establecimiento de la lógica de negocio:} Formulación de 5 reglas de negocio iniciales que regirán el comportamiento del sistema ante eventos de préstamo, devolución y gestión de usuarios.
-    \item \textbf{Documentación técnica del proyecto:} Elaboración del acta constitutiva del grupo y definición del alcance del proyecto, delimitando las fronteras del software y sus entregables inmediatos.
-\end{enumerate}
+\subsubsection{Ejercicio 1: Sistema de Inventario Académico}
+
+El primer ejercicio se desarrolló para controlar artículos académicos dentro de una institución. Para ello se utilizaron tablas como \texttt{CATEGORIA}, \texttt{DEPARTAMENTO}, \texttt{ESTADO\_ARTICULO}, \texttt{ROL}, \texttt{USUARIO}, \texttt{UBICACION}, \texttt{RESPONSABLE}, \texttt{ARTICULO}, \texttt{PRESTAMO} y \texttt{DETALLE\_PRESTAMO}.
+
+\subsubsection{Creación del usuario}
+
+Primero se creó un usuario propio para trabajar la base de datos del inventario académico. Luego se asignaron permisos de conexión, creación de objetos y uso de espacio.
+
+\begin{lstlisting}[style=sqlstyle]
+CONNECT system/system;
+
+CREATE USER INV_ACADEMICO IDENTIFIED BY INV123;
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO INV_ACADEMICO;
+
+CONNECT INV_ACADEMICO/INV123;
+\end{lstlisting}
+
+\subsubsection{Fase P1: Creación de tablas base}
+
+En esta fase se crean las tablas principales de catálogo. Estas tablas sirven como base para clasificar los artículos, identificar los departamentos y registrar los estados posibles de cada artículo.
+
+\begin{lstlisting}[style=sqlstyle]
+CREATE TABLE CATEGORIA (
+    ID_CAT      NUMBER(10) PRIMARY KEY,
+    NOM_CAT     VARCHAR2(40) NOT NULL UNIQUE,
+    DES_CAT     VARCHAR2(100)
+);
+
+CREATE TABLE DEPARTAMENTO (
+    ID_DEP      NUMBER(10) PRIMARY KEY,
+    NOM_DEP     VARCHAR2(50) NOT NULL UNIQUE,
+    UBIC_DEP    VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE ESTADO_ARTICULO (
+    ID_EST      NUMBER(10) PRIMARY KEY,
+    NOM_EST     VARCHAR2(30) NOT NULL UNIQUE,
+    CONSTRAINT CHK_ESTADO_ARTICULO 
+    CHECK (NOM_EST IN ('DISPONIBLE','PRESTADO','MANTENIMIENTO','BAJA'))
+);
+\end{lstlisting}
+
+La tabla \texttt{CATEGORIA} permite clasificar los artículos. La tabla \texttt{DEPARTAMENTO} permite registrar las áreas de la institución. La tabla \texttt{ESTADO\_ARTICULO} controla que los artículos solamente puedan tener estados válidos.
+
+\subsubsection{Fase P2: Creación de tablas con restricciones}
+
+En esta fase se crean las tablas que permiten registrar roles, usuarios, ubicaciones y responsables. Se aplican restricciones como \texttt{PRIMARY KEY}, \texttt{UNIQUE}, \texttt{NOT NULL}, \texttt{CHECK} y claves foráneas.
+
+\begin{lstlisting}[style=sqlstyle]
+CREATE TABLE ROL (
+    ID_ROL      NUMBER(10) PRIMARY KEY,
+    NOM_ROL     VARCHAR2(30) NOT NULL UNIQUE,
+    CONSTRAINT CHK_ROL 
+    CHECK (NOM_ROL IN ('ADMINISTRADOR','DOCENTE','ESTUDIANTE','ASISTENTE'))
+);
+
+CREATE TABLE USUARIO (
+    CED_USU      VARCHAR2(10) PRIMARY KEY,
+    NOM_USU      VARCHAR2(30) NOT NULL,
+    APE_USU      VARCHAR2(30) NOT NULL,
+    COR_USU      VARCHAR2(60) UNIQUE,
+    ID_ROL_PER   NUMBER(10) NOT NULL,
+    EST_USU      VARCHAR2(10) DEFAULT 'ACTIVO' NOT NULL,
+    CONSTRAINT CHK_EST_USUARIO 
+    CHECK (EST_USU IN ('ACTIVO','INACTIVO')),
+    FOREIGN KEY (ID_ROL_PER) REFERENCES ROL(ID_ROL)
+);
+
+CREATE TABLE UBICACION (
+    ID_UBI       NUMBER(10) PRIMARY KEY,
+    NOM_UBI      VARCHAR2(50) NOT NULL,
+    ID_DEP_PER   NUMBER(10) NOT NULL,
+    FOREIGN KEY (ID_DEP_PER) REFERENCES DEPARTAMENTO(ID_DEP)
+);
+
+CREATE TABLE RESPONSABLE (
+    CED_RES      VARCHAR2(10) PRIMARY KEY,
+    NOM_RES      VARCHAR2(30) NOT NULL,
+    APE_RES      VARCHAR2(30) NOT NULL,
+    TEL_RES      VARCHAR2(10),
+    ID_DEP_PER   NUMBER(10) NOT NULL,
+    FOREIGN KEY (ID_DEP_PER) REFERENCES DEPARTAMENTO(ID_DEP)
+);
+\end{lstlisting}
+
+La tabla \texttt{USUARIO} se relaciona con \texttt{ROL}. La tabla \texttt{UBICACION} se relaciona con \texttt{DEPARTAMENTO}. La tabla \texttt{RESPONSABLE} también depende de un departamento, porque cada responsable pertenece a un área específica.
+
+\subsubsection{Fase P3: Creación de tablas relacionadas}
+
+En esta fase se crean las tablas principales del proceso. La tabla \texttt{ARTICULO} almacena los bienes académicos. La tabla \texttt{PRESTAMO} registra la cabecera del préstamo. La tabla \texttt{DETALLE\_PRESTAMO} registra los artículos incluidos en cada préstamo.
+
+\begin{lstlisting}[style=sqlstyle]
+CREATE TABLE ARTICULO (
+    COD_ART       VARCHAR2(10) PRIMARY KEY,
+    NOM_ART       VARCHAR2(60) NOT NULL,
+    MAR_ART       VARCHAR2(30),
+    MOD_ART       VARCHAR2(30),
+    FEC_ADQ       DATE NOT NULL,
+    VAL_ART       NUMBER(10,2) NOT NULL,
+    ID_CAT_PER    NUMBER(10) NOT NULL,
+    ID_EST_PER    NUMBER(10) NOT NULL,
+    ID_UBI_PER    NUMBER(10) NOT NULL,
+    CED_RES_PER   VARCHAR2(10) NOT NULL,
+    CONSTRAINT CHK_VAL_ART CHECK (VAL_ART > 0),
+    FOREIGN KEY (ID_CAT_PER) REFERENCES CATEGORIA(ID_CAT),
+    FOREIGN KEY (ID_EST_PER) REFERENCES ESTADO_ARTICULO(ID_EST),
+    FOREIGN KEY (ID_UBI_PER) REFERENCES UBICACION(ID_UBI),
+    FOREIGN KEY (CED_RES_PER) REFERENCES RESPONSABLE(CED_RES)
+);
+
+CREATE TABLE PRESTAMO (
+    ID_PRE        NUMBER(10) PRIMARY KEY,
+    FEC_PRE       DATE DEFAULT SYSDATE NOT NULL,
+    FEC_DEV_PREV  DATE NOT NULL,
+    CED_USU_PER   VARCHAR2(10) NOT NULL,
+    CED_RES_PER   VARCHAR2(10) NOT NULL,
+    EST_PRE       VARCHAR2(20) DEFAULT 'ABIERTO' NOT NULL,
+    CONSTRAINT CHK_EST_PRESTAMO 
+    CHECK (EST_PRE IN ('ABIERTO','DEVUELTO','ATRASADO','CANCELADO')),
+    FOREIGN KEY (CED_USU_PER) REFERENCES USUARIO(CED_USU),
+    FOREIGN KEY (CED_RES_PER) REFERENCES RESPONSABLE(CED_RES)
+);
+
+CREATE TABLE DETALLE_PRESTAMO (
+    ID_DET        NUMBER(10) PRIMARY KEY,
+    ID_PRE_PER    NUMBER(10) NOT NULL,
+    COD_ART_PER   VARCHAR2(10) NOT NULL,
+    FEC_DEV_REAL  DATE,
+    OBS_DET       VARCHAR2(100),
+    FOREIGN KEY (ID_PRE_PER) REFERENCES PRESTAMO(ID_PRE),
+    FOREIGN KEY (COD_ART_PER) REFERENCES ARTICULO(COD_ART),
+    CONSTRAINT UQ_DETALLE_ARTICULO UNIQUE (ID_PRE_PER, COD_ART_PER)
+);
+\end{lstlisting}
+
+La tabla \texttt{ARTICULO} tiene varias claves foráneas porque depende de categoría, estado, ubicación y responsable. La tabla \texttt{PRESTAMO} se relaciona con el usuario que solicita el préstamo y con el responsable que lo gestiona. Finalmente, \texttt{DETALLE\_PRESTAMO} une el préstamo con los artículos prestados.
+
+\subsubsection{Inserción de datos}
+
+Después de crear las tablas, se insertan datos en el orden correcto. Primero se insertan los datos de las tablas base, luego los usuarios y responsables, después los artículos y finalmente los préstamos.
+
+\begin{lstlisting}[style=sqlstyle]
+INSERT INTO CATEGORIA VALUES (1,'COMPUTADORAS','Equipos de computo institucional');
+INSERT INTO CATEGORIA VALUES (2,'PROYECTORES','Equipos para presentacion academica');
+INSERT INTO CATEGORIA VALUES (3,'MUEBLES','Mobiliario academico');
+INSERT INTO CATEGORIA VALUES (4,'REDES','Equipos de conectividad');
+INSERT INTO CATEGORIA VALUES (5,'LABORATORIO','Material para laboratorios');
+
+INSERT INTO DEPARTAMENTO VALUES (1,'SISTEMAS','BLOQUE A');
+INSERT INTO DEPARTAMENTO VALUES (2,'ELECTRONICA','BLOQUE B');
+INSERT INTO DEPARTAMENTO VALUES (3,'INDUSTRIAL','BLOQUE C');
+INSERT INTO DEPARTAMENTO VALUES (4,'BIBLIOTECA','BLOQUE D');
+INSERT INTO DEPARTAMENTO VALUES (5,'ADMINISTRACION','BLOQUE E');
+
+INSERT INTO ESTADO_ARTICULO VALUES (1,'DISPONIBLE');
+INSERT INTO ESTADO_ARTICULO VALUES (2,'PRESTADO');
+INSERT INTO ESTADO_ARTICULO VALUES (3,'MANTENIMIENTO');
+INSERT INTO ESTADO_ARTICULO VALUES (4,'BAJA');
+
+INSERT INTO ROL VALUES (1,'ADMINISTRADOR');
+INSERT INTO ROL VALUES (2,'DOCENTE');
+INSERT INTO ROL VALUES (3,'ESTUDIANTE');
+INSERT INTO ROL VALUES (4,'ASISTENTE');
+
+COMMIT;
+\end{lstlisting}
+
+Estos registros permiten que las claves foráneas funcionen correctamente, ya que las tablas dependientes necesitan que existan primero los datos principales.
+
+\subsubsection{Consultas de comprobación}
+
+Para comprobar que la información fue registrada correctamente, se ejecutan consultas sobre cada tabla.
+
+\begin{lstlisting}[style=sqlstyle]
+SELECT * FROM CATEGORIA;
+SELECT * FROM DEPARTAMENTO;
+SELECT * FROM ESTADO_ARTICULO;
+SELECT * FROM ROL;
+SELECT * FROM USUARIO;
+SELECT * FROM ARTICULO;
+SELECT * FROM PRESTAMO;
+SELECT * FROM DETALLE_PRESTAMO;
+\end{lstlisting}
+
+Estas consultas permiten verificar que las tablas existen y que los registros fueron insertados correctamente.
+
+\subsubsection{Consulta con JOIN}
+
+La siguiente consulta permite mostrar artículos prestados junto con el usuario y el responsable. Para lograrlo se relacionan las tablas \texttt{DETALLE\_PRESTAMO}, \texttt{ARTICULO}, \texttt{PRESTAMO}, \texttt{USUARIO} y \texttt{RESPONSABLE}.
+
+\begin{lstlisting}[style=sqlstyle]
+SELECT 
+    DP.ID_DET,
+    A.NOM_ART AS ARTICULO,
+    U.NOM_USU || ' ' || U.APE_USU AS USUARIO,
+    R.NOM_RES || ' ' || R.APE_RES AS RESPONSABLE,
+    P.EST_PRE
+FROM DETALLE_PRESTAMO DP
+JOIN ARTICULO A ON DP.COD_ART_PER = A.COD_ART
+JOIN PRESTAMO P ON DP.ID_PRE_PER = P.ID_PRE
+JOIN USUARIO U ON P.CED_USU_PER = U.CED_USU
+JOIN RESPONSABLE R ON P.CED_RES_PER = R.CED_RES;
+\end{lstlisting}
+
+Esta consulta sirve para obtener información completa del préstamo, ya que une los datos del artículo, usuario, responsable y estado del préstamo.
+
+\subsubsection{Consulta sin JOIN}
+
+También se realizó una consulta sin utilizar \texttt{JOIN}. En este caso se usó una subconsulta para mostrar los artículos que han sido prestados.
+
+\begin{lstlisting}[style=sqlstyle]
+SELECT COD_ART, NOM_ART
+FROM ARTICULO
+WHERE COD_ART IN (
+    SELECT COD_ART_PER
+    FROM DETALLE_PRESTAMO
+);
+\end{lstlisting}
+
+Esta consulta busca en la tabla \texttt{ARTICULO} solamente aquellos códigos que existen dentro de la tabla \texttt{DETALLE\_PRESTAMO}.
+
+\subsubsection{Fase P4: ALTER TABLE, DROP TABLE y FLASHBACK}
+
+En esta fase se modifica la estructura de la tabla \texttt{ARTICULO}, agregando una nueva columna, cambiando el tamaño de una columna existente y agregando una restricción \texttt{UNIQUE}.
+
+\begin{lstlisting}[style=sqlstyle]
+ALTER TABLE ARTICULO ADD SERIE_ART VARCHAR2(30);
+
+ALTER TABLE ARTICULO MODIFY NOM_ART VARCHAR2(80);
+
+ALTER TABLE ARTICULO ADD CONSTRAINT UQ_SERIE_ART UNIQUE (SERIE_ART);
+
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-HP-001' WHERE COD_ART = 'A01';
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-EP-002' WHERE COD_ART = 'A02';
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-SI-003' WHERE COD_ART = 'A03';
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-CI-004' WHERE COD_ART = 'A04';
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-OL-005' WHERE COD_ART = 'A05';
+
+COMMIT;
+\end{lstlisting}
+
+Con esto se demuestra que una tabla ya creada puede modificarse sin necesidad de eliminarla. Además, la restricción \texttt{UNIQUE} evita que se repita el número de serie de los artículos.
+
+Luego se creó una tabla temporal, se eliminó y se recuperó con \texttt{FLASHBACK}.
+
+\begin{lstlisting}[style=sqlstyle]
+CREATE TABLE PRUEBA_FLASHBACK_INV (
+    ID_PRU      NUMBER(10) PRIMARY KEY,
+    NOM_PRU     VARCHAR2(30)
+);
+
+INSERT INTO PRUEBA_FLASHBACK_INV VALUES (1,'DATO DE PRUEBA');
+COMMIT;
+
+DROP TABLE PRUEBA_FLASHBACK_INV;
+
+FLASHBACK TABLE PRUEBA_FLASHBACK_INV TO BEFORE DROP;
+
+SELECT * FROM PRUEBA_FLASHBACK_INV;
+\end{lstlisting}
+
+Esta parte permite comprobar que Oracle puede recuperar una tabla eliminada, siempre que no se haya usado \texttt{DROP TABLE ... PURGE}.
+
+\subsubsection{Ejercicio 2: Sistema de Biblioteca}
+
+El segundo ejercicio corresponde a un sistema de biblioteca. Este sistema permite registrar libros, categorías, editoriales, autores, lectores, bibliotecarios, ejemplares y préstamos.
+
+\subsubsection{Creación del usuario}
+
+Se creó un usuario diferente para separar la base de datos de biblioteca de la base de datos del inventario académico.
+
+\begin{lstlisting}[style=sqlstyle]
+CONNECT system/system;
+
+CREATE USER BIBLIOTECA_ACAD IDENTIFIED BY BIB123;
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO BIBLIOTECA_ACAD;
+
+CONNECT BIBLIOTECA_ACAD/BIB123;
+\end{lstlisting}
+
+\subsubsection{Fase P1: Creación de tablas base}
+
+En esta fase se crean tablas base para clasificar libros, editoriales, autores y estados de ejemplares.
+
+\begin{lstlisting}[style=sqlstyle]
+CREATE TABLE CATEGORIA_LIBRO (
+    ID_CAT_LIB     NUMBER(10) PRIMARY KEY,
+    NOM_CAT_LIB    VARCHAR2(40) NOT NULL UNIQUE,
+    DES_CAT_LIB    VARCHAR2(100)
+);
+
+CREATE TABLE EDITORIAL (
+    ID_EDI      NUMBER(10) PRIMARY KEY,
+    NOM_EDI     VARCHAR2(50) NOT NULL UNIQUE,
+    DIR_EDI     VARCHAR2(80)
+);
+
+CREATE TABLE AUTOR (
+    ID_AUT      NUMBER(10) PRIMARY KEY,
+    NOM_AUT     VARCHAR2(30) NOT NULL,
+    APE_AUT     VARCHAR2(30) NOT NULL,
+    NAC_AUT     VARCHAR2(30)
+);
+
+CREATE TABLE ESTADO_EJEMPLAR (
+    ID_EST_EJE     NUMBER(10) PRIMARY KEY,
+    NOM_EST_EJE    VARCHAR2(30) NOT NULL UNIQUE
+);
+\end{lstlisting}
+
+Estas tablas son necesarias porque los libros dependen de una categoría, una editorial y un autor. Además, cada ejemplar necesita tener un estado.
+
+\subsubsection{Fase P2: Aplicación de restricciones}
+
+En esta fase se crean las tablas \texttt{LECTOR} y \texttt{BIBLIOTECARIO}. Se aplican restricciones para evitar datos incorrectos.
+
+\begin{lstlisting}[style=sqlstyle]
+CREATE TABLE LECTOR (
+    CED_LEC      VARCHAR2(10) PRIMARY KEY,
+    NOM_LEC      VARCHAR2(30) NOT NULL,
+    APE_LEC      VARCHAR2(30) NOT NULL,
+    TEL_LEC      VARCHAR2(10),
+    DIR_LEC      VARCHAR2(50),
+    COR_LEC      VARCHAR2(60) UNIQUE,
+    EST_LEC      VARCHAR2(10) DEFAULT 'ACTIVO' NOT NULL,
+    CONSTRAINT CHK_EST_LECTOR 
+    CHECK (EST_LEC IN ('ACTIVO','INACTIVO'))
+);
+
+CREATE TABLE BIBLIOTECARIO (
+    CED_BIB      VARCHAR2(10) PRIMARY KEY,
+    NOM_BIB      VARCHAR2(30) NOT NULL,
+    APE_BIB      VARCHAR2(30) NOT NULL,
+    TUR_BIB      VARCHAR2(15) NOT NULL,
+    CONSTRAINT CHK_TURNO_BIB 
+    CHECK (TUR_BIB IN ('MATUTINO','VESPERTINO','NOCTURNO'))
+);
+\end{lstlisting}
+
+La restricción \texttt{CHECK} en \texttt{LECTOR} permite que el estado sea únicamente \texttt{ACTIVO} o \texttt{INACTIVO}. En \texttt{BIBLIOTECARIO}, el turno solo puede ser \texttt{MATUTINO}, \texttt{VESPERTINO} o \texttt{NOCTURNO}.
+
+\subsubsection{Fase P3: Implementación de relaciones}
+
+En esta fase se crean las tablas principales del sistema: \texttt{LIBRO}, \texttt{EJEMPLAR}, \texttt{PRESTAMO\_LIBRO} y \texttt{DETALLE\_PRESTAMO\_LIBRO}.
+
+\begin{lstlisting}[style=sqlstyle]
+CREATE TABLE LIBRO (
+    COD_LIB        VARCHAR2(10) PRIMARY KEY,
+    TIT_LIB        VARCHAR2(80) NOT NULL,
+    ANIO_LIB       NUMBER(4) NOT NULL,
+    ID_CAT_PER     NUMBER(10) NOT NULL,
+    ID_EDI_PER     NUMBER(10) NOT NULL,
+    ID_AUT_PER     NUMBER(10) NOT NULL,
+    CONSTRAINT CHK_ANIO_LIB CHECK (ANIO_LIB >= 1900),
+    FOREIGN KEY (ID_CAT_PER) REFERENCES CATEGORIA_LIBRO(ID_CAT_LIB),
+    FOREIGN KEY (ID_EDI_PER) REFERENCES EDITORIAL(ID_EDI),
+    FOREIGN KEY (ID_AUT_PER) REFERENCES AUTOR(ID_AUT)
+);
+
+CREATE TABLE EJEMPLAR (
+    ID_EJE        NUMBER(10) PRIMARY KEY,
+    COD_LIB_PER   VARCHAR2(10) NOT NULL,
+    COD_BARRA     VARCHAR2(20) NOT NULL UNIQUE,
+    ID_EST_PER    NUMBER(10) NOT NULL,
+    FOREIGN KEY (COD_LIB_PER) REFERENCES LIBRO(COD_LIB),
+    FOREIGN KEY (ID_EST_PER) REFERENCES ESTADO_EJEMPLAR(ID_EST_EJE)
+);
+
+CREATE TABLE PRESTAMO_LIBRO (
+    ID_PRE_LIB     NUMBER(10) PRIMARY KEY,
+    FEC_PRE_LIB    DATE DEFAULT SYSDATE NOT NULL,
+    FEC_DEV_PREV   DATE NOT NULL,
+    CED_LEC_PER    VARCHAR2(10) NOT NULL,
+    CED_BIB_PER    VARCHAR2(10) NOT NULL,
+    EST_PRE_LIB    VARCHAR2(20) DEFAULT 'ABIERTO' NOT NULL,
+    CONSTRAINT CHK_EST_PRE_LIB 
+    CHECK (EST_PRE_LIB IN ('ABIERTO','DEVUELTO','ATRASADO','CANCELADO')),
+    FOREIGN KEY (CED_LEC_PER) REFERENCES LECTOR(CED_LEC),
+    FOREIGN KEY (CED_BIB_PER) REFERENCES BIBLIOTECARIO(CED_BIB)
+);
+
+CREATE TABLE DETALLE_PRESTAMO_LIBRO (
+    ID_DET_LIB      NUMBER(10) PRIMARY KEY,
+    ID_PRE_LIB_PER  NUMBER(10) NOT NULL,
+    ID_EJE_PER      NUMBER(10) NOT NULL,
+    FEC_DEV_REAL    DATE,
+    OBS_DET_LIB     VARCHAR2(100),
+    FOREIGN KEY (ID_PRE_LIB_PER) REFERENCES PRESTAMO_LIBRO(ID_PRE_LIB),
+    FOREIGN KEY (ID_EJE_PER) REFERENCES EJEMPLAR(ID_EJE),
+    CONSTRAINT UQ_DET_LIBRO UNIQUE (ID_PRE_LIB_PER, ID_EJE_PER)
+);
+\end{lstlisting}
+
+La tabla \texttt{LIBRO} se relaciona con categoría, editorial y autor. La tabla \texttt{EJEMPLAR} representa cada copia física de un libro. La tabla \texttt{PRESTAMO\_LIBRO} registra el préstamo y la tabla \texttt{DETALLE\_PRESTAMO\_LIBRO} indica qué ejemplar fue prestado.
+
+\subsubsection{Inserción de datos}
+
+Después de crear las tablas, se insertan datos de prueba. Primero se insertan categorías, editoriales, autores y estados. Luego se insertan lectores, bibliotecarios, libros, ejemplares y préstamos.
+
+\begin{lstlisting}[style=sqlstyle]
+INSERT INTO CATEGORIA_LIBRO VALUES (1,'BASE DE DATOS','Libros de diseno y administracion de datos');
+INSERT INTO CATEGORIA_LIBRO VALUES (2,'PROGRAMACION','Libros de desarrollo de software');
+INSERT INTO CATEGORIA_LIBRO VALUES (3,'REDES','Libros de comunicacion de datos');
+INSERT INTO CATEGORIA_LIBRO VALUES (4,'MATEMATICAS','Libros de calculo y algebra');
+INSERT INTO CATEGORIA_LIBRO VALUES (5,'INVESTIGACION','Libros de metodologia');
+
+INSERT INTO EDITORIAL VALUES (1,'PEARSON','QUITO');
+INSERT INTO EDITORIAL VALUES (2,'MCGRAW HILL','GUAYAQUIL');
+INSERT INTO EDITORIAL VALUES (3,'ALFAOMEGA','AMBATO');
+INSERT INTO EDITORIAL VALUES (4,'OXFORD','CUENCA');
+INSERT INTO EDITORIAL VALUES (5,'UTA EDITORIAL','AMBATO');
+
+INSERT INTO AUTOR VALUES (1,'CARLOS','CORONEL','ECUADOR');
+INSERT INTO AUTOR VALUES (2,'DEITEL','HARVEY','ESTADOS UNIDOS');
+INSERT INTO AUTOR VALUES (3,'ANDREW','TANENBAUM','PAISES BAJOS');
+INSERT INTO AUTOR VALUES (4,'JAMES','STEWART','CANADA');
+INSERT INTO AUTOR VALUES (5,'ROBERTO','HERNANDEZ','MEXICO');
+
+COMMIT;
+\end{lstlisting}
+
+El orden de inserción es importante porque las tablas relacionadas dependen de los registros existentes en las tablas base.
+
+\subsubsection{Consultas de comprobación}
+
+Para comprobar la creación e inserción de datos, se ejecutaron consultas generales sobre las tablas.
+
+\begin{lstlisting}[style=sqlstyle]
+SELECT * FROM CATEGORIA_LIBRO;
+SELECT * FROM EDITORIAL;
+SELECT * FROM AUTOR;
+SELECT * FROM ESTADO_EJEMPLAR;
+SELECT * FROM LECTOR;
+SELECT * FROM BIBLIOTECARIO;
+SELECT * FROM LIBRO;
+SELECT * FROM EJEMPLAR;
+SELECT * FROM PRESTAMO_LIBRO;
+SELECT * FROM DETALLE_PRESTAMO_LIBRO;
+\end{lstlisting}
+
+Estas consultas permiten verificar que las tablas contienen información y que los registros fueron almacenados correctamente.
+
+\subsubsection{Consulta con JOIN}
+
+La siguiente consulta muestra los lectores que han realizado préstamos y el bibliotecario que atendió cada préstamo.
+
+\begin{lstlisting}[style=sqlstyle]
+SELECT 
+    PL.ID_PRE_LIB,
+    L.NOM_LEC || ' ' || L.APE_LEC AS LECTOR,
+    B.NOM_BIB || ' ' || B.APE_BIB AS BIBLIOTECARIO,
+    PL.FEC_PRE_LIB,
+    PL.EST_PRE_LIB
+FROM PRESTAMO_LIBRO PL
+JOIN LECTOR L ON PL.CED_LEC_PER = L.CED_LEC
+JOIN BIBLIOTECARIO B ON PL.CED_BIB_PER = B.CED_BIB;
+\end{lstlisting}
+
+Esta consulta une las tablas \texttt{PRESTAMO\_LIBRO}, \texttt{LECTOR} y \texttt{BIBLIOTECARIO} para mostrar información más completa del préstamo.
+
+\subsubsection{Consulta de libros prestados}
+
+La siguiente consulta muestra los libros que fueron prestados, junto con el lector y el estado del préstamo.
+
+\begin{lstlisting}[style=sqlstyle]
+SELECT 
+    DPL.ID_DET_LIB,
+    LI.TIT_LIB AS LIBRO,
+    LE.NOM_LEC || ' ' || LE.APE_LEC AS LECTOR,
+    PL.EST_PRE_LIB
+FROM DETALLE_PRESTAMO_LIBRO DPL
+JOIN EJEMPLAR E ON DPL.ID_EJE_PER = E.ID_EJE
+JOIN LIBRO LI ON E.COD_LIB_PER = LI.COD_LIB
+JOIN PRESTAMO_LIBRO PL ON DPL.ID_PRE_LIB_PER = PL.ID_PRE_LIB
+JOIN LECTOR LE ON PL.CED_LEC_PER = LE.CED_LEC;
+\end{lstlisting}
+
+Esta consulta es importante porque permite identificar qué libro fue prestado, a quién se le prestó y cuál es el estado del préstamo.
+
+\subsubsection{Consulta sin JOIN}
+
+También se realizó una consulta sin usar \texttt{JOIN}. En este caso se usan subconsultas para mostrar los libros que han sido prestados.
+
+\begin{lstlisting}[style=sqlstyle]
+SELECT COD_LIB, TIT_LIB
+FROM LIBRO
+WHERE COD_LIB IN (
+    SELECT COD_LIB_PER
+    FROM EJEMPLAR
+    WHERE ID_EJE IN (
+        SELECT ID_EJE_PER
+        FROM DETALLE_PRESTAMO_LIBRO
+    )
+);
+\end{lstlisting}
+
+Esta consulta obtiene los libros cuyos ejemplares aparecen registrados en la tabla de detalle de préstamos.
+
+\subsubsection{Fase P4: Evolución del esquema y recuperación}
+
+En esta fase se modifica la tabla \texttt{LIBRO}, agregando la columna \texttt{ISBN\_LIB}, modificando el tamaño del título y agregando una restricción única.
+
+\begin{lstlisting}[style=sqlstyle]
+ALTER TABLE LIBRO ADD ISBN_LIB VARCHAR2(20);
+
+ALTER TABLE LIBRO MODIFY TIT_LIB VARCHAR2(100);
+
+ALTER TABLE LIBRO ADD CONSTRAINT UQ_ISBN_LIB UNIQUE (ISBN_LIB);
+
+UPDATE LIBRO SET ISBN_LIB = 'ISBN-001' WHERE COD_LIB = 'L01';
+UPDATE LIBRO SET ISBN_LIB = 'ISBN-002' WHERE COD_LIB = 'L02';
+UPDATE LIBRO SET ISBN_LIB = 'ISBN-003' WHERE COD_LIB = 'L03';
+UPDATE LIBRO SET ISBN_LIB = 'ISBN-004' WHERE COD_LIB = 'L04';
+UPDATE LIBRO SET ISBN_LIB = 'ISBN-005' WHERE COD_LIB = 'L05';
+
+COMMIT;
+\end{lstlisting}
+
+La columna \texttt{ISBN\_LIB} permite almacenar un identificador adicional para cada libro. La restricción \texttt{UNIQUE} evita que se repita el mismo ISBN.
+
+Finalmente, se realiza una prueba de recuperación con \texttt{FLASHBACK}.
+
+\begin{lstlisting}[style=sqlstyle]
+CREATE TABLE PRUEBA_FLASHBACK_BIB (
+    ID_PRU      NUMBER(10) PRIMARY KEY,
+    NOM_PRU     VARCHAR2(30)
+);
+
+INSERT INTO PRUEBA_FLASHBACK_BIB VALUES (1,'PRUEBA BIBLIOTECA');
+COMMIT;
+
+DROP TABLE PRUEBA_FLASHBACK_BIB;
+
+FLASHBACK TABLE PRUEBA_FLASHBACK_BIB TO BEFORE DROP;
+
+SELECT * FROM PRUEBA_FLASHBACK_BIB;
+\end{lstlisting}
+
+Con esta prueba se comprueba que una tabla eliminada puede recuperarse desde la papelera de reciclaje de Oracle.
 
 \subsection{Resultados obtenidos}
-De acuerdo con el tipo de trabajo, se plasmarán los resultados alcanzados en la guía tarea una vez ejecutadas las actividades. Se pueden emplear figuras y tablas las cuales deben ser numeradas.
 
+Se implementaron dos bases de datos en Oracle. En el primer ejercicio se creó un Sistema de Inventario Académico con tablas para artículos, usuarios, responsables, ubicaciones y préstamos. En el segundo ejercicio se creó un Sistema de Biblioteca con tablas para libros, autores, editoriales, lectores, bibliotecarios, ejemplares y préstamos.
 
-\subsubsection{Identificación de Datos e Información en el Contexto UTA}
+En ambos sistemas se aplicaron claves primarias para identificar de forma única cada registro. También se aplicaron claves foráneas para relacionar correctamente las tablas y mantener la integridad referencial. Además, se utilizaron restricciones \texttt{CHECK}, \texttt{UNIQUE}, \texttt{NOT NULL} y valores por defecto.
 
-A continuación, se presentan 10 ejemplos que ilustran la diferencia entre un \textbf{dato} (hecho en bruto) y la \textbf{información} (dato procesado con contexto y utilidad), aplicados al sistema de préstamos de equipos de la carrera de Ingeniería en Software.
+También se comprobó el uso de consultas con \texttt{JOIN} y consultas sin \texttt{JOIN}. Finalmente, se aplicaron comandos de modificación de estructura y recuperación de tablas eliminadas.
 
-\vspace{0.5cm}
+\subsection{Habilidades blandas empleadas en la práctica}
 
-\begin{enumerate}
-
-\item \textbf{Control del proyector Epson} \\
-\textit{Dato}: ``Control: Epson CB-695Wi'' \\
-\textit{Información}: El control del proyector Epson del aula 304 se ha prestado 8 veces esta semana, pero en 3 ocasiones lo devolvieron sin pilas, lo que indica la necesidad de mantener un stock de repuestos en el laboratorio.
-
-\item \textbf{Control del aire acondicionado} \\
-\textit{Dato}: ``Aire acondicionado: LG - Laboratorio 2'' \\
-\textit{Información}: El control del aire acondicionado del Laboratorio 2 solo es solicitado por profesores en horarios de 3 a 5 PM, coincidiendo con las prácticas intensivas de programación, por lo que debe estar siempre disponible en esa franja.
-
-\item \textbf{Computadora de laboratorio} \\
-\textit{Dato}: ``PC: HP ProDesk 400 G5'' \\
-\textit{Información}: La PC \#12 del laboratorio de cómputo ha sido la más solicitada (50 préstamos en el semestre) por ser la única con Android Studio instalado correctamente, justificando la clonación de su software a otros equipos.
-
-\item \textbf{Horario de préstamos} \\
-\textit{Dato}: ``Horario: 7:00 AM'' \\
-\textit{Información}: Las 7:00 AM concentran la mayor demanda de préstamo de computadoras, justo antes de la clase de Estructura de Datos, lo que sugiere abrir el laboratorio 15 minutos antes para evitar demoras.
-
-\item \textbf{Usuario frecuente} \\
-\textit{Dato}: ``Usuario: Ana López - 5to semestre'' \\
-\textit{Información}: La estudiante Ana López ha solicitado el control del proyector en 4 materias diferentes durante el mes (Inglés, Redacción, Web y Proyectos), evidenciando la necesidad de asignarle un equipo de uso temporal.
-
-\item \textbf{Periféricos dañados} \\
-\textit{Dato}: ``Estado: Mouse no funciona'' \\
-\textit{Información}: El 40\% de las computadoras del Laboratorio 3 presentan fallas en el mouse óptico, afectando directamente las prácticas de Interacción Humano-Computador, por lo que se requiere un reemplazo inmediato.
-
-\item \textbf{Software más utilizado} \\
-\textit{Dato}: ``Software: Visual Studio 2022'' \\
-\textit{Información}: Visual Studio 2022 es el IDE con mayor tiempo de uso en los préstamos, principalmente para proyectos de Programación Avanzada, lo que exige priorizar mantenimiento en las PCs que lo ejecutan.
-
-\item \textbf{Accesorios complementarios} \\
-\textit{Dato}: ``Cable: HDMI - 2 metros'' \\
-\textit{Información}: Los cables HDMI se prestan generalmente junto con los controles de proyector para presentaciones de Proyecto Integrador, sugiriendo la creación de ``kits de exposición'' completos.
-
-\item \textbf{Incumplimiento recurrente} \\
-\textit{Dato}: ``Devolución: Tardía - 20 min'' \\
-\textit{Información}: El grupo de Sexto semestre de la materia Integrador acumula 4 devoluciones tardías en el mes, lo que amerita restringir sus préstamos múltiples o aplicar multas más estrictas.
-
-\item \textbf{Fallas técnicas recurrentes} \\
-\textit{Dato}: ``PC \#08 - Sin Internet'' \\
-\textit{Información}: La PC \#08 ha sido reportada 5 veces por conexión lenta a internet, afectando las prácticas de Cloud Computing, por lo que se debe revisar su tarjeta de red o el puerto del switch correspondiente.
-
-\end{enumerate}
-
-\vspace{0.5cm}
-
-% ---------------------------------------------------------------------------
-% 2. Listar entidades y atributos del caso (mín. 8 entidades)
-% ---------------------------------------------------------------------------
-\subsubsection{Entidades y Atributos del Caso}
-
-A continuación, se listan las entidades principales del sistema de préstamos de equipos, junto con sus atributos:
-
-\begin{itemize}
-    \item \textbf{LABORATORISTAS} = (id\_lab, nom\_lab, ape\_lab, sue\_lab)
-    \item \textbf{USUARIOS} = (id\_cli, nom\_cli, ape\_cli, tel\_cli, dir\_cli, cor\_cli, ID\_CAR\_PER, habilitado)
-    \item \textbf{CARRERAS} = (ID\_CAR, NOM\_CAR)
-    \item \textbf{PERIODOS} = (ID\_PER\_ACA, FEC\_INI\_PER, FEC\_FIN\_PER)
-    \item \textbf{CATEGORIAS} = (ID\_CAT, NOM\_CAT)
-    \item \textbf{EQUIPOS} = (ID\_EQUI, MAR\_EQUI, SISTEMA\_OP\_EQUI, DIS\_EQUI, EST\_EQUI, MOD\_EQUI, ID\_CAT\_PER)
-    \item \textbf{PRESTAMOS} = (NUM\_PRE, FEC\_PRE, ID\_LAB\_PRESTA, ID\_USUA\_PRE, ID\_EQUI\_PRE, ESTADO\_PRE, ID\_LAB\_DEV, FEC\_DEV, FEC\_REAL, ESTADO\_DEV, ID\_PER\_PER)
-    \item \textbf{MULTAS} = (NUM\_MUL, FEC\_MUL, PRES\_PER\_MUL, VAL\_PAGAR, EST\_MUL)
-    \item \textbf{OBSERVACIONES} = (ID\_OBS, DES\_OBS, ID\_PRES\_PER)
-\end{itemize}
-
-% ---------------------------------------------------------------------------
-% 3. Definir 5 reglas de negocio
-% ---------------------------------------------------------------------------
-\subsubsection{Reglas de Negocio}
-
-\begin{enumerate}
-    \item \textbf{Regla de Unicidad de Préstamo por Usuario}
-    \begin{itemize}
-        \item \textbf{Regla:} Un usuario está autorizado a poseer únicamente un equipo bajo su responsabilidad de forma simultánea. No se permitirá la apertura de un nuevo préstamo si el usuario tiene uno previo sin devolver.
-        \item \textbf{Justificación de Negocio:} Esta medida protege el patrimonio tecnológico de la universidad. Al ser equipos de alto costo (laptops, proyectores), se mitiga el riesgo de pérdida masiva y se garantiza que más estudiantes tengan acceso a los recursos disponibles, evitando el acaparamiento.
-        \item \textbf{Impacto en BD:}
-        \begin{itemize}
-            \item Estado del Préstamo: Un préstamo se considera "Activo" o "Pendiente" mientras el campo FEC\_REAL sea NULL (vacío), lo que indica que el equipo aún no ha reingresado al laboratorio.
-            \item Validación de Inserción: Antes de registrar un nuevo préstamo en la tabla PRESTAMOS, el sistema debe realizar una consulta para verificar que el ID\_USUA\_PRE no aparezca en ningún registro donde la fecha de devolución real aún no haya sido marcada.
-        \end{itemize}
-    \end{itemize}
-
-    \item \textbf{Condición de Usuario Habilitado}
-    \begin{itemize}
-        \item \textbf{Regla:} Solo los usuarios con el atributo habilitado = 'S' pueden solicitar préstamos.
-        \item \textbf{Justificación:} Si un estudiante tiene multas pendientes o dañó un equipo anteriormente, el sistema debe bloquearle el acceso automáticamente.
-        \item \textbf{Impacto en la BD:} El campo habilitado en la tabla USUARIOS debe cambiar a 'N' automáticamente si se genera una multa.
-    \end{itemize}
-
-    \item \textbf{Integridad de la Devolución (Doble Verificación)}
-    \begin{itemize}
-        \item \textbf{Regla:} Todo préstamo debe registrar obligatoriamente al laboratorista que entrega (ID\_LAB\_PRESTA) y, posteriormente, al que recibe (ID\_LAB\_DEV).
-        \item \textbf{Justificación:} Esto asegura la trazabilidad (responsabilidad) en caso de que el equipo regrese dañado.
-        \item \textbf{Impacto en la BD:} El campo ID\_LAB\_DEV debe ser obligatorio al momento de actualizar la FEC\_REAL.
-    \end{itemize}
-
-    \item \textbf{Generación Automática de Multas por Mora}
-    \begin{itemize}
-        \item \textbf{Regla:} Si la FEC\_REAL (fecha de entrega real) es mayor a la FEC\_DEV (fecha máxima pactada), se debe generar automáticamente un registro en la tabla MULTAS.
-        \item \textbf{Justificación:} Garantiza que los equipos roten y estén disponibles para otros usuarios en los tiempos previstos.
-        \item \textbf{Impacto en la BD:} Se requiere un cálculo de ($FEC\_REAL - FEC\_DEV$) para determinar el VAL\_PAGAR.
-    \end{itemize}
-
-    \item \textbf{Vigencia por Periodo Académico}
-    \begin{itemize}
-        \item \textbf{Regla:} No se pueden realizar préstamos cuyas fechas estén fuera del rango de FEC\_INI\_PER y FEC\_FIN\_PER del periodo activo.
-        \item \textbf{Justificación:} Evita que los equipos se queden en manos de los usuarios durante las vacaciones o periodos donde no hay supervisión de laboratorio.
-        \item \textbf{Impacto en la BD:} Validación de fechas cruzando PRESTAMOS con PERIODOS.
-    \end{itemize}
-
-    \item \textbf{Exclusividad de Disponibilidad del Equipo}
-    \begin{itemize}
-        \item \textbf{Regla:} Un equipo solo puede ser objeto de un nuevo préstamo si su atributo DIS\_EQUI tiene el valor 'D' (Disponible). Al momento de registrar el préstamo, este valor debe cambiar automáticamente a 'P' (Prestado).
-        \item \textbf{Justificación:} Evita la duplicidad de préstamos sobre un mismo activo físico y garantiza que el inventario mostrado al laboratorista sea real.
-        \item \textbf{Impacto en la BD:}
-        \begin{itemize}
-            \item Antes del Préstamo: Una consulta SELECT debe filtrar solo equipos con DIS\_EQUI = 'D'.
-            \item Durante el Préstamo: Se ejecuta un UPDATE en la tabla EQUIPOS para cambiar el estado a 'P'.
-            \item En la Devolución: Cuando se registra la FEC\_REAL en la tabla PRESTAMOS, el estado en EQUIPOS debe volver a 'D'.
-        \end{itemize}
-    \end{itemize}
-
-    \item \textbf{Regla de Integridad del Estado Físico (Entregas vs. Devoluciones)}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El ESTADO\_DEV (estado de devolución) no puede ser superior en calidad al ESTADO\_PRE (estado de préstamo). Si un equipo sale como "ANTIGUO", no puede regresar como "NUEVO".
-        \item \textbf{Justificación:} Detecta errores de digitación o posibles cambios de piezas/equipos por parte del usuario. Si hay una discrepancia negativa (sale "NUEVO" y regresa "DAÑADO"), el sistema debe obligar a registrar una OBSERVACIÓN.
-        \item \textbf{Impacto en la BD:} El sistema debe comparar el texto o nivel de calidad de ambos atributos antes de cerrar el préstamo.
-    \end{itemize}
-
-    \item \textbf{Regla de Consistencia de Categoría}
-    \begin{itemize}
-        \item \textbf{Enunciado:} Todo equipo registrado en la tabla EQUIPOS debe tener obligatoriamente un ID\_CAT\_PER válido que exista en la tabla CATEGORIAS.
-        \item \textbf{Justificación:} Evita tener equipos "huérfanos" en el sistema. Si no sabemos si es una Laptop o un Proyector, no podemos aplicar reglas de tiempo (por ejemplo, las laptops se prestan por 2 días, pero los proyectores quizás solo por 3 horas).
-        \item \textbf{Impacto en la BD:} Aplicación de Integridad Referencial (Foreign Key). No se puede borrar una categoría si todavía tiene equipos asignados a ella.
-    \end{itemize}
-
-    \item \textbf{Regla de Liquidación de Multas para Rehabilitación}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El atributo habilitado del usuario solo puede volver a 'S' (Sí) cuando todos los registros relacionados en la tabla MULTAS tengan el EST\_MUL como "PAGADO".
-        \item \textbf{Justificación:} Asegura que el proceso de cobro se complete. El laboratorista no debe habilitar a mano a un amigo si este aún debe dinero a la universidad.
-        \item \textbf{Impacto en la BD:} Al actualizar una multa a "PAGADO", el sistema debe hacer un COUNT de las multas pendientes del usuario; si el resultado es 0, entonces se ejecuta el UPDATE a habilitado = 'S'.
-    \end{itemize}
-\end{enumerate}
-%Especifique las TAC's utilizadas en la Tarea. 
-\subsection{Habilidades blandas empleadas en la tarea}
 \begin{itemize}
     \item[$\square$] Liderazgo
-    \item[$\square$] Trabajo en equipo
-    \item[$\square$] Comunicación asertiva
+    \item[$\boxtimes$] Trabajo en equipo
+    \item[$\boxtimes$] Comunicación asertiva
     \item[$\square$] La empatía
-    \item[$\square$] Pensamiento crítico
+    \item[$\boxtimes$] Pensamiento crítico
     \item[$\square$] Flexibilidad
-    \item[$\square$] La resolución de conflictos
-    \item[$\square$] Adaptabilidad
-    \item[$\square$] Responsabilidad
+    \item[$\boxtimes$] La resolución de conflictos
+    \item[$\boxtimes$] Adaptabilidad
+    \item[$\boxtimes$] Responsabilidad
 \end{itemize}
-
 
 \subsection{Conclusiones}
-Se concluye que el diseño preliminar del sistema de gestión de préstamos, fundamentado en la correcta identificación de entidades y reglas de negocio, establece una base técnica sólida para el desarrollo de la base de datos. La aplicación de un enfoque estructurado permitió transformar los requerimientos institucionales en un modelo conceptual organizado, garantizando que la futura implementación responda eficazmente a las necesidades de control, integridad de la información y optimización de los procesos administrativos dentro del contexto universitario.
+
+La implementación del Sistema de Inventario Académico permitió aplicar correctamente sentencias DDL en Oracle, utilizando tablas relacionadas mediante claves primarias y claves foráneas. Además, se comprobó que las restricciones ayudan a mantener la integridad de los datos.
+
+El Sistema de Biblioteca permitió reforzar el diseño de bases de datos relacionales, ya que se separaron correctamente las entidades principales como libros, autores, editoriales, lectores, bibliotecarios y préstamos. Esto evita duplicidad de datos y facilita la administración de la información.
+
+La aplicación de \texttt{ALTER TABLE}, \texttt{DROP TABLE} y \texttt{FLASHBACK TABLE} permitió demostrar que una base de datos puede modificarse y también recuperarse ante eliminaciones accidentales, siempre que se utilicen correctamente las herramientas de Oracle.
 
 \subsection{Recomendaciones}
-\begin{itemize}
-    \item Realizar un análisis exhaustivo de la cardinalidad entre las 8 entidades identificadas para asegurar que las relaciones en el modelo entidad-relación reflejen fielmente la lógica del negocio.
-    \item Documentar de manera detallada cada regla de negocio establecida, con el fin de facilitar la posterior creación de restricciones (constraints) y disparadores (triggers) a nivel de base de datos.
-    \item Validar el listado de atributos propuesto mediante un proceso de normalización hasta la tercera forma normal (3NF), evitando así la redundancia de datos y posibles anomalías en futuras inserciones o actualizaciones.
-    \item Mantener una comunicación constante entre los integrantes del grupo para asegurar que el alcance definido se cumpla estrictamente dentro de los plazos establecidos por el docente. \cite{greenwade93}
-\end{itemize}
-\subsection{Referencias}
-Insertar las referencias bibliográficas empleadas aplicando la norma IEEE.
 
-\vspace{-3em} %reduce el espacio causado por refname vacío
-\renewcommand{\refname}{}
-\bibliographystyle{ieeetr}
-\bibliography{citas}
+Se recomienda ejecutar los scripts en orden, iniciando por las tablas base y luego las tablas que contienen claves foráneas. Esto evita errores de referencia al momento de crear o insertar datos.
+
+Se recomienda verificar cada fase con consultas \texttt{SELECT} para comprobar que las tablas fueron creadas correctamente y que los datos se insertaron sin problemas.
+
+También se recomienda no utilizar \texttt{DROP TABLE ... PURGE} cuando se desea recuperar una tabla mediante \texttt{FLASHBACK}, ya que esta opción elimina la tabla de forma definitiva.
+
+\subsection{Referencias}
+
+Oracle. (2024). \textit{Oracle Database SQL Language Reference}. Oracle Help Center.
+
+Silberschatz, A., Korth, H. F., \& Sudarshan, S. (2020). \textit{Database System Concepts}. McGraw-Hill.
+
+Coronel, C., \& Morris, S. (2019). \textit{Database Systems: Design, Implementation, and Management}. Cengage Learning.
 
 \subsection{Anexos}
+
+No se colocaron capturas de pantalla. En esta sección se presenta únicamente el desarrollo mediante explicación y código SQL correspondiente a cada fase de implementación.
+
 \vfill
+
 \end{document}

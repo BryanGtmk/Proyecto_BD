@@ -1,0 +1,328 @@
+CONNECT system/system;
+
+CREATE USER INV_ACADEMICO IDENTIFIED BY INV123;
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO INV_ACADEMICO;
+
+CONNECT INV_ACADEMICO/INV123;
+
+-- =========================================================
+-- UNIVERSIDAD TÉCNICA DE AMBATO
+-- Facultad de Ingeniería en Sistemas
+-- Asignatura: Base de Datos
+-- Docente: José Caiza
+-- Formato: APA 7
+-- =========================================================
+-- EJERCICIO 1: SISTEMA DE INVENTARIO ACADÉMICO
+-- Objetivo: Implementar una base de datos aplicando DDL,
+-- restricciones, claves foráneas y recuperación.
+-- =========================================================
+
+
+-- =========================================================
+-- FASE P1: CREAR TABLAS CATEGORIA, DEPARTAMENTO,
+-- ESTADO_ARTICULO
+-- =========================================================
+
+CREATE TABLE CATEGORIA (
+    ID_CAT      NUMBER(10) PRIMARY KEY,
+    NOM_CAT     VARCHAR2(40) NOT NULL UNIQUE,
+    DES_CAT     VARCHAR2(100)
+);
+
+CREATE TABLE DEPARTAMENTO (
+    ID_DEP      NUMBER(10) PRIMARY KEY,
+    NOM_DEP     VARCHAR2(50) NOT NULL UNIQUE,
+    UBIC_DEP    VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE ESTADO_ARTICULO (
+    ID_EST      NUMBER(10) PRIMARY KEY,
+    NOM_EST     VARCHAR2(30) NOT NULL UNIQUE,
+    CONSTRAINT CHK_ESTADO_ARTICULO 
+    CHECK (NOM_EST IN ('DISPONIBLE','PRESTADO','MANTENIMIENTO','BAJA'))
+);
+
+
+-- =========================================================
+-- FASE P2: CREAR TABLAS ROL, USUARIO, UBICACION,
+-- RESPONSABLE CON RESTRICCIONES
+-- =========================================================
+
+CREATE TABLE ROL (
+    ID_ROL      NUMBER(10) PRIMARY KEY,
+    NOM_ROL     VARCHAR2(30) NOT NULL UNIQUE,
+    CONSTRAINT CHK_ROL 
+    CHECK (NOM_ROL IN ('ADMINISTRADOR','DOCENTE','ESTUDIANTE','ASISTENTE'))
+);
+
+CREATE TABLE USUARIO (
+    CED_USU      VARCHAR2(10) PRIMARY KEY,
+    NOM_USU      VARCHAR2(30) NOT NULL,
+    APE_USU      VARCHAR2(30) NOT NULL,
+    COR_USU      VARCHAR2(60) UNIQUE,
+    ID_ROL_PER   NUMBER(10) NOT NULL,
+    EST_USU      VARCHAR2(10) DEFAULT 'ACTIVO' NOT NULL,
+    CONSTRAINT CHK_EST_USUARIO 
+    CHECK (EST_USU IN ('ACTIVO','INACTIVO')),
+    FOREIGN KEY (ID_ROL_PER) REFERENCES ROL(ID_ROL)
+);
+
+CREATE TABLE UBICACION (
+    ID_UBI       NUMBER(10) PRIMARY KEY,
+    NOM_UBI      VARCHAR2(50) NOT NULL,
+    ID_DEP_PER   NUMBER(10) NOT NULL,
+    FOREIGN KEY (ID_DEP_PER) REFERENCES DEPARTAMENTO(ID_DEP)
+);
+
+CREATE TABLE RESPONSABLE (
+    CED_RES      VARCHAR2(10) PRIMARY KEY,
+    NOM_RES      VARCHAR2(30) NOT NULL,
+    APE_RES      VARCHAR2(30) NOT NULL,
+    TEL_RES      VARCHAR2(10),
+    ID_DEP_PER   NUMBER(10) NOT NULL,
+    FOREIGN KEY (ID_DEP_PER) REFERENCES DEPARTAMENTO(ID_DEP)
+);
+
+
+-- =========================================================
+-- FASE P3: CREAR TABLAS ARTICULO, PRESTAMO,
+-- DETALLE_PRESTAMO CON CLAVES FORÁNEAS
+-- =========================================================
+
+CREATE TABLE ARTICULO (
+    COD_ART       VARCHAR2(10) PRIMARY KEY,
+    NOM_ART       VARCHAR2(60) NOT NULL,
+    MAR_ART       VARCHAR2(30),
+    MOD_ART       VARCHAR2(30),
+    FEC_ADQ       DATE NOT NULL,
+    VAL_ART       NUMBER(10,2) NOT NULL,
+    ID_CAT_PER    NUMBER(10) NOT NULL,
+    ID_EST_PER    NUMBER(10) NOT NULL,
+    ID_UBI_PER    NUMBER(10) NOT NULL,
+    CED_RES_PER   VARCHAR2(10) NOT NULL,
+    CONSTRAINT CHK_VAL_ART CHECK (VAL_ART > 0),
+    FOREIGN KEY (ID_CAT_PER) REFERENCES CATEGORIA(ID_CAT),
+    FOREIGN KEY (ID_EST_PER) REFERENCES ESTADO_ARTICULO(ID_EST),
+    FOREIGN KEY (ID_UBI_PER) REFERENCES UBICACION(ID_UBI),
+    FOREIGN KEY (CED_RES_PER) REFERENCES RESPONSABLE(CED_RES)
+);
+
+CREATE TABLE PRESTAMO (
+    ID_PRE        NUMBER(10) PRIMARY KEY,
+    FEC_PRE       DATE DEFAULT SYSDATE NOT NULL,
+    FEC_DEV_PREV  DATE NOT NULL,
+    CED_USU_PER   VARCHAR2(10) NOT NULL,
+    CED_RES_PER   VARCHAR2(10) NOT NULL,
+    EST_PRE       VARCHAR2(20) DEFAULT 'ABIERTO' NOT NULL,
+    CONSTRAINT CHK_EST_PRESTAMO 
+    CHECK (EST_PRE IN ('ABIERTO','DEVUELTO','ATRASADO','CANCELADO')),
+    FOREIGN KEY (CED_USU_PER) REFERENCES USUARIO(CED_USU),
+    FOREIGN KEY (CED_RES_PER) REFERENCES RESPONSABLE(CED_RES)
+);
+
+CREATE TABLE DETALLE_PRESTAMO (
+    ID_DET        NUMBER(10) PRIMARY KEY,
+    ID_PRE_PER    NUMBER(10) NOT NULL,
+    COD_ART_PER   VARCHAR2(10) NOT NULL,
+    FEC_DEV_REAL  DATE,
+    OBS_DET       VARCHAR2(100),
+    FOREIGN KEY (ID_PRE_PER) REFERENCES PRESTAMO(ID_PRE),
+    FOREIGN KEY (COD_ART_PER) REFERENCES ARTICULO(COD_ART),
+    CONSTRAINT UQ_DETALLE_ARTICULO UNIQUE (ID_PRE_PER, COD_ART_PER)
+);
+
+
+-- =========================================================
+-- INSERTAR CATEGORIAS
+-- =========================================================
+
+INSERT INTO CATEGORIA VALUES (1,'COMPUTADORAS','Equipos de cómputo institucional');
+INSERT INTO CATEGORIA VALUES (2,'PROYECTORES','Equipos para presentación académica');
+INSERT INTO CATEGORIA VALUES (3,'MUEBLES','Mobiliario académico');
+INSERT INTO CATEGORIA VALUES (4,'REDES','Equipos de conectividad');
+INSERT INTO CATEGORIA VALUES (5,'LABORATORIO','Material para laboratorios');
+
+
+-- =========================================================
+-- INSERTAR DEPARTAMENTOS
+-- =========================================================
+
+INSERT INTO DEPARTAMENTO VALUES (1,'SISTEMAS','BLOQUE A');
+INSERT INTO DEPARTAMENTO VALUES (2,'ELECTRÓNICA','BLOQUE B');
+INSERT INTO DEPARTAMENTO VALUES (3,'INDUSTRIAL','BLOQUE C');
+INSERT INTO DEPARTAMENTO VALUES (4,'BIBLIOTECA','BLOQUE D');
+INSERT INTO DEPARTAMENTO VALUES (5,'ADMINISTRACIÓN','BLOQUE E');
+
+
+-- =========================================================
+-- INSERTAR ESTADOS
+-- =========================================================
+
+INSERT INTO ESTADO_ARTICULO VALUES (1,'DISPONIBLE');
+INSERT INTO ESTADO_ARTICULO VALUES (2,'PRESTADO');
+INSERT INTO ESTADO_ARTICULO VALUES (3,'MANTENIMIENTO');
+INSERT INTO ESTADO_ARTICULO VALUES (4,'BAJA');
+
+
+-- =========================================================
+-- INSERTAR ROLES
+-- =========================================================
+
+INSERT INTO ROL VALUES (1,'ADMINISTRADOR');
+INSERT INTO ROL VALUES (2,'DOCENTE');
+INSERT INTO ROL VALUES (3,'ESTUDIANTE');
+INSERT INTO ROL VALUES (4,'ASISTENTE');
+
+
+-- =========================================================
+-- INSERTAR USUARIOS
+-- =========================================================
+
+INSERT INTO USUARIO VALUES ('1801','JUAN','MERA','juan.mera@uta.edu.ec',2,'ACTIVO');
+INSERT INTO USUARIO VALUES ('1802','ANA','LOPEZ','ana.lopez@uta.edu.ec',3,'ACTIVO');
+INSERT INTO USUARIO VALUES ('1803','CARLOS','PEREZ','carlos.perez@uta.edu.ec',3,'ACTIVO');
+INSERT INTO USUARIO VALUES ('1804','MARIA','GOMEZ','maria.gomez@uta.edu.ec',2,'ACTIVO');
+INSERT INTO USUARIO VALUES ('1805','LUIS','MORA','luis.mora@uta.edu.ec',4,'ACTIVO');
+
+
+-- =========================================================
+-- INSERTAR UBICACIONES
+-- =========================================================
+
+INSERT INTO UBICACION VALUES (1,'LABORATORIO 1',1);
+INSERT INTO UBICACION VALUES (2,'LABORATORIO 2',1);
+INSERT INTO UBICACION VALUES (3,'AULA 201',2);
+INSERT INTO UBICACION VALUES (4,'SALA DE DOCENTES',5);
+INSERT INTO UBICACION VALUES (5,'BIBLIOTECA GENERAL',4);
+
+
+-- =========================================================
+-- INSERTAR RESPONSABLES
+-- =========================================================
+
+INSERT INTO RESPONSABLE VALUES ('2001','PEDRO','CASTRO','0981111111',1);
+INSERT INTO RESPONSABLE VALUES ('2002','LAURA','VEGA','0982222222',2);
+INSERT INTO RESPONSABLE VALUES ('2003','DIEGO','SALAS','0983333333',3);
+INSERT INTO RESPONSABLE VALUES ('2004','SOFIA','RUIZ','0984444444',4);
+INSERT INTO RESPONSABLE VALUES ('2005','MARCO','LEON','0985555555',5);
+
+
+-- =========================================================
+-- INSERTAR ARTICULOS
+-- =========================================================
+
+INSERT INTO ARTICULO VALUES ('A01','LAPTOP HP','HP','PROBOOK',TO_DATE('10/01/2026','DD/MM/YYYY'),750.00,1,1,1,'2001');
+INSERT INTO ARTICULO VALUES ('A02','PROYECTOR EPSON','EPSON','X05',TO_DATE('12/01/2026','DD/MM/YYYY'),600.00,2,1,3,'2002');
+INSERT INTO ARTICULO VALUES ('A03','SILLA ACADÉMICA','GENERICA','S-100',TO_DATE('15/01/2026','DD/MM/YYYY'),45.00,3,1,4,'2005');
+INSERT INTO ARTICULO VALUES ('A04','ROUTER CISCO','CISCO','RV340',TO_DATE('20/01/2026','DD/MM/YYYY'),320.00,4,3,2,'2001');
+INSERT INTO ARTICULO VALUES ('A05','MICROSCOPIO','OLYMPUS','M20',TO_DATE('25/01/2026','DD/MM/YYYY'),900.00,5,1,5,'2004');
+
+
+-- =========================================================
+-- INSERTAR PRESTAMOS
+-- =========================================================
+
+INSERT INTO PRESTAMO VALUES (1,TO_DATE('01/02/2026','DD/MM/YYYY'),TO_DATE('05/02/2026','DD/MM/YYYY'),'1801','2001','ABIERTO');
+INSERT INTO PRESTAMO VALUES (2,TO_DATE('03/02/2026','DD/MM/YYYY'),TO_DATE('07/02/2026','DD/MM/YYYY'),'1802','2002','ABIERTO');
+INSERT INTO PRESTAMO VALUES (3,TO_DATE('04/02/2026','DD/MM/YYYY'),TO_DATE('08/02/2026','DD/MM/YYYY'),'1803','2004','DEVUELTO');
+
+
+-- =========================================================
+-- INSERTAR DETALLE DE PRESTAMO
+-- =========================================================
+
+INSERT INTO DETALLE_PRESTAMO VALUES (1001,1,'A01',NULL,'Préstamo para clase práctica');
+INSERT INTO DETALLE_PRESTAMO VALUES (1002,2,'A02',NULL,'Préstamo para exposición');
+INSERT INTO DETALLE_PRESTAMO VALUES (1003,3,'A05',TO_DATE('08/02/2026','DD/MM/YYYY'),'Artículo devuelto correctamente');
+
+COMMIT;
+
+
+-- =========================================================
+-- CONSULTAS DE COMPROBACIÓN
+-- =========================================================
+
+SELECT * FROM CATEGORIA;
+SELECT * FROM DEPARTAMENTO;
+SELECT * FROM ESTADO_ARTICULO;
+SELECT * FROM ROL;
+SELECT * FROM USUARIO;
+SELECT * FROM ARTICULO;
+SELECT * FROM PRESTAMO;
+SELECT * FROM DETALLE_PRESTAMO;
+
+
+-- =========================================================
+-- CONSULTA CON JOIN
+-- Mostrar artículos prestados con usuario y responsable
+-- =========================================================
+
+SELECT 
+    DP.ID_DET,
+    A.NOM_ART AS ARTICULO,
+    U.NOM_USU || ' ' || U.APE_USU AS USUARIO,
+    R.NOM_RES || ' ' || R.APE_RES AS RESPONSABLE,
+    P.EST_PRE
+FROM DETALLE_PRESTAMO DP
+JOIN ARTICULO A ON DP.COD_ART_PER = A.COD_ART
+JOIN PRESTAMO P ON DP.ID_PRE_PER = P.ID_PRE
+JOIN USUARIO U ON P.CED_USU_PER = U.CED_USU
+JOIN RESPONSABLE R ON P.CED_RES_PER = R.CED_RES;
+
+
+-- =========================================================
+-- CONSULTA SIN JOIN
+-- Mostrar artículos que han sido prestados
+-- =========================================================
+
+SELECT COD_ART, NOM_ART
+FROM ARTICULO
+WHERE COD_ART IN (
+    SELECT COD_ART_PER
+    FROM DETALLE_PRESTAMO
+);
+
+
+-- =========================================================
+-- FASE P4: ALTER TABLE, DROP TABLE Y FLASHBACK
+-- =========================================================
+
+-- Agregar nueva columna
+ALTER TABLE ARTICULO ADD SERIE_ART VARCHAR2(30);
+
+-- Modificar tamaño de columna
+ALTER TABLE ARTICULO MODIFY NOM_ART VARCHAR2(80);
+
+-- Agregar restricción UNIQUE
+ALTER TABLE ARTICULO ADD CONSTRAINT UQ_SERIE_ART UNIQUE (SERIE_ART);
+
+-- Actualizar datos en la nueva columna
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-HP-001' WHERE COD_ART = 'A01';
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-EP-002' WHERE COD_ART = 'A02';
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-SI-003' WHERE COD_ART = 'A03';
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-CI-004' WHERE COD_ART = 'A04';
+UPDATE ARTICULO SET SERIE_ART = 'SERIE-OL-005' WHERE COD_ART = 'A05';
+
+COMMIT;
+
+-- Crear tabla temporal para probar DROP TABLE y FLASHBACK
+CREATE TABLE PRUEBA_FLASHBACK_INV (
+    ID_PRU      NUMBER(10) PRIMARY KEY,
+    NOM_PRU     VARCHAR2(30)
+);
+
+INSERT INTO PRUEBA_FLASHBACK_INV VALUES (1,'DATO DE PRUEBA');
+COMMIT;
+
+-- Eliminar tabla
+DROP TABLE PRUEBA_FLASHBACK_INV;
+
+-- Recuperar tabla eliminada
+FLASHBACK TABLE PRUEBA_FLASHBACK_INV TO BEFORE DROP;
+
+-- Comprobar recuperación
+SELECT * FROM PRUEBA_FLASHBACK_INV;
+
+
+SET LINESIZE 200;
+SET PAGESIZE 200;
