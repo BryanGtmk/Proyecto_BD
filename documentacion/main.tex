@@ -1,36 +1,67 @@
 \documentclass{article}
 
-% Language setting
-% Replace `english' with e.g. `spanish' to change the document language
+% Idioma y codificación
 \usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
+% Márgenes
 \usepackage[letterpaper,top=2cm,bottom=5cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
-% Useful packages
+% Paquetes útiles
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\usepackage{amssymb} 
+\usepackage{amssymb}
 \usepackage{fancyhdr}
-\usepackage{lipsum} % Para generar texto de ejemplo
 \usepackage{multicol}
-\pagestyle{fancy} 
 \usepackage{url}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{array}
 
-  
+\graphicspath{{img/}}
 
-\fancyhf{} % Limpiar encabezado y pie de página por defecto
-\setlength{\headheight}{70pt} % Ajuste del tamaño del encabezado (puedes aumentar este valor si es necesario)
+% Configuración de código SQL
+\definecolor{codegray}{gray}{0.95}
+\definecolor{codeborder}{gray}{0.75}
 
-% Definición del encabezado
+\lstdefinestyle{sqlstyle}{
+    backgroundcolor=\color{codegray},
+    basicstyle=\ttfamily\small,
+    frame=single,
+    rulecolor=\color{codeborder},
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    tabsize=2,
+    captionpos=b
+}
 
+\lstset{
+    style=sqlstyle,
+    inputencoding=utf8,
+    extendedchars=true,
+    literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{70pt}
+
+% Encabezado
 \fancyhead[C]{%
     \begin{minipage}[c]{2.0cm}
         \centering
         \includegraphics[width=2.0cm]{img/uta.png}
     \end{minipage}%
     \hfill
-    \begin{minipage}[c]{8cm} 
+    \begin{minipage}[c]{8cm}
         \centering
         \small {\textbf{UNIVERSIDAD TÉCNICA DE AMBATO}} \\[0.1cm]
         \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL} \\[0.1cm]
@@ -45,267 +76,871 @@
 }
 
 \begin{document}
+
 \begin{center}
-    {\large \textbf{INFORME DE TAREA}} \\    
+    {\large \textbf{INFORME DE TAREA}}\\
+    \vspace{0.2cm}
+    {\normalsize \textbf{2do Parcial - Semana 10 - Clase 21}}\\
+    {\normalsize \textbf{Fecha: 05/04/2026}}
 \end{center}
 
 \section{Portada}
+
 \begin{flushleft}
 \begin{tabular}{ l l }
-    \textbf{Tema:} & Proyecto de base de datos \\
-    \textbf{Unidad de Organización Curricular:} & Profesional \\
-    \textbf{Nivel y Paralelo:} & 4to Semestre "B"\\
-    \textbf{Alumnos participantes:} & Molina Karen \\
-    & Guatemal Bryan \\
-    &  Gisselle Espín\\
-    & Benjarano Carlos \\
-    \textbf{Asignatura:} & Base de Datos\\
-    \textbf{Docente:} & Ing.Jose Ruben Caiza Caizabuano Mg. \\
+\textbf{Tema:} & Práctica de DML, DDL, restricciones e integridad referencial en Oracle SQL \\
+\textbf{Unidad de Organización Curricular:} & Profesional \\
+\textbf{Nivel y Paralelo:} & 4to Semestre ``B''\\
+\textbf{Alumno participante:} & Guatemal Avilez Bryan Stalin\\
+\textbf{Asignatura:} & Base de Datos\\
+\textbf{Docente:} & Ing. Jose Ruben Caiza Caizabuano, Mg. \\
 \end{tabular}
 \end{flushleft}
 
-
 \section{Informe de la Tarea}
+
 \subsection{Objetivos}
 
-\subsubsection{General}
-Desarrollar un modelo de base de datos eficiente para el control y seguimiento del préstamo de equipos tecnológicos, permitiendo la organización centralizada de la información y el cumplimiento de las normativas de uso institucional.
+\subsubsection{Objetivo general}
 
-\subsubsection{Específicos}
+Aplicar sentencias SQL de definición y manipulación de datos en Oracle, mediante la creación de usuarios, tablas, claves primarias, claves foráneas, restricciones CHECK, inserciones, actualizaciones, eliminaciones y consultas de verificación, con la finalidad de comprender el manejo de integridad referencial dentro de una base de datos relacional.
+
+\subsubsection{Objetivos específicos}
+
 \begin{itemize}
-    \item Identificar las entidades y atributos fundamentales del dominio para establecer una estructura de datos sólida que soporte al menos 8 entidades principales.
-    \item Definir y normalizar las reglas de negocio para garantizar la integridad y el flujo correcto de los procesos de préstamo y devolución de equipos.
-    \item Establecer el alcance técnico y funcional del proyecto, delimitando las responsabilidades del sistema y los requerimientos iniciales para el entregable de la Fase 1.
+    \item Crear un usuario de base de datos en Oracle y asignarle los privilegios necesarios para ejecutar operaciones DDL y DML.
+    \item Diseñar tablas relacionadas mediante claves primarias, claves foráneas y restricciones CHECK.
+    \item Ejecutar operaciones INSERT, UPDATE, DELETE y SELECT, verificando los resultados obtenidos.
+    \item Identificar errores comunes de Oracle, como errores de sintaxis, claves foráneas y restricciones de integridad.
 \end{itemize}
-
 
 \subsection{Instrucciones}
 
-De acuerdo con la planificación de la asignatura para la Semana 1-2, el desarrollo de la presente práctica se rige bajo las siguientes directrices:
-
-\begin{itemize}
-    \item \textbf{Análisis de Conceptos:} Identificar y diferenciar ejemplos prácticos de datos frente a información dentro del contexto de la Universidad Técnica de Ambato (UTA).
-    \item \textbf{Modelado Inicial:} Listar y estructurar un mínimo de 8 entidades con sus respectivos atributos basados en el caso de estudio "Préstamos de equipos".
-    \item \textbf{Reglas de Negocio:} Definir al menos 5 reglas de negocio que condicionen el funcionamiento del sistema (estados, plazos y restricciones).
-    \item \textbf{Documentación:} Elaborar el acta de grupo que integre el alcance técnico y las reglas iniciales como primer entregable del proyecto.
-\end{itemize}
+Durante la práctica se desarrolló una base de datos para el control de usuarios, roles, departamentos, ubicaciones, categorías, artículos y préstamos dentro de una biblioteca. La actividad consistió en crear las tablas, insertar datos iniciales, realizar actualizaciones, eliminar registros relacionados y verificar los resultados mediante consultas SQL.
 
 \subsection{Listado de equipos, materiales y recursos}
+
 \textbf{Listado de equipos y materiales generales empleados en la tarea:}
-\begin{itemize}
-    \item Computador portátil o de escritorio con acceso a internet.
-    \item Herramientas de modelado de datos.
-    \item Editor de texto especializado (Overleaf / LaTeX).
-    \item Repositorio de código (GitHub / Git) para control de versiones del proyecto.
-\end{itemize}
-
-\textbf{TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la tarea:}
-\begin{itemize}
-    \item[$\boxtimes$] Plataformas educativas
-    \item[$\square$] Simuladores y laboratorios virtuales
-    \item[$\boxtimes$] Aplicaciones educativas
-    \item[$\boxtimes$] Recursos audiovisuales
-    \item[$\square$] Gamificación
-    \item[$\boxtimes$] Inteligencia Artificial
-    \item Otros (Especifique)
-\end{itemize}
-
-\subsection{Desarrollo de la Tarea (Actividades a Desarrollar)}
-
-El desarrollo de la presente práctica se desglosa en las siguientes actividades secuenciales orientadas al diseño del sistema de préstamo de equipos:
-\begin{enumerate}
-    \item \textbf{Análisis de requerimientos y contexto:} Identificación de 10 ejemplos prácticos de datos e información aplicados al entorno de la Universidad Técnica de Ambato para comprender el flujo de entrada y salida del sistema.
-    \item \textbf{Modelado conceptual de datos:} Definición de un esquema relacional que incluye un mínimo de 8 entidades fundamentales, estableciendo sus respectivos atributos y relaciones de cardinalidad.
-    \item \textbf{Establecimiento de la lógica de negocio:} Formulación de 5 reglas de negocio iniciales que regirán el comportamiento del sistema ante eventos de préstamo, devolución y gestión de usuarios.
-    \item \textbf{Documentación técnica del proyecto:} Elaboración del acta constitutiva del grupo y definición del alcance del proyecto, delimitando las fronteras del software y sus entregables inmediatos.
-\end{enumerate}
-
-\subsection{Resultados obtenidos}
-De acuerdo con el tipo de trabajo, se plasmarán los resultados alcanzados en la guía tarea una vez ejecutadas las actividades. Se pueden emplear figuras y tablas las cuales deben ser numeradas.
-
-
-\subsubsection{Identificación de Datos e Información en el Contexto UTA}
-
-A continuación, se presentan 10 ejemplos que ilustran la diferencia entre un \textbf{dato} (hecho en bruto) y la \textbf{información} (dato procesado con contexto y utilidad), aplicados al sistema de préstamos de equipos de la carrera de Ingeniería en Software.
-
-\vspace{0.5cm}
-
-\begin{enumerate}
-
-\item \textbf{Control del proyector Epson} \\
-\textit{Dato}: ``Control: Epson CB-695Wi'' \\
-\textit{Información}: El control del proyector Epson del aula 304 se ha prestado 8 veces esta semana, pero en 3 ocasiones lo devolvieron sin pilas, lo que indica la necesidad de mantener un stock de repuestos en el laboratorio.
-
-\item \textbf{Control del aire acondicionado} \\
-\textit{Dato}: ``Aire acondicionado: LG - Laboratorio 2'' \\
-\textit{Información}: El control del aire acondicionado del Laboratorio 2 solo es solicitado por profesores en horarios de 3 a 5 PM, coincidiendo con las prácticas intensivas de programación, por lo que debe estar siempre disponible en esa franja.
-
-\item \textbf{Computadora de laboratorio} \\
-\textit{Dato}: ``PC: HP ProDesk 400 G5'' \\
-\textit{Información}: La PC \#12 del laboratorio de cómputo ha sido la más solicitada (50 préstamos en el semestre) por ser la única con Android Studio instalado correctamente, justificando la clonación de su software a otros equipos.
-
-\item \textbf{Horario de préstamos} \\
-\textit{Dato}: ``Horario: 7:00 AM'' \\
-\textit{Información}: Las 7:00 AM concentran la mayor demanda de préstamo de computadoras, justo antes de la clase de Estructura de Datos, lo que sugiere abrir el laboratorio 15 minutos antes para evitar demoras.
-
-\item \textbf{Usuario frecuente} \\
-\textit{Dato}: ``Usuario: Ana López - 5to semestre'' \\
-\textit{Información}: La estudiante Ana López ha solicitado el control del proyector en 4 materias diferentes durante el mes (Inglés, Redacción, Web y Proyectos), evidenciando la necesidad de asignarle un equipo de uso temporal.
-
-\item \textbf{Periféricos dañados} \\
-\textit{Dato}: ``Estado: Mouse no funciona'' \\
-\textit{Información}: El 40\% de las computadoras del Laboratorio 3 presentan fallas en el mouse óptico, afectando directamente las prácticas de Interacción Humano-Computador, por lo que se requiere un reemplazo inmediato.
-
-\item \textbf{Software más utilizado} \\
-\textit{Dato}: ``Software: Visual Studio 2022'' \\
-\textit{Información}: Visual Studio 2022 es el IDE con mayor tiempo de uso en los préstamos, principalmente para proyectos de Programación Avanzada, lo que exige priorizar mantenimiento en las PCs que lo ejecutan.
-
-\item \textbf{Accesorios complementarios} \\
-\textit{Dato}: ``Cable: HDMI - 2 metros'' \\
-\textit{Información}: Los cables HDMI se prestan generalmente junto con los controles de proyector para presentaciones de Proyecto Integrador, sugiriendo la creación de ``kits de exposición'' completos.
-
-\item \textbf{Incumplimiento recurrente} \\
-\textit{Dato}: ``Devolución: Tardía - 20 min'' \\
-\textit{Información}: El grupo de Sexto semestre de la materia Integrador acumula 4 devoluciones tardías en el mes, lo que amerita restringir sus préstamos múltiples o aplicar multas más estrictas.
-
-\item \textbf{Fallas técnicas recurrentes} \\
-\textit{Dato}: ``PC \#08 - Sin Internet'' \\
-\textit{Información}: La PC \#08 ha sido reportada 5 veces por conexión lenta a internet, afectando las prácticas de Cloud Computing, por lo que se debe revisar su tarjeta de red o el puerto del switch correspondiente.
-
-\end{enumerate}
-
-\vspace{0.5cm}
-
-% ---------------------------------------------------------------------------
-% 2. Listar entidades y atributos del caso (mín. 8 entidades)
-% ---------------------------------------------------------------------------
-\subsubsection{Entidades y Atributos del Caso}
-
-A continuación, se listan las entidades principales del sistema de préstamos de equipos, junto con sus atributos:
 
 \begin{itemize}
-    \item \textbf{LABORATORISTAS} = (id\_lab, nom\_lab, ape\_lab, sue\_lab)
-    \item \textbf{USUARIOS} = (id\_cli, nom\_cli, ape\_cli, tel\_cli, dir\_cli, cor\_cli, ID\_CAR\_PER, habilitado)
-    \item \textbf{CARRERAS} = (ID\_CAR, NOM\_CAR)
-    \item \textbf{PERIODOS} = (ID\_PER\_ACA, FEC\_INI\_PER, FEC\_FIN\_PER)
-    \item \textbf{CATEGORIAS} = (ID\_CAT, NOM\_CAT)
-    \item \textbf{EQUIPOS} = (ID\_EQUI, MAR\_EQUI, SISTEMA\_OP\_EQUI, DIS\_EQUI, EST\_EQUI, MOD\_EQUI, ID\_CAT\_PER)
-    \item \textbf{PRESTAMOS} = (NUM\_PRE, FEC\_PRE, ID\_LAB\_PRESTA, ID\_USUA\_PRE, ID\_EQUI\_PRE, ESTADO\_PRE, ID\_LAB\_DEV, FEC\_DEV, FEC\_REAL, ESTADO\_DEV, ID\_PER\_PER)
-    \item \textbf{MULTAS} = (NUM\_MUL, FEC\_MUL, PRES\_PER\_MUL, VAL\_PAGAR, EST\_MUL)
-    \item \textbf{OBSERVACIONES} = (ID\_OBS, DES\_OBS, ID\_PRES\_PER)
+    \item Computador con sistema operativo Windows.
+    \item Oracle Database / SQL*Plus.
+    \item Visual Studio Code para la elaboración del informe en \LaTeX.
+    \item Capturas de pantalla como evidencia de ejecución.
+    \item Script SQL ejecutado durante la práctica.
 \end{itemize}
 
-% ---------------------------------------------------------------------------
-% 3. Definir 5 reglas de negocio
-% ---------------------------------------------------------------------------
-\subsubsection{Reglas de Negocio}
+\textbf{TAC empleadas en la tarea:}
 
-\begin{enumerate}
-    \item \textbf{Regla de Unicidad de Préstamo por Usuario}
-    \begin{itemize}
-        \item \textbf{Regla:} Un usuario está autorizado a poseer únicamente un equipo bajo su responsabilidad de forma simultánea. No se permitirá la apertura de un nuevo préstamo si el usuario tiene uno previo sin devolver.
-        \item \textbf{Justificación de Negocio:} Esta medida protege el patrimonio tecnológico de la universidad. Al ser equipos de alto costo (laptops, proyectores), se mitiga el riesgo de pérdida masiva y se garantiza que más estudiantes tengan acceso a los recursos disponibles, evitando el acaparamiento.
-        \item \textbf{Impacto en BD:}
-        \begin{itemize}
-            \item Estado del Préstamo: Un préstamo se considera "Activo" o "Pendiente" mientras el campo FEC\_REAL sea NULL (vacío), lo que indica que el equipo aún no ha reingresado al laboratorio.
-            \item Validación de Inserción: Antes de registrar un nuevo préstamo en la tabla PRESTAMOS, el sistema debe realizar una consulta para verificar que el ID\_USUA\_PRE no aparezca en ningún registro donde la fecha de devolución real aún no haya sido marcada.
-        \end{itemize}
-    \end{itemize}
-
-    \item \textbf{Condición de Usuario Habilitado}
-    \begin{itemize}
-        \item \textbf{Regla:} Solo los usuarios con el atributo habilitado = 'S' pueden solicitar préstamos.
-        \item \textbf{Justificación:} Si un estudiante tiene multas pendientes o dañó un equipo anteriormente, el sistema debe bloquearle el acceso automáticamente.
-        \item \textbf{Impacto en la BD:} El campo habilitado en la tabla USUARIOS debe cambiar a 'N' automáticamente si se genera una multa.
-    \end{itemize}
-
-    \item \textbf{Integridad de la Devolución (Doble Verificación)}
-    \begin{itemize}
-        \item \textbf{Regla:} Todo préstamo debe registrar obligatoriamente al laboratorista que entrega (ID\_LAB\_PRESTA) y, posteriormente, al que recibe (ID\_LAB\_DEV).
-        \item \textbf{Justificación:} Esto asegura la trazabilidad (responsabilidad) en caso de que el equipo regrese dañado.
-        \item \textbf{Impacto en la BD:} El campo ID\_LAB\_DEV debe ser obligatorio al momento de actualizar la FEC\_REAL.
-    \end{itemize}
-
-    \item \textbf{Generación Automática de Multas por Mora}
-    \begin{itemize}
-        \item \textbf{Regla:} Si la FEC\_REAL (fecha de entrega real) es mayor a la FEC\_DEV (fecha máxima pactada), se debe generar automáticamente un registro en la tabla MULTAS.
-        \item \textbf{Justificación:} Garantiza que los equipos roten y estén disponibles para otros usuarios en los tiempos previstos.
-        \item \textbf{Impacto en la BD:} Se requiere un cálculo de ($FEC\_REAL - FEC\_DEV$) para determinar el VAL\_PAGAR.
-    \end{itemize}
-
-    \item \textbf{Vigencia por Periodo Académico}
-    \begin{itemize}
-        \item \textbf{Regla:} No se pueden realizar préstamos cuyas fechas estén fuera del rango de FEC\_INI\_PER y FEC\_FIN\_PER del periodo activo.
-        \item \textbf{Justificación:} Evita que los equipos se queden en manos de los usuarios durante las vacaciones o periodos donde no hay supervisión de laboratorio.
-        \item \textbf{Impacto en la BD:} Validación de fechas cruzando PRESTAMOS con PERIODOS.
-    \end{itemize}
-
-    \item \textbf{Exclusividad de Disponibilidad del Equipo}
-    \begin{itemize}
-        \item \textbf{Regla:} Un equipo solo puede ser objeto de un nuevo préstamo si su atributo DIS\_EQUI tiene el valor 'D' (Disponible). Al momento de registrar el préstamo, este valor debe cambiar automáticamente a 'P' (Prestado).
-        \item \textbf{Justificación:} Evita la duplicidad de préstamos sobre un mismo activo físico y garantiza que el inventario mostrado al laboratorista sea real.
-        \item \textbf{Impacto en la BD:}
-        \begin{itemize}
-            \item Antes del Préstamo: Una consulta SELECT debe filtrar solo equipos con DIS\_EQUI = 'D'.
-            \item Durante el Préstamo: Se ejecuta un UPDATE en la tabla EQUIPOS para cambiar el estado a 'P'.
-            \item En la Devolución: Cuando se registra la FEC\_REAL en la tabla PRESTAMOS, el estado en EQUIPOS debe volver a 'D'.
-        \end{itemize}
-    \end{itemize}
-
-    \item \textbf{Regla de Integridad del Estado Físico (Entregas vs. Devoluciones)}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El ESTADO\_DEV (estado de devolución) no puede ser superior en calidad al ESTADO\_PRE (estado de préstamo). Si un equipo sale como "ANTIGUO", no puede regresar como "NUEVO".
-        \item \textbf{Justificación:} Detecta errores de digitación o posibles cambios de piezas/equipos por parte del usuario. Si hay una discrepancia negativa (sale "NUEVO" y regresa "DAÑADO"), el sistema debe obligar a registrar una OBSERVACIÓN.
-        \item \textbf{Impacto en la BD:} El sistema debe comparar el texto o nivel de calidad de ambos atributos antes de cerrar el préstamo.
-    \end{itemize}
-
-    \item \textbf{Regla de Consistencia de Categoría}
-    \begin{itemize}
-        \item \textbf{Enunciado:} Todo equipo registrado en la tabla EQUIPOS debe tener obligatoriamente un ID\_CAT\_PER válido que exista en la tabla CATEGORIAS.
-        \item \textbf{Justificación:} Evita tener equipos "huérfanos" en el sistema. Si no sabemos si es una Laptop o un Proyector, no podemos aplicar reglas de tiempo (por ejemplo, las laptops se prestan por 2 días, pero los proyectores quizás solo por 3 horas).
-        \item \textbf{Impacto en la BD:} Aplicación de Integridad Referencial (Foreign Key). No se puede borrar una categoría si todavía tiene equipos asignados a ella.
-    \end{itemize}
-
-    \item \textbf{Regla de Liquidación de Multas para Rehabilitación}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El atributo habilitado del usuario solo puede volver a 'S' (Sí) cuando todos los registros relacionados en la tabla MULTAS tengan el EST\_MUL como "PAGADO".
-        \item \textbf{Justificación:} Asegura que el proceso de cobro se complete. El laboratorista no debe habilitar a mano a un amigo si este aún debe dinero a la universidad.
-        \item \textbf{Impacto en la BD:} Al actualizar una multa a "PAGADO", el sistema debe hacer un COUNT de las multas pendientes del usuario; si el resultado es 0, entonces se ejecuta el UPDATE a habilitado = 'S'.
-    \end{itemize}
-\end{enumerate}
-%Especifique las TAC's utilizadas en la Tarea. 
-\subsection{Habilidades blandas empleadas en la tarea}
 \begin{itemize}
-    \item[$\square$] Liderazgo
-    \item[$\square$] Trabajo en equipo
-    \item[$\square$] Comunicación asertiva
-    \item[$\square$] La empatía
-    \item[$\square$] Pensamiento crítico
-    \item[$\square$] Flexibilidad
-    \item[$\square$] La resolución de conflictos
-    \item[$\square$] Adaptabilidad
-    \item[$\square$] Responsabilidad
+    \item[$\checkmark$] Plataformas educativas.
+    \item[$\checkmark$] Aplicaciones educativas.
+    \item[$\checkmark$] Recursos audiovisuales.
+    \item[$\checkmark$] Inteligencia Artificial.
+    \item Otros: Oracle SQL, SQL*Plus, Visual Studio Code y \LaTeX.
 \end{itemize}
 
+\section{Desarrollo de la Tarea}
 
-\subsection{Conclusiones}
-Se concluye que el diseño preliminar del sistema de gestión de préstamos, fundamentado en la correcta identificación de entidades y reglas de negocio, establece una base técnica sólida para el desarrollo de la base de datos. La aplicación de un enfoque estructurado permitió transformar los requerimientos institucionales en un modelo conceptual organizado, garantizando que la futura implementación responda eficazmente a las necesidades de control, integridad de la información y optimización de los procesos administrativos dentro del contexto universitario.
+\subsection{Creación del usuario en Oracle}
 
-\subsection{Recomendaciones}
+Primero se ingresó con el usuario administrador \texttt{system}. Luego se creó el usuario \texttt{clase\_dml}, se asignaron privilegios y se realizó la conexión con el nuevo usuario.
+
+\begin{lstlisting}[language=SQL, caption={Creación del usuario en Oracle}]
+CONNECT system/system;
+
+CREATE USER clase_dml IDENTIFIED BY FACT123;
+
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO clase_dml;
+
+CONNECT clase_dml/FACT123;
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.82\textwidth]{img/CREACION_USUARIO.png}
+    \caption{Creación y conexión del usuario en Oracle.}
+    \label{fig:creacion_usuario}
+\end{figure}
+
+\subsection{Creación de tablas principales}
+
+Se crearon las tablas principales de la base de datos. Estas tablas permiten organizar roles, departamentos, categorías, ubicaciones, artículos, usuarios y préstamos.
+
+\subsubsection{Tabla roles}
+
+\begin{lstlisting}[language=SQL, caption={Creación de la tabla roles}]
+CREATE TABLE roles (
+    id_rol NUMBER PRIMARY KEY,
+    nombre VARCHAR2(50) NOT NULL
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{img/TABLA_ROLES.png}
+    \caption{Evidencia de creación de la tabla roles.}
+    \label{fig:tabla_roles}
+\end{figure}
+
+\subsubsection{Tabla departamentos}
+
+\begin{lstlisting}[language=SQL, caption={Creación de la tabla departamentos}]
+CREATE TABLE departamentos (
+    id_departamento NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{img/TABLA_DEPARTAMENTO.png}
+    \caption{Evidencia de creación de la tabla departamentos.}
+    \label{fig:tabla_departamentos}
+\end{figure}
+
+\subsubsection{Tabla categorias}
+
+\begin{lstlisting}[language=SQL, caption={Creación de la tabla categorias}]
+CREATE TABLE categorias (
+    id_categoria NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{img/TABLA_CATEGORIAS.png}
+    \caption{Evidencia de creación de la tabla categorias.}
+    \label{fig:tabla_categorias}
+\end{figure}
+
+\subsubsection{Tabla ubicaciones}
+
+La tabla \texttt{ubicaciones} se relaciona con la tabla \texttt{departamentos} mediante una clave foránea.
+
+\begin{lstlisting}[language=SQL, caption={Creación de la tabla ubicaciones}]
+CREATE TABLE ubicaciones (
+    id_ubicacion NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL,
+    id_departamento NUMBER NOT NULL,
+    CONSTRAINT fk_ubicaciones_departamentos 
+        FOREIGN KEY (id_departamento)
+        REFERENCES departamentos(id_departamento)
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{img/TABLA_UBICACIONES.png}
+    \caption{Evidencia de creación de la tabla ubicaciones.}
+    \label{fig:tabla_ubicaciones}
+\end{figure}
+
+\subsubsection{Tabla articulos}
+
+La tabla \texttt{articulos} posee una clave foránea hacia \texttt{categorias}. Además, incluye una restricción \texttt{CHECK} para evitar que el stock sea negativo.
+
+\begin{lstlisting}[language=SQL, caption={Creación de la tabla articulos}]
+CREATE TABLE articulos (
+    id_articulo NUMBER PRIMARY KEY,
+    descripcion VARCHAR2(100) NOT NULL,
+    id_categoria NUMBER NOT NULL,
+    stock NUMBER NOT NULL,
+    CONSTRAINT ck_articulos_stock CHECK (stock >= 0),
+    CONSTRAINT fk_articulos_categorias 
+        FOREIGN KEY (id_categoria)
+        REFERENCES categorias(id_categoria)
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{img/TABLA_ARTICULOS.png}
+    \caption{Evidencia de creación de la tabla articulos.}
+    \label{fig:tabla_articulos}
+\end{figure}
+
+\subsubsection{Tabla usuarios}
+
+La tabla \texttt{usuarios} se relaciona con \texttt{roles}, \texttt{departamentos} y \texttt{ubicaciones}. Esto permite controlar que cada usuario pertenezca a un rol, departamento y ubicación existente.
+
+\begin{lstlisting}[language=SQL, caption={Creación de la tabla usuarios}]
+CREATE TABLE usuarios (
+    id_usuario NUMBER PRIMARY KEY,
+    nombre VARCHAR2(80) NOT NULL,
+    id_rol NUMBER NOT NULL,
+    id_departamento NUMBER NOT NULL,
+    id_ubicacion NUMBER NOT NULL,
+    CONSTRAINT fk_usuarios_roles 
+        FOREIGN KEY (id_rol)
+        REFERENCES roles(id_rol),
+    CONSTRAINT fk_usuarios_departamentos 
+        FOREIGN KEY (id_departamento)
+        REFERENCES departamentos(id_departamento),
+    CONSTRAINT fk_usuarios_ubicaciones 
+        FOREIGN KEY (id_ubicacion)
+        REFERENCES ubicaciones(id_ubicacion)
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{img/TABLA_USUARIOS.png}
+    \caption{Evidencia de creación de la tabla usuarios.}
+    \label{fig:tabla_usuarios}
+\end{figure}
+
+\subsubsection{Tabla prestamos}
+
+La tabla \texttt{prestamos} se relaciona con \texttt{usuarios} y \texttt{articulos}. También incluye una restricción \texttt{CHECK} que obliga a que la cantidad prestada sea mayor a cero.
+
+\begin{lstlisting}[language=SQL, caption={Creación de la tabla prestamos}]
+CREATE TABLE prestamos (
+    id_prestamo NUMBER PRIMARY KEY,
+    id_usuario NUMBER NOT NULL,
+    id_articulo NUMBER NOT NULL,
+    fecha_prestamo DATE NOT NULL,
+    fecha_devolucion DATE,
+    cantidad NUMBER NOT NULL,
+    CONSTRAINT ck_prestamos_cantidad CHECK (cantidad > 0),
+    CONSTRAINT fk_prestamos_usuarios 
+        FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario),
+    CONSTRAINT fk_prestamos_articulos 
+        FOREIGN KEY (id_articulo)
+        REFERENCES articulos(id_articulo)
+);
+\end{lstlisting}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.80\textwidth]{img/TABLA_PRESTAMOS.png}
+    \caption{Evidencia de creación de la tabla prestamos.}
+    \label{fig:tabla_prestamos}
+\end{figure}
+
+\subsection{Verificación de tablas creadas}
+
+Después de crear las tablas, se verificó su existencia con la siguiente consulta:
+
+\begin{lstlisting}[language=SQL, caption={Consulta para verificar tablas creadas}]
+SELECT * FROM tab;
+\end{lstlisting}
+
+\subsection{Inserción de datos iniciales}
+
+Se insertaron registros en las tablas principales. El orden de inserción fue importante porque algunas tablas dependen de otras mediante claves foráneas. Primero se insertaron los datos en tablas independientes y luego en tablas dependientes.
+
+\begin{lstlisting}[language=SQL, caption={Inserción de datos iniciales}]
+INSERT INTO roles VALUES (1, 'Administrador');
+INSERT INTO roles VALUES (2, 'Bibliotecario');
+INSERT INTO roles VALUES (3, 'Usuario');
+
+INSERT INTO departamentos VALUES (10, 'Sistemas');
+INSERT INTO departamentos VALUES (20, 'Docencia');
+INSERT INTO departamentos VALUES (30, 'Administrativo');
+
+INSERT INTO ubicaciones VALUES (100, 'Bloque A', 10);
+INSERT INTO ubicaciones VALUES (101, 'Bloque B', 20);
+INSERT INTO ubicaciones VALUES (102, 'Bloque C', 30);
+
+INSERT INTO categorias VALUES (1, 'Equipos');
+INSERT INTO categorias VALUES (2, 'Accesorios');
+
+INSERT INTO articulos VALUES (1, 'Laptop HP 15', 1, 10);
+INSERT INTO articulos VALUES (2, 'Mouse Inalambrico', 2, 25);
+INSERT INTO articulos VALUES (3, 'Teclado Mecanico', 2, 15);
+
+INSERT INTO usuarios VALUES (10, 'Juan Perez', 1, 10, 100);
+INSERT INTO usuarios VALUES (11, 'Maria Lopez', 2, 20, 101);
+INSERT INTO usuarios VALUES (12, 'Carlos Ruiz', 3, 30, 102);
+
+INSERT INTO prestamos VALUES (100, 10, 1, SYSDATE, NULL, 1);
+INSERT INTO prestamos VALUES (101, 11, 2, SYSDATE, NULL, 3);
+INSERT INTO prestamos VALUES (102, 12, 3, SYSDATE, NULL, 2);
+
+COMMIT;
+\end{lstlisting}
+
+\subsection{Inserción de un nuevo artículo}
+
+El docente solicitó insertar un nuevo artículo con los siguientes datos: ID 10, descripción ``Monitor LG'', categoría Equipos y stock 8.
+
+\begin{lstlisting}[language=SQL, caption={Inserción de nuevo artículo}]
+-- La categoria Equipos tiene id_categoria = 1.
+
+INSERT INTO articulos 
+VALUES (10, 'Monitor LG', 1, 8);
+
+COMMIT;
+
+SELECT *
+FROM articulos
+WHERE id_articulo = 10;
+\end{lstlisting}
+
+\textbf{Explicación:} el registro es válido porque el identificador del artículo es único, la categoría con ID 1 existe y el stock cumple la restricción \texttt{CHECK (stock >= 0)}.
+
+\subsection{Inserción de usuario VIP y préstamo}
+
+Se incorporó un nuevo usuario VIP con ID 20 y nombre Pedro Sánchez. Se le asignó el rol de bibliotecario, el departamento de Sistemas y la ubicación Bloque A. Luego se registró un préstamo del artículo 1, correspondiente a Laptop HP 15, con cantidad 2.
+
+\begin{lstlisting}[language=SQL, caption={Inserción de usuario VIP y préstamo}]
+-- Se inserta el usuario Pedro Sanchez.
+-- id_rol = 2 corresponde a Bibliotecario.
+-- id_departamento = 10 corresponde a Sistemas.
+-- id_ubicacion = 100 corresponde a Bloque A.
+
+INSERT INTO usuarios 
+VALUES (20, 'Pedro Sanchez', 2, 10, 100);
+
+-- Se registra un prestamo para el usuario Pedro Sanchez.
+-- id_articulo = 1 corresponde a Laptop HP 15.
+-- La cantidad prestada es 2.
+
+INSERT INTO prestamos 
+VALUES (200, 20, 1, SYSDATE, NULL, 2);
+
+COMMIT;
+\end{lstlisting}
+
+\subsubsection{Verificación con JOIN}
+
+\begin{lstlisting}[language=SQL, caption={Verificación del usuario VIP y su préstamo}]
+SELECT 
+    u.nombre AS nombre_usuario,
+    p.id_prestamo,
+    a.descripcion AS descripcion_articulo,
+    p.cantidad
+FROM prestamos p
+JOIN usuarios u 
+    ON p.id_usuario = u.id_usuario
+JOIN articulos a 
+    ON p.id_articulo = a.id_articulo
+WHERE u.id_usuario = 20;
+\end{lstlisting}
+
+El resultado esperado muestra el nombre del usuario, el ID del préstamo, la descripción del artículo y la cantidad prestada.
+
+\subsection{Validación de INSERT incorrecto}
+
+Durante la práctica se analizó el siguiente INSERT:
+
+\begin{lstlisting}[language=SQL, caption={INSERT incorrecto analizado}]
+INSERT INTO prestamo VALUES (200, 99, 1, SYSDATE, NULL, 1);
+\end{lstlisting}
+
+Este INSERT no es válido por dos razones. Primero, la tabla correcta se llama \texttt{prestamos}, no \texttt{prestamo}. Segundo, el usuario con ID 99 no existe en la tabla \texttt{usuarios}. Por lo tanto, si se corrige el nombre de la tabla, Oracle generaría un error de clave foránea porque no encuentra el usuario relacionado.
+
+\begin{lstlisting}[language=SQL, caption={INSERT corregido}]
+INSERT INTO prestamos 
+VALUES (200, 10, 1, SYSDATE, NULL, 1);
+\end{lstlisting}
+
+\subsection{Actualización del usuario 10}
+
+Se buscó al usuario con ID 10 y luego se actualizó su ubicación a la ubicación 101.
+
+\begin{lstlisting}[language=SQL, caption={Búsqueda y actualización del usuario 10}]
+-- Se busca al usuario 10.
+
+SELECT *
+FROM usuarios
+WHERE id_usuario = 10;
+
+-- Se actualiza la ubicacion del usuario 10.
+-- La ubicacion 101 corresponde a Bloque B.
+
+UPDATE usuarios
+SET id_ubicacion = 101
+WHERE id_usuario = 10;
+
+-- Se verifica la actualizacion.
+
+SELECT *
+FROM usuarios
+WHERE id_usuario = 10;
+
+COMMIT;
+\end{lstlisting}
+
+La sentencia incorrecta era:
+
+\begin{lstlisting}[language=SQL, caption={Sentencia incorrecta de actualización}]
+UPDATE usuarios 
+SET id_ubicacion = 101
+WHERE id_usuario_10;
+\end{lstlisting}
+
+La corrección consiste en comparar el campo con el valor:
+
+\begin{lstlisting}[language=SQL, caption={Sentencia corregida de actualización}]
+UPDATE usuarios
+SET id_ubicacion = 101
+WHERE id_usuario = 10;
+\end{lstlisting}
+
+\subsection{Actualización del stock del artículo 2}
+
+Se actualizó el stock del artículo 2 aumentando 5 unidades al valor actual.
+
+\begin{lstlisting}[language=SQL, caption={Actualización de stock}]
+-- Se consulta el articulo antes de actualizar.
+
+SELECT *
+FROM articulos
+WHERE id_articulo = 2;
+
+-- Se aumenta el stock en 5 unidades.
+
+UPDATE articulos
+SET stock = stock + 5
+WHERE id_articulo = 2;
+
+-- Se verifica el nuevo stock.
+
+SELECT *
+FROM articulos
+WHERE id_articulo = 2;
+
+COMMIT;
+\end{lstlisting}
+
+\subsection{Actualización de usuarios del departamento Docencia}
+
+El escenario indicó que todos los usuarios del departamento Docencia debían ser movidos a la ubicación Bloque C. Además, todos los préstamos con cantidad menor a 2 debían incrementarse en una unidad.
+
+\begin{lstlisting}[language=SQL, caption={Actualización de usuarios del departamento Docencia}]
+-- Primero se verifican los usuarios del departamento Docencia.
+
+SELECT 
+    u.id_usuario,
+    u.nombre,
+    d.nombre AS departamento,
+    ub.nombre AS ubicacion_actual
+FROM usuarios u
+JOIN departamentos d
+    ON u.id_departamento = d.id_departamento
+JOIN ubicaciones ub
+    ON u.id_ubicacion = ub.id_ubicacion
+WHERE d.nombre = 'Docencia';
+
+-- Se actualiza la ubicacion a Bloque C.
+-- Bloque C tiene id_ubicacion = 102.
+-- Docencia tiene id_departamento = 20.
+
+UPDATE usuarios
+SET id_ubicacion = 102
+WHERE id_departamento = 20;
+
+-- Se verifica la actualizacion.
+
+SELECT 
+    u.id_usuario,
+    u.nombre,
+    d.nombre AS departamento,
+    ub.nombre AS nueva_ubicacion
+FROM usuarios u
+JOIN departamentos d
+    ON u.id_departamento = d.id_departamento
+JOIN ubicaciones ub
+    ON u.id_ubicacion = ub.id_ubicacion
+WHERE d.nombre = 'Docencia';
+
+COMMIT;
+\end{lstlisting}
+
+\textbf{Filas afectadas:} este UPDATE afecta 1 fila, porque en los datos iniciales solo existe un usuario del departamento Docencia: María López.
+
+\subsection{Actualización de préstamos con cantidad menor a 2}
+
+\begin{lstlisting}[language=SQL, caption={Actualización de préstamos con cantidad menor a 2}]
+-- Se consultan los prestamos con cantidad menor a 2.
+
+SELECT 
+    id_prestamo,
+    id_usuario,
+    id_articulo,
+    cantidad
+FROM prestamos
+WHERE cantidad < 2;
+
+-- Se incrementa en 1 unidad la cantidad.
+
+UPDATE prestamos
+SET cantidad = cantidad + 1
+WHERE cantidad < 2;
+
+-- Se verifica la actualizacion.
+
+SELECT 
+    id_prestamo,
+    id_usuario,
+    id_articulo,
+    cantidad
+FROM prestamos
+WHERE cantidad >= 2;
+
+COMMIT;
+\end{lstlisting}
+
+\textbf{Filas afectadas:} este UPDATE afecta 1 fila, porque inicialmente solo el préstamo con ID 100 tenía cantidad menor a 2.
+
+\subsection{Consulta de conteo de registros}
+
+Se ejecutó una consulta para contar la cantidad de registros existentes en las tablas principales.
+
+\begin{lstlisting}[language=SQL, caption={Conteo de registros por tabla}]
+SELECT 
+    (SELECT COUNT(*) FROM usuarios) AS usuarios,
+    (SELECT COUNT(*) FROM articulos) AS articulos,
+    (SELECT COUNT(*) FROM prestamos) AS prestamos
+FROM dual;
+\end{lstlisting}
+
+Esta consulta usa subconsultas con \texttt{COUNT(*)} para contar cuántos usuarios, artículos y préstamos existen. La tabla \texttt{DUAL} se usa en Oracle para mostrar resultados calculados en una sola fila.
+
+\subsection{Eliminación del préstamo 101}
+
+Se eliminó el préstamo con \texttt{id\_prestamo = 101}. Antes y después de eliminar, se verificó la existencia del registro.
+
+\begin{lstlisting}[language=SQL, caption={Eliminación del préstamo 101}]
+-- Primero se verifica que exista el prestamo 101.
+
+SELECT *
+FROM prestamos
+WHERE id_prestamo = 101;
+
+-- Se elimina el prestamo 101.
+
+DELETE FROM prestamos
+WHERE id_prestamo = 101;
+
+-- Se verifica que ya no exista.
+
+SELECT *
+FROM prestamos
+WHERE id_prestamo = 101;
+
+COMMIT;
+\end{lstlisting}
+
+\subsection{Eliminación segura del usuario 20}
+
+El usuario con ID 20, Pedro Sánchez, se dio de baja del sistema. Como tenía préstamos asociados, primero se intentó eliminarlo directamente para comprobar el error de integridad referencial.
+
+\begin{lstlisting}[language=SQL, caption={Identificación de datos relacionados con el usuario 20}]
+-- Se verifica que el usuario exista.
+
+SELECT *
+FROM usuarios
+WHERE id_usuario = 20;
+
+-- Se revisan los prestamos asociados al usuario 20.
+
+SELECT *
+FROM prestamos
+WHERE id_usuario = 20;
+\end{lstlisting}
+
+\subsubsection{Intento incorrecto de eliminación}
+
+\begin{lstlisting}[language=SQL, caption={Intento incorrecto de eliminar directamente al usuario 20}]
+DELETE FROM usuarios
+WHERE id_usuario = 20;
+\end{lstlisting}
+
+Este DELETE puede generar el error:
+
+\begin{lstlisting}[language=SQL, caption={Error esperado por integridad referencial}]
+ORA-02292: restriccion de integridad violada - registro secundario encontrado
+\end{lstlisting}
+
+El error ocurre porque el usuario posee registros dependientes en la tabla \texttt{prestamos}. Por lo tanto, primero se debe eliminar la información de la tabla hija y luego la información de la tabla padre.
+
+\subsubsection{Eliminación correcta}
+
+\begin{lstlisting}[language=SQL, caption={Eliminación correcta del usuario 20}]
+-- Primero se eliminan los prestamos del usuario 20.
+
+DELETE FROM prestamos
+WHERE id_usuario = 20;
+
+-- Luego se elimina el usuario 20.
+
+DELETE FROM usuarios
+WHERE id_usuario = 20;
+
+-- Verificacion final.
+
+SELECT *
+FROM prestamos
+WHERE id_usuario = 20;
+
+SELECT *
+FROM usuarios
+WHERE id_usuario = 20;
+
+COMMIT;
+\end{lstlisting}
+
+El orden correcto es:
+
+\begin{center}
+\textbf{prestamos $\rightarrow$ usuarios}
+\end{center}
+
+\subsection{Errores identificados durante la práctica}
+
+\subsubsection{Error ORA-00907}
+
+Este error apareció cuando faltaba cerrar correctamente un paréntesis o existía un error de escritura en la definición de la tabla.
+
+\begin{lstlisting}[language=SQL, caption={Ejemplo de error ORA-00907}]
+ORA-00907: falta el parentesis derecho
+\end{lstlisting}
+
+También se identificó un error de escritura en el tipo de dato:
+
+\begin{lstlisting}[language=SQL, caption={Tipo de dato escrito incorrectamente}]
+VARACHAR2
+\end{lstlisting}
+
+La forma correcta es:
+
+\begin{lstlisting}[language=SQL, caption={Tipo de dato correcto}]
+VARCHAR2
+\end{lstlisting}
+
+\subsubsection{Error ORA-00942}
+
+Este error puede aparecer cuando se escribe mal el nombre de una tabla.
+
+\begin{lstlisting}[language=SQL, caption={Ejemplo de tabla mal escrita}]
+DELETE FROM pestamos
+WHERE id_prestamo = 102;
+\end{lstlisting}
+
+La forma correcta es:
+
+\begin{lstlisting}[language=SQL, caption={Corrección del nombre de tabla}]
+DELETE FROM prestamos
+WHERE id_prestamo = 102;
+\end{lstlisting}
+
+\subsubsection{Error ORA-00904}
+
+Este error ocurre cuando se usa una columna que no existe en una tabla.
+
+\begin{lstlisting}[language=SQL, caption={Ejemplo de columna inexistente}]
+DELETE FROM usuarios
+WHERE id_prestamo = 11;
+\end{lstlisting}
+
+La tabla \texttt{usuarios} no tiene la columna \texttt{id\_prestamo}. La forma correcta para eliminar un usuario sería usar \texttt{id\_usuario}.
+
+\begin{lstlisting}[language=SQL, caption={Corrección usando la columna correcta}]
+DELETE FROM usuarios
+WHERE id_usuario = 11;
+\end{lstlisting}
+
+\subsubsection{Error ORA-02291}
+
+Este error ocurre cuando se intenta insertar un registro que hace referencia a una clave foránea inexistente. Por ejemplo, registrar un préstamo para un usuario que no existe.
+
+\begin{lstlisting}[language=SQL, caption={Ejemplo de error por clave foránea inexistente}]
+INSERT INTO prestamos 
+VALUES (200, 99, 1, SYSDATE, NULL, 1);
+\end{lstlisting}
+
+El usuario con ID 99 no existe en la tabla \texttt{usuarios}, por lo tanto, se rompe la integridad referencial.
+
+\subsubsection{Error ORA-02292}
+
+Este error ocurre cuando se intenta eliminar un registro padre que tiene registros hijos asociados.
+
+\begin{lstlisting}[language=SQL, caption={Ejemplo de eliminación incorrecta}]
+DELETE FROM usuarios
+WHERE id_usuario = 20;
+\end{lstlisting}
+
+Si el usuario tiene préstamos asociados, primero se deben eliminar los préstamos y luego el usuario.
+
+\section{Resultados obtenidos}
+
+Durante la práctica se logró crear correctamente el usuario \texttt{clase\_dml} y las tablas necesarias para el funcionamiento de la base de datos. Se insertaron datos iniciales en las tablas de roles, departamentos, ubicaciones, categorías, artículos, usuarios y préstamos.
+
+También se realizaron operaciones DML como inserción, actualización y eliminación de registros. Además, se comprobó el funcionamiento de las restricciones de integridad mediante claves foráneas y restricciones CHECK. Finalmente, se identificaron errores comunes de Oracle y se explicó la causa técnica de cada uno.
+
+\begin{table}[H]
+\centering
+\caption{Resumen de tablas creadas}
+\begin{tabular}{|m{4cm}|m{8cm}|}
+\hline
+\textbf{Tabla} & \textbf{Descripción} \\ \hline
+roles & Almacena los roles de los usuarios del sistema. \\ \hline
+departamentos & Registra los departamentos de la biblioteca. \\ \hline
+categorias & Clasifica los artículos disponibles. \\ \hline
+ubicaciones & Registra los bloques o ubicaciones físicas. \\ \hline
+articulos & Almacena los artículos que pueden ser prestados. \\ \hline
+usuarios & Registra los usuarios del sistema. \\ \hline
+prestamos & Registra los préstamos realizados por los usuarios. \\ \hline
+\end{tabular}
+\end{table}
+
+\section{Habilidades blandas empleadas en la tarea}
+
 \begin{itemize}
-    \item Realizar un análisis exhaustivo de la cardinalidad entre las 8 entidades identificadas para asegurar que las relaciones en el modelo entidad-relación reflejen fielmente la lógica del negocio.
-    \item Documentar de manera detallada cada regla de negocio establecida, con el fin de facilitar la posterior creación de restricciones (constraints) y disparadores (triggers) a nivel de base de datos.
-    \item Validar el listado de atributos propuesto mediante un proceso de normalización hasta la tercera forma normal (3NF), evitando así la redundancia de datos y posibles anomalías en futuras inserciones o actualizaciones.
-    \item Mantener una comunicación constante entre los integrantes del grupo para asegurar que el alcance definido se cumpla estrictamente dentro de los plazos establecidos por el docente. \cite{greenwade93}
+    \item[$\checkmark$] Pensamiento crítico.
+    \item[$\checkmark$] Responsabilidad.
+    \item[$\checkmark$] Adaptabilidad.
+    \item[$\checkmark$] Comunicación asertiva.
+    \item[$\checkmark$] Resolución de problemas.
 \end{itemize}
-\subsection{Referencias}
-Insertar las referencias bibliográficas empleadas aplicando la norma IEEE.
 
-\vspace{-3em} %reduce el espacio causado por refname vacío
-\renewcommand{\refname}{}
-\bibliographystyle{ieeetr}
-\bibliography{citas}
+\section{Conclusiones}
 
-\subsection{Anexos}
-\vfill
+Se concluye que el uso de claves primarias y claves foráneas permite mantener la integridad referencial dentro de una base de datos relacional. En la práctica se evidenció que Oracle no permite insertar datos relacionados con registros inexistentes ni eliminar registros padres que poseen registros hijos asociados.
+
+Además, se comprobó que las operaciones DML deben ejecutarse en un orden correcto. Por ejemplo, para eliminar un usuario con préstamos registrados, primero se deben eliminar los préstamos y después el usuario. De esta manera se evitan errores como \texttt{ORA-02292}.
+
+Finalmente, la práctica permitió reforzar el uso de sentencias \texttt{INSERT}, \texttt{UPDATE}, \texttt{DELETE} y \texttt{SELECT}, junto con el análisis de errores comunes en Oracle SQL.
+
+\section{Recomendaciones}
+
+Se recomienda verificar siempre los registros antes de ejecutar operaciones de actualización o eliminación, usando previamente una sentencia \texttt{SELECT}. Esto permite evitar cambios accidentales en la base de datos.
+
+También se recomienda respetar el orden de inserción y eliminación de datos cuando existen claves foráneas. Primero deben insertarse los datos en las tablas padre y luego en las tablas hijas. Para eliminar, el orden debe ser inverso: primero las tablas hijas y después las tablas padre.
+
+Finalmente, se recomienda escribir correctamente los nombres de tablas, columnas y tipos de datos, ya que errores pequeños como \texttt{VARACHAR2} en lugar de \texttt{VARCHAR2} pueden impedir la ejecución correcta del script.
+
+\section{Referencias}
+
+\begin{thebibliography}{00}
+
+\bibitem{oracle_sql}
+Oracle, \textit{Oracle Database SQL Language Reference}. Oracle Corporation.
+
+\bibitem{silberschatz}
+A. Silberschatz, H. F. Korth y S. Sudarshan, \textit{Database System Concepts}. McGraw-Hill.
+
+\end{thebibliography}
+
+\section{Anexos}
+
+\subsection{Script completo utilizado en clase}
+
+\begin{lstlisting}[language=SQL, caption={Script completo de la práctica}]
+CONNECT system/system;
+
+CREATE USER clase_dml IDENTIFIED BY FACT123;
+
+GRANT CONNECT, RESOURCE, UNLIMITED TABLESPACE TO clase_dml;
+
+CONNECT clase_dml/FACT123;
+
+CREATE TABLE roles (
+    id_rol NUMBER PRIMARY KEY,
+    nombre VARCHAR2(50) NOT NULL
+);
+
+CREATE TABLE departamentos (
+    id_departamento NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL
+);
+
+CREATE TABLE categorias (
+    id_categoria NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL
+);
+
+CREATE TABLE ubicaciones (
+    id_ubicacion NUMBER PRIMARY KEY,
+    nombre VARCHAR2(60) NOT NULL,
+    id_departamento NUMBER NOT NULL,
+    CONSTRAINT fk_ubicaciones_departamentos 
+        FOREIGN KEY (id_departamento)
+        REFERENCES departamentos(id_departamento)
+);
+
+CREATE TABLE articulos (
+    id_articulo NUMBER PRIMARY KEY,
+    descripcion VARCHAR2(100) NOT NULL,
+    id_categoria NUMBER NOT NULL,
+    stock NUMBER NOT NULL,
+    CONSTRAINT ck_articulos_stock CHECK (stock >= 0),
+    CONSTRAINT fk_articulos_categorias 
+        FOREIGN KEY (id_categoria)
+        REFERENCES categorias(id_categoria)
+);
+
+CREATE TABLE usuarios (
+    id_usuario NUMBER PRIMARY KEY,
+    nombre VARCHAR2(80) NOT NULL,
+    id_rol NUMBER NOT NULL,
+    id_departamento NUMBER NOT NULL,
+    id_ubicacion NUMBER NOT NULL,
+    CONSTRAINT fk_usuarios_roles 
+        FOREIGN KEY (id_rol)
+        REFERENCES roles(id_rol),
+    CONSTRAINT fk_usuarios_departamentos 
+        FOREIGN KEY (id_departamento)
+        REFERENCES departamentos(id_departamento),
+    CONSTRAINT fk_usuarios_ubicaciones 
+        FOREIGN KEY (id_ubicacion)
+        REFERENCES ubicaciones(id_ubicacion)
+);
+
+CREATE TABLE prestamos (
+    id_prestamo NUMBER PRIMARY KEY,
+    id_usuario NUMBER NOT NULL,
+    id_articulo NUMBER NOT NULL,
+    fecha_prestamo DATE NOT NULL,
+    fecha_devolucion DATE,
+    cantidad NUMBER NOT NULL,
+    CONSTRAINT ck_prestamos_cantidad CHECK (cantidad > 0),
+    CONSTRAINT fk_prestamos_usuarios 
+        FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario),
+    CONSTRAINT fk_prestamos_articulos 
+        FOREIGN KEY (id_articulo)
+        REFERENCES articulos(id_articulo)
+);
+
+SELECT * FROM tab;
+
+INSERT INTO roles VALUES (1, 'Administrador');
+INSERT INTO roles VALUES (2, 'Bibliotecario');
+INSERT INTO roles VALUES (3, 'Usuario');
+
+INSERT INTO departamentos VALUES (10, 'Sistemas');
+INSERT INTO departamentos VALUES (20, 'Docencia');
+INSERT INTO departamentos VALUES (30, 'Administrativo');
+
+INSERT INTO ubicaciones VALUES (100, 'Bloque A', 10);
+INSERT INTO ubicaciones VALUES (101, 'Bloque B', 20);
+INSERT INTO ubicaciones VALUES (102, 'Bloque C', 30);
+
+INSERT INTO categorias VALUES (1, 'Equipos');
+INSERT INTO categorias VALUES (2, 'Accesorios');
+
+INSERT INTO articulos VALUES (1, 'Laptop HP 15', 1, 10);
+INSERT INTO articulos VALUES (2, 'Mouse Inalambrico', 2, 25);
+INSERT INTO articulos VALUES (3, 'Teclado Mecanico', 2, 15);
+INSERT INTO articulos VALUES (10, 'Monitor LG', 1, 8);
+
+INSERT INTO usuarios VALUES (10, 'Juan Perez', 1, 10, 100);
+INSERT INTO usuarios VALUES (11, 'Maria Lopez', 2, 20, 101);
+INSERT INTO usuarios VALUES (12, 'Carlos Ruiz', 3, 30, 102);
+INSERT INTO usuarios VALUES (20, 'Pedro Sanchez', 2, 10, 100);
+
+INSERT INTO prestamos VALUES (100, 10, 1, SYSDATE, NULL, 1);
+INSERT INTO prestamos VALUES (101, 11, 2, SYSDATE, NULL, 3);
+INSERT INTO prestamos VALUES (102, 12, 3, SYSDATE, NULL, 2);
+INSERT INTO prestamos VALUES (200, 20, 1, SYSDATE, NULL, 2);
+
+COMMIT;
+\end{lstlisting}
+
 \end{document}
