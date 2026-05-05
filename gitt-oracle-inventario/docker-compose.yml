@@ -1,0 +1,51 @@
+services:
+  oracle-db:
+    image: gvenzl/oracle-free:23-slim
+    container_name: gitt-oracle-db
+    ports:
+      - "1521:1521"
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD:-Gitt2026*}
+      APP_USER: ${ORACLE_APP_USER:-GITT_INV}
+      APP_USER_PASSWORD: ${ORACLE_APP_PASSWORD:-Gitt2026*}
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./database/full:/container-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  backend-api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: gitt-backend-api
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__OracleConnection: ${ORACLE_CONNECTION:-User Id=GITT_INV;Password=Gitt2026*;Data Source=oracle-db:1521/FREEPDB1}
+      Jwt__Key: ${JWT_KEY:-GITT_INVENTARIO_FISEI_SECRET_KEY_DEVELOPMENT_2026}
+      Jwt__Issuer: GittInventario.Api
+      Jwt__Audience: GittInventario.Frontend
+      Frontend__Url: http://localhost:5173
+
+  frontend-react:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: gitt-frontend-react
+    depends_on:
+      - backend-api
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_URL: http://localhost:8080/api
+
+volumes:
+  oracle-data:
