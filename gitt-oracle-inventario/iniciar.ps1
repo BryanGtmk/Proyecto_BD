@@ -40,10 +40,17 @@ else {
 
 Write-Host ""
 Write-Host "Servicios iniciados:" -ForegroundColor Green
-Write-Host "  Oracle:   localhost:1521/FREEPDB1"
+Write-Host "  Oracle DB: localhost:1521/FREEPDB1  (usar SQL Developer o SQL*Plus, no navegador)"
 Write-Host "  API:      http://localhost:8080"
 Write-Host "  Swagger:  http://localhost:8080/swagger"
 Write-Host "  Frontend: http://localhost:5173"
+Write-Host ""
+Write-Host "Conexion Oracle para SQL Developer:" -ForegroundColor Cyan
+Write-Host "  Usuario:     GITT_INV"
+Write-Host "  Contrasena:  Gitt2026*"
+Write-Host "  Host:        localhost"
+Write-Host "  Puerto:      1521"
+Write-Host "  Service:     FREEPDB1"
 Write-Host ""
 Write-Host "Si Oracle no cargo el script automaticamente, ejecuta:" -ForegroundColor Yellow
 Write-Host "docker exec -it gitt-oracle-db sqlplus GITT_INV/Gitt2026*@FREEPDB1 @/container-entrypoint-initdb.d/00_bd_completa.sql"
