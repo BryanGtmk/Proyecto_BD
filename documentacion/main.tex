@@ -101,22 +101,17 @@
 
 \begin{document}
 
-%========================================================
-% TÍTULO
-%========================================================
 \begin{center}
     {\large \textbf{INFORME DE TAREA}} \\[0.2cm]
     {\large \textbf{Consultas SQL en Oracle - Base de Datos Veterinaria}}    
 \end{center}
 
-%========================================================
-% PORTADA
-%========================================================
 \section{Portada}
 
 \begin{flushleft}
 \begin{tabular}{ l l }
-    \textbf{Tema:} & Consultas SQL en Oracle para la base de datos veterinaria \\
+    \textbf{Tema:} & Consultas SQL en Oracle para la base de datos \\
+                   & veterinaria \\
     \textbf{Unidad de Organización Curricular:} & Profesional \\
     \textbf{Nivel y Paralelo:} & 4to Semestre ``B'' \\
     \textbf{Alumno participante:} & Guatemal Bryan \\
@@ -125,9 +120,6 @@
 \end{tabular}
 \end{flushleft}
 
-%========================================================
-% INFORME DE TAREA
-%========================================================
 \section{Informe de tarea}
 
 \subsection{Objetivos}
@@ -165,9 +157,10 @@ La tarea consistió en ejecutar consultas SQL sobre la base de datos \texttt{VET
     \item Computador personal.
     \item Sistema operativo Windows.
     \item Oracle Database.
-    \item Oracle SQL Developer o SQL*Plus.
-    \item Editor Visual Studio Code.
-    \item LaTeX para la elaboración del informe.
+    \item Oracle SQL Developer para la conexión gráfica, verificación del usuario y revisión de tablas.
+    \item Terminal SQL*Plus para la ejecución continua del script SQL y obtención de evidencias de resultados.
+    \item Visual Studio Code para la edición del informe en LaTeX.
+    \item LaTeX para la elaboración del documento final.
 \end{itemize}
 
 \textbf{TAC empleados en la guía práctica:}
@@ -187,6 +180,7 @@ La tarea consistió en ejecutar consultas SQL sobre la base de datos \texttt{VET
 Las actividades desarrolladas fueron las siguientes:
 
 \begin{enumerate}
+    \item Configurar la conexión a la base de datos en Oracle SQL Developer.
     \item Conectarse al usuario \texttt{VETERINARIA\_DB}.
     \item Verificar la creación de las tablas de la base de datos.
     \item Ejecutar los registros iniciales mediante sentencias \texttt{INSERT}.
@@ -196,9 +190,6 @@ Las actividades desarrolladas fueron las siguientes:
     \item Elaborar el informe final con resultados, evidencias, conclusiones y recomendaciones.
 \end{enumerate}
 
-%========================================================
-% BASE DE DATOS
-%========================================================
 \section{Descripción de la base de datos}
 
 La base de datos empleada se denomina \texttt{VETERINARIA\_DB}. Esta base de datos permite registrar información relacionada con propietarios, mascotas, especies, veterinarios, especialidades y consultas médicas.
@@ -220,9 +211,20 @@ La base de datos empleada se denomina \texttt{VETERINARIA\_DB}. Esta base de dat
 \end{tabular}
 \end{table}
 
-%========================================================
-% RESULTADOS
-%========================================================
+\subsection{Script SQL desarrollado}
+
+Como parte de la actividad se elaboró y ejecutó un script SQL con las consultas solicitadas. El archivo contiene la creación de tablas, inserción de datos, consultas principales, consultas adicionales y cinco consultas propias.
+
+\begin{center}
+\texttt{consultas\_veterinaria\_bryan.sql}
+\end{center}
+
+El script permite ejecutar las sentencias dentro del usuario \texttt{VETERINARIA\_DB}, aplicando filtros, ordenamiento, uniones, agrupaciones, subconsultas y funciones de agregación.
+
+\subsection{Uso de Oracle SQL Developer y terminal}
+
+La herramienta principal utilizada para la configuración y verificación de la base de datos fue Oracle SQL Developer, ya que permitió crear la conexión gráfica con el usuario \texttt{VETERINARIA\_DB}, comprobar la sesión activa y verificar las tablas existentes. Posteriormente, se utilizó el terminal con SQL*Plus para ejecutar el script de consultas de forma continua, debido a que este entorno facilita correr varias sentencias en secuencia, revisar rápidamente la salida generada y conservar evidencias textuales de ejecución. Ambos entornos se conectaron al mismo usuario \texttt{VETERINARIA\_DB} y a la misma instancia de Oracle, por lo que los resultados pertenecen a la misma base de datos trabajada en la práctica.
+
 \section{Resultados obtenidos}
 
 Se ejecutaron correctamente las consultas solicitadas para la base de datos \texttt{VETERINARIA\_DB}. Los resultados permitieron obtener información filtrada, ordenada, agrupada y relacionada entre las diferentes tablas de la base de datos.
@@ -285,17 +287,37 @@ Además de las consultas solicitadas, se desarrollaron cinco consultas propias p
 \midrule
 \endhead
 
-1 & Propietarios que tienen más mascotas que el promedio de mascotas por propietario. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{AVG}, \texttt{COUNT} \\
-2 & Veterinarios cuyo total generado supera el promedio de ingresos por veterinario. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{SUM}, \texttt{AVG} \\
-3 & Especies que han generado más dinero que el costo promedio general de consultas. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{SUM}, \texttt{AVG} \\
-4 & Mascotas que tienen más consultas que el promedio de consultas por mascota. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{COUNT}, \texttt{SUM} \\
-5 & Especialidades con ingresos mayores al promedio de ingresos por especialidad. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{SUM}, \texttt{AVG} \\
+1 & Total de mascotas y peso promedio por propietario. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{AVG}, \texttt{COUNT} \\
+2 & Promedio y generación económica por especie. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{SUM}, \texttt{AVG} \\
+3 & Veterinarios sobre el promedio de consultas o generación. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{SUM}, \texttt{AVG} \\
+4 & Mascotas con mayor cantidad de consultas. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{COUNT}, \texttt{SUM} \\
+5 & Especialidades con mayor generación económica. & \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsulta, \texttt{SUM}, \texttt{AVG} \\
 \bottomrule
 \end{longtable}
 
-%========================================================
-% HABILIDADES BLANDAS
-%========================================================
+\subsection{Explicación de las consultas propias}
+
+\textbf{Consulta propia 1: Total de mascotas y peso promedio por propietario.}  
+Esta consulta permite identificar cuántas mascotas tiene cada propietario y calcular el peso promedio de sus mascotas. Se utiliza \texttt{INNER JOIN} para relacionar propietarios con mascotas, \texttt{GROUP BY} para agrupar por propietario y funciones como \texttt{COUNT} y \texttt{AVG} para obtener los resultados agregados. Además, se aplica \texttt{HAVING} para filtrar los grupos según una condición.
+
+\textbf{Consulta propia 2: Promedio y generación económica por especie.}  
+Esta consulta permite analizar cuánto dinero han generado las consultas según la especie de la mascota. Para ello se relacionan las tablas \texttt{ESPECIE}, \texttt{MASCOTA} y \texttt{CONSULTA}. Se emplea \texttt{SUM} para calcular el total generado y \texttt{AVG} para obtener promedios de costos.
+
+\textbf{Consulta propia 3: Veterinarios sobre el promedio de consultas o generación.}  
+Esta consulta permite identificar veterinarios cuyo rendimiento económico o cantidad de consultas supera un promedio calculado mediante subconsulta. Se aplican agrupaciones por veterinario, funciones de agregación y la cláusula \texttt{HAVING} para filtrar los resultados agrupados.
+
+\textbf{Consulta propia 4: Mascotas con mayor cantidad de consultas.}  
+Esta consulta permite conocer qué mascotas registran una mayor cantidad de atenciones médicas. Se relacionan las tablas \texttt{MASCOTA} y \texttt{CONSULTA}, se agrupa por mascota y se utiliza \texttt{COUNT} para calcular el número de consultas realizadas.
+
+\textbf{Consulta propia 5: Especialidades con mayor generación económica.}  
+Esta consulta permite determinar qué especialidades veterinarias generan mayores ingresos. Se relacionan las tablas \texttt{ESPECIALIDAD} y \texttt{CONSULTA}, se agrupan los datos por especialidad y se utiliza \texttt{SUM} para calcular el total generado.
+
+\subsection{Repositorio GitHub}
+
+El desarrollo de la actividad fue organizado en un repositorio de GitHub. En el repositorio se incluyen el script SQL, el documento en LaTeX, las capturas de evidencia y el archivo PDF generado.
+
+\textbf{Enlace del repositorio:} \url{https://github.com/BryanGtmk/Proyecto_BD/tree/consultas_SQL_con_JOIN%2C_filtros_y_agregaciones}
+
 \subsection{Habilidades blandas empleadas en la práctica}
 
 \begin{itemize}
@@ -310,24 +332,20 @@ Además de las consultas solicitadas, se desarrollaron cinco consultas propias p
     \item[$\boxtimes$] Responsabilidad
 \end{itemize}
 
-%========================================================
-% CONCLUSIONES Y RECOMENDACIONES
-%========================================================
 \subsection{Conclusiones}
 
 La práctica permitió aplicar los principales fundamentos de consultas SQL en Oracle, utilizando filtros, ordenamiento, uniones, agrupaciones, funciones de agregación y subconsultas. Mediante la base de datos \texttt{VETERINARIA\_DB}, se logró consultar información relacionada entre propietarios, mascotas, veterinarios, especialidades y consultas médicas.
 
 Además, el desarrollo de consultas propias permitió reforzar el uso combinado de \texttt{INNER JOIN}, \texttt{GROUP BY}, \texttt{HAVING}, subconsultas y funciones de agregación. Esto demuestra que una base de datos correctamente relacionada facilita la obtención de reportes útiles para la toma de decisiones.
 
+Finalmente, el uso de Oracle SQL Developer permitió comprobar la conexión al usuario correspondiente y verificar las tablas creadas. Luego, el terminal con SQL*Plus permitió ejecutar el script de manera rápida y continua, manteniendo la conexión con la misma base de datos \texttt{VETERINARIA\_DB}.
+
 \subsection{Recomendaciones}
 
 Se recomienda verificar la conexión al usuario correcto antes de ejecutar las consultas, ya que trabajar con otro usuario puede generar errores relacionados con tablas inexistentes. También se recomienda ejecutar primero las sentencias de creación de tablas e inserción de datos antes de probar las consultas.
 
-Además, es conveniente ordenar y nombrar correctamente las capturas de evidencia para facilitar su inclusión en el informe. En consultas con columnas de texto largas, se recomienda ajustar el tamaño de salida o utilizar Oracle SQL Developer para visualizar los resultados de forma más clara.
+Además, es conveniente ordenar y nombrar correctamente las capturas de evidencia para facilitar su inclusión en el informe. En consultas con columnas de texto largas, se recomienda utilizar Oracle SQL Developer o ajustar la salida del terminal para visualizar los resultados de forma más clara.
 
-%========================================================
-% REFERENCIAS
-%========================================================
 \section{Referencias}
 
 \begin{thebibliography}{00}
@@ -343,20 +361,31 @@ A. Silberschatz, H. F. Korth y S. Sudarshan, \textit{Database System Concepts}. 
 
 \end{thebibliography}
 
-%========================================================
-% ANEXOS
-%========================================================
 \section{Anexos}
 
-\subsection{Evidencias generales}
+\subsection{Evidencia de uso de Oracle SQL Developer}
 
-\evidencia{00_conexion_veterinaria_db.png}{Conexión al usuario \texttt{VETERINARIA\_DB}.}{fig:conexion}
+Para el desarrollo de la actividad se utilizó Oracle SQL Developer como herramienta gráfica para la conexión y verificación de la base de datos \texttt{VETERINARIA\_DB}. En la Figura \ref{fig:configuracion-sql-developer} se muestra la configuración de conexión empleada, utilizando el usuario \texttt{VETERINARIA\_DB}, el host \texttt{localhost}, el puerto \texttt{1521} y el SID \texttt{xe}.
+
+\evidencia{00_configuracion_conexion_sql_developer.png}{Configuración de conexión en Oracle SQL Developer.}{fig:configuracion-sql-developer}
+
+Además, se verificó la conexión mediante la consulta \texttt{SELECT USER FROM DUAL;}, confirmando que la sesión activa corresponde al usuario \texttt{VETERINARIA\_DB}, como se observa en la Figura \ref{fig:conexion}.
+
+\evidencia{00_conexion_veterinaria_db.png}{Verificación del usuario conectado en Oracle SQL Developer.}{fig:conexion}
+
+Finalmente, se comprobó la existencia de las tablas principales de la base de datos mediante la consulta a \texttt{USER\_TABLES}. El resultado evidencia las tablas \texttt{CONSULTA}, \texttt{ESPECIALIDAD}, \texttt{ESPECIE}, \texttt{MASCOTA}, \texttt{PROPIETARIO} y \texttt{VETERINARIO}.
+
+\evidencia{03_tablas_creadas.png}{Verificación de tablas creadas en Oracle SQL Developer.}{fig:tablas}
+
+\subsection{Evidencia complementaria de ejecución en terminal}
+
+Después de verificar la conexión y las tablas en Oracle SQL Developer, se ejecutaron las consultas mediante terminal SQL*Plus para procesar el script completo de forma secuencial. Esta evidencia complementa el trabajo realizado en Oracle SQL Developer, ya que ambos entornos utilizaron el mismo usuario \texttt{VETERINARIA\_DB} y la misma base de datos.
+
+\subsection{Evidencias generales}
 
 \evidencia{01_creacion_tablas.png}{Ejecución de la creación de tablas.}{fig:creacion-tablas}
 
 \evidencia{02_inserts_datos_commit.png}{Inserción de datos y confirmación mediante \texttt{COMMIT}.}{fig:inserts}
-
-\evidencia{03_tablas_creadas.png}{Verificación de tablas creadas en la base de datos.}{fig:tablas}
 
 \subsection{Evidencias de consultas principales}
 
