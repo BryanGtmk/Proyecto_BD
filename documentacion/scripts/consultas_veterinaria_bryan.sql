@@ -372,4 +372,5 @@ HAVING SUM(c.costo) > (
         GROUP BY id_especialidad
     )
 );
+xd
 
