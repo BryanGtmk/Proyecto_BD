@@ -1,311 +1,826 @@
 \documentclass{article}
 
-% Language setting
-% Replace `english' with e.g. `spanish' to change the document language
-\usepackage[spanish]{babel}
+% Idioma
+\usepackage[spanish, es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 
+% Configuración de página
 \usepackage[letterpaper,top=2cm,bottom=5cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
 
-% Useful packages
+% Paquetes útiles
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
-\usepackage{amssymb} 
+\usepackage{amssymb}
 \usepackage{fancyhdr}
-\usepackage{lipsum} % Para generar texto de ejemplo
 \usepackage{multicol}
-\pagestyle{fancy} 
-\usepackage{url}
+\usepackage{float}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{caption}
 
-  
+\pagestyle{fancy}
+\fancyhf{}
+\setlength{\headheight}{70pt}
 
-\fancyhf{} % Limpiar encabezado y pie de página por defecto
-\setlength{\headheight}{70pt} % Ajuste del tamaño del encabezado (puedes aumentar este valor si es necesario)
-
-% Definición del encabezado
-
+% Encabezado institucional
 \fancyhead[C]{%
     \begin{minipage}[c]{2.0cm}
         \centering
-        \includegraphics[width=2.0cm]{img/uta.png}
+        \IfFileExists{img/uta.png}{\includegraphics[width=2.0cm]{img/uta.png}}{\fbox{\scriptsize UTA}}
     \end{minipage}%
     \hfill
-    \begin{minipage}[c]{8cm} 
+    \begin{minipage}[c]{8cm}
         \centering
         \small {\textbf{UNIVERSIDAD TÉCNICA DE AMBATO}} \\[0.1cm]
-        \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS ELECTRÓNICA E INDUSTRIAL} \\[0.1cm]
-        \scriptsize \textbf{CARRERA SOFTWARE - Base de Datos} \\[0.1cm]
-        \scriptsize \textbf{CICLO ACADÉMICO: AGOSTO 2025 - ENERO 2026}
+        \scriptsize \textit{FACULTAD DE INGENIERÍA EN SISTEMAS, ELECTRÓNICA E INDUSTRIAL} \\[0.1cm]
+        \scriptsize \textbf{CARRERA DE SOFTWARE - BASE DE DATOS} \\[0.1cm]
+        \scriptsize \textbf{CICLO ACADÉMICO: ENERO - JULIO 2026}
     \end{minipage}%
     \hfill
     \begin{minipage}[c]{2.0cm}
         \centering
-        \includegraphics[width=2.0cm]{img/fisei.png}
+        \IfFileExists{img/fisei.png}{\includegraphics[width=2.0cm]{img/fisei.png}}{\fbox{\scriptsize FISEI}}
     \end{minipage}%
 }
 
+% Configuración para código SQL
+\lstdefinestyle{sqlstyle}{
+    language=SQL,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{gray},
+    stringstyle=\color{red!70!black},
+    breaklines=true,
+    showstringspaces=false,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    tabsize=2
+}
+\lstset{style=sqlstyle}
+
+% Comando para insertar capturas.
+% Si una imagen todavía no existe, se muestra un recuadro de aviso para que el PDF compile.
+\newcommand{\captura}[3][0.90\linewidth]{
+\begin{figure}[H]
+    \centering
+    \IfFileExists{#2}{
+        \includegraphics[width=#1]{#2}
+    }{
+        \fbox{
+            \parbox[c][5cm][c]{0.85\linewidth}{
+                \centering
+                Falta insertar la imagen: \texttt{\detokenize{#2}}
+            }
+        }
+    }
+    \caption{#3}
+\end{figure}
+}
+
 \begin{document}
+
 \begin{center}
-    {\large \textbf{INFORME DE TAREA}} \\    
+    {\large \textbf{INFORME DE EXAMEN PRÁCTICO No. 2}} \\[0.2cm]
+    {\normalsize \textbf{Sistema de transporte puerta a puerta en Oracle SQL Developer}}
 \end{center}
 
 \section{Portada}
+
 \begin{flushleft}
 \begin{tabular}{ l l }
-    \textbf{Tema:} & Proyecto de base de datos \\
+    \textbf{Tema:} & Examen práctico No. 2: Sistema de transporte puerta a puerta \\
     \textbf{Unidad de Organización Curricular:} & Profesional \\
-    \textbf{Nivel y Paralelo:} & 4to Semestre "B"\\
-    \textbf{Alumnos participantes:} & Molina Karen \\
-    & Guatemal Bryan \\
-    &  Gisselle Espín\\
-    & Benjarano Carlos \\
-    \textbf{Asignatura:} & Base de Datos\\
-    \textbf{Docente:} & Ing.Jose Ruben Caiza Caizabuano Mg. \\
+    \textbf{Nivel y Paralelo:} & 5.º Semestre ``B'' \\
+    \textbf{Alumno participante:} & Guatemal Avilez Bryan Stalin \\
+    \textbf{Asignatura:} & Base de Datos \\
+    \textbf{Docente:} & Ing. José Caiza, Mg. \\
+    \textbf{Herramienta empleada:} & Oracle SQL Developer \\
 \end{tabular}
 \end{flushleft}
 
-
 \section{Informe de la Tarea}
+
 \subsection{Objetivos}
 
 \subsubsection{General}
-Desarrollar un modelo de base de datos eficiente para el control y seguimiento del préstamo de equipos tecnológicos, permitiendo la organización centralizada de la información y el cumplimiento de las normativas de uso institucional.
+
+Diseñar e implementar una base de datos relacional para una empresa de transporte puerta a puerta, aplicando normalización, modelo relacional, sentencias DDL, operaciones DML, transacciones, consultas SQL avanzadas y programación PL/SQL en Oracle SQL Developer.
 
 \subsubsection{Específicos}
-\begin{itemize}
-    \item Identificar las entidades y atributos fundamentales del dominio para establecer una estructura de datos sólida que soporte al menos 8 entidades principales.
-    \item Definir y normalizar las reglas de negocio para garantizar la integridad y el flujo correcto de los procesos de préstamo y devolución de equipos.
-    \item Establecer el alcance técnico y funcional del proyecto, delimitando las responsabilidades del sistema y los requerimientos iniciales para el entregable de la Fase 1.
-\end{itemize}
 
+\begin{itemize}
+    \item Identificar las entidades principales del caso de estudio y aplicar normalización hasta Tercera Forma Normal.
+    \item Implementar las tablas CLIENTES, CONDUCTORES, VEHICULOS, VIAJES y RESERVAS con restricciones de integridad.
+    \item Ejecutar operaciones de inserción, actualización, eliminación, transacciones, consultas avanzadas y ejercicios PL/SQL para validar el funcionamiento de la base de datos.
+\end{itemize}
 
 \subsection{Instrucciones}
 
-De acuerdo con la planificación de la asignatura para la Semana 1-2, el desarrollo de la presente práctica se rige bajo las siguientes directrices:
-
-\begin{itemize}
-    \item \textbf{Análisis de Conceptos:} Identificar y diferenciar ejemplos prácticos de datos frente a información dentro del contexto de la Universidad Técnica de Ambato (UTA).
-    \item \textbf{Modelado Inicial:} Listar y estructurar un mínimo de 8 entidades con sus respectivos atributos basados en el caso de estudio "Préstamos de equipos".
-    \item \textbf{Reglas de Negocio:} Definir al menos 5 reglas de negocio que condicionen el funcionamiento del sistema (estados, plazos y restricciones).
-    \item \textbf{Documentación:} Elaborar el acta de grupo que integre el alcance técnico y las reglas iniciales como primer entregable del proyecto.
-\end{itemize}
+El examen práctico solicita desarrollar una solución completa en Oracle SQL Developer para automatizar el control de operaciones de una empresa de transporte puerta a puerta. La solución debe contemplar normalización, modelo relacional, creación de tablas con restricciones, inserción de datos, transacciones, consultas SQL avanzadas y ejercicios PL/SQL.
 
 \subsection{Listado de equipos, materiales y recursos}
+
 \textbf{Listado de equipos y materiales generales empleados en la tarea:}
+
 \begin{itemize}
-    \item Computador portátil o de escritorio con acceso a internet.
-    \item Herramientas de modelado de datos.
-    \item Editor de texto especializado (Overleaf / LaTeX).
-    \item Repositorio de código (GitHub / Git) para control de versiones del proyecto.
+    \item Computador personal con sistema operativo Windows.
+    \item Oracle Database.
+    \item Oracle SQL Developer.
+    \item Editor de texto para organizar el script SQL.
+    \item Plantilla LaTeX institucional para elaborar el informe.
+    \item Capturas de pantalla como evidencias de ejecución.
 \end{itemize}
 
 \textbf{TAC (Tecnologías para el Aprendizaje y Conocimiento) empleados en la tarea:}
+
 \begin{itemize}
     \item[$\boxtimes$] Plataformas educativas
     \item[$\square$] Simuladores y laboratorios virtuales
     \item[$\boxtimes$] Aplicaciones educativas
-    \item[$\boxtimes$] Recursos audiovisuales
+    \item[$\square$] Recursos audiovisuales
     \item[$\square$] Gamificación
     \item[$\boxtimes$] Inteligencia Artificial
-    \item Otros (Especifique)
+    \item Otros: \underline{Oracle SQL Developer, LaTeX}
 \end{itemize}
 
-\subsection{Desarrollo de la Tarea (Actividades a Desarrollar)}
+\subsection{Desarrollo de la Tarea}
 
-El desarrollo de la presente práctica se desglosa en las siguientes actividades secuenciales orientadas al diseño del sistema de préstamo de equipos:
-\begin{enumerate}
-    \item \textbf{Análisis de requerimientos y contexto:} Identificación de 10 ejemplos prácticos de datos e información aplicados al entorno de la Universidad Técnica de Ambato para comprender el flujo de entrada y salida del sistema.
-    \item \textbf{Modelado conceptual de datos:} Definición de un esquema relacional que incluye un mínimo de 8 entidades fundamentales, estableciendo sus respectivos atributos y relaciones de cardinalidad.
-    \item \textbf{Establecimiento de la lógica de negocio:} Formulación de 5 reglas de negocio iniciales que regirán el comportamiento del sistema ante eventos de préstamo, devolución y gestión de usuarios.
-    \item \textbf{Documentación técnica del proyecto:} Elaboración del acta constitutiva del grupo y definición del alcance del proyecto, delimitando las fronteras del software y sus entregables inmediatos.
-\end{enumerate}
+\subsubsection{Descripción del caso de estudio}
 
-\subsection{Resultados obtenidos}
-De acuerdo con el tipo de trabajo, se plasmarán los resultados alcanzados en la guía tarea una vez ejecutadas las actividades. Se pueden emplear figuras y tablas las cuales deben ser numeradas.
+La empresa de transporte puerta a puerta registra inicialmente toda la información en una sola hoja de cálculo con los campos: Num\_Viaje, Fecha, Cliente, Teléfono, Conductor, Vehículo, Placa, Origen, Destino, Valor y FormaPago.
 
+Esta forma de almacenamiento genera redundancia, repetición de datos e inconsistencias, debido a que la información del cliente, conductor, vehículo y viaje se encuentra mezclada en una única estructura. Por esta razón, se aplicó normalización y se construyó un modelo relacional.
 
-\subsubsection{Identificación de Datos e Información en el Contexto UTA}
+\subsubsection{Identificación de entidades}
 
-A continuación, se presentan 10 ejemplos que ilustran la diferencia entre un \textbf{dato} (hecho en bruto) y la \textbf{información} (dato procesado con contexto y utilidad), aplicados al sistema de préstamos de equipos de la carrera de Ingeniería en Software.
-
-\vspace{0.5cm}
-
-\begin{enumerate}
-
-\item \textbf{Control del proyector Epson} \\
-\textit{Dato}: ``Control: Epson CB-695Wi'' \\
-\textit{Información}: El control del proyector Epson del aula 304 se ha prestado 8 veces esta semana, pero en 3 ocasiones lo devolvieron sin pilas, lo que indica la necesidad de mantener un stock de repuestos en el laboratorio.
-
-\item \textbf{Control del aire acondicionado} \\
-\textit{Dato}: ``Aire acondicionado: LG - Laboratorio 2'' \\
-\textit{Información}: El control del aire acondicionado del Laboratorio 2 solo es solicitado por profesores en horarios de 3 a 5 PM, coincidiendo con las prácticas intensivas de programación, por lo que debe estar siempre disponible en esa franja.
-
-\item \textbf{Computadora de laboratorio} \\
-\textit{Dato}: ``PC: HP ProDesk 400 G5'' \\
-\textit{Información}: La PC \#12 del laboratorio de cómputo ha sido la más solicitada (50 préstamos en el semestre) por ser la única con Android Studio instalado correctamente, justificando la clonación de su software a otros equipos.
-
-\item \textbf{Horario de préstamos} \\
-\textit{Dato}: ``Horario: 7:00 AM'' \\
-\textit{Información}: Las 7:00 AM concentran la mayor demanda de préstamo de computadoras, justo antes de la clase de Estructura de Datos, lo que sugiere abrir el laboratorio 15 minutos antes para evitar demoras.
-
-\item \textbf{Usuario frecuente} \\
-\textit{Dato}: ``Usuario: Ana López - 5to semestre'' \\
-\textit{Información}: La estudiante Ana López ha solicitado el control del proyector en 4 materias diferentes durante el mes (Inglés, Redacción, Web y Proyectos), evidenciando la necesidad de asignarle un equipo de uso temporal.
-
-\item \textbf{Periféricos dañados} \\
-\textit{Dato}: ``Estado: Mouse no funciona'' \\
-\textit{Información}: El 40\% de las computadoras del Laboratorio 3 presentan fallas en el mouse óptico, afectando directamente las prácticas de Interacción Humano-Computador, por lo que se requiere un reemplazo inmediato.
-
-\item \textbf{Software más utilizado} \\
-\textit{Dato}: ``Software: Visual Studio 2022'' \\
-\textit{Información}: Visual Studio 2022 es el IDE con mayor tiempo de uso en los préstamos, principalmente para proyectos de Programación Avanzada, lo que exige priorizar mantenimiento en las PCs que lo ejecutan.
-
-\item \textbf{Accesorios complementarios} \\
-\textit{Dato}: ``Cable: HDMI - 2 metros'' \\
-\textit{Información}: Los cables HDMI se prestan generalmente junto con los controles de proyector para presentaciones de Proyecto Integrador, sugiriendo la creación de ``kits de exposición'' completos.
-
-\item \textbf{Incumplimiento recurrente} \\
-\textit{Dato}: ``Devolución: Tardía - 20 min'' \\
-\textit{Información}: El grupo de Sexto semestre de la materia Integrador acumula 4 devoluciones tardías en el mes, lo que amerita restringir sus préstamos múltiples o aplicar multas más estrictas.
-
-\item \textbf{Fallas técnicas recurrentes} \\
-\textit{Dato}: ``PC \#08 - Sin Internet'' \\
-\textit{Información}: La PC \#08 ha sido reportada 5 veces por conexión lenta a internet, afectando las prácticas de Cloud Computing, por lo que se debe revisar su tarjeta de red o el puerto del switch correspondiente.
-
-\end{enumerate}
-
-\vspace{0.5cm}
-
-% ---------------------------------------------------------------------------
-% 2. Listar entidades y atributos del caso (mín. 8 entidades)
-% ---------------------------------------------------------------------------
-\subsubsection{Entidades y Atributos del Caso}
-
-A continuación, se listan las entidades principales del sistema de préstamos de equipos, junto con sus atributos:
+A partir del caso de estudio se identificaron las siguientes entidades:
 
 \begin{itemize}
-    \item \textbf{LABORATORISTAS} = (id\_lab, nom\_lab, ape\_lab, sue\_lab)
-    \item \textbf{USUARIOS} = (id\_cli, nom\_cli, ape\_cli, tel\_cli, dir\_cli, cor\_cli, ID\_CAR\_PER, habilitado)
-    \item \textbf{CARRERAS} = (ID\_CAR, NOM\_CAR)
-    \item \textbf{PERIODOS} = (ID\_PER\_ACA, FEC\_INI\_PER, FEC\_FIN\_PER)
-    \item \textbf{CATEGORIAS} = (ID\_CAT, NOM\_CAT)
-    \item \textbf{EQUIPOS} = (ID\_EQUI, MAR\_EQUI, SISTEMA\_OP\_EQUI, DIS\_EQUI, EST\_EQUI, MOD\_EQUI, ID\_CAT\_PER)
-    \item \textbf{PRESTAMOS} = (NUM\_PRE, FEC\_PRE, ID\_LAB\_PRESTA, ID\_USUA\_PRE, ID\_EQUI\_PRE, ESTADO\_PRE, ID\_LAB\_DEV, FEC\_DEV, FEC\_REAL, ESTADO\_DEV, ID\_PER\_PER)
-    \item \textbf{MULTAS} = (NUM\_MUL, FEC\_MUL, PRES\_PER\_MUL, VAL\_PAGAR, EST\_MUL)
-    \item \textbf{OBSERVACIONES} = (ID\_OBS, DES\_OBS, ID\_PRES\_PER)
+    \item \textbf{CLIENTES:} almacena los datos de las personas que realizan reservas.
+    \item \textbf{CONDUCTORES:} almacena los datos de los conductores asignados a los viajes.
+    \item \textbf{VEHICULOS:} almacena los datos de los vehículos utilizados para el transporte.
+    \item \textbf{VIAJES:} almacena la información del recorrido, fecha, origen, destino, valor y forma de pago.
+    \item \textbf{RESERVAS:} relaciona a los clientes con los viajes y controla asiento y estado.
 \end{itemize}
 
-% ---------------------------------------------------------------------------
-% 3. Definir 5 reglas de negocio
-% ---------------------------------------------------------------------------
-\subsubsection{Reglas de Negocio}
+\subsubsection{Primera Forma Normal}
 
-\begin{enumerate}
-    \item \textbf{Regla de Unicidad de Préstamo por Usuario}
-    \begin{itemize}
-        \item \textbf{Regla:} Un usuario está autorizado a poseer únicamente un equipo bajo su responsabilidad de forma simultánea. No se permitirá la apertura de un nuevo préstamo si el usuario tiene uno previo sin devolver.
-        \item \textbf{Justificación de Negocio:} Esta medida protege el patrimonio tecnológico de la universidad. Al ser equipos de alto costo (laptops, proyectores), se mitiga el riesgo de pérdida masiva y se garantiza que más estudiantes tengan acceso a los recursos disponibles, evitando el acaparamiento.
-        \item \textbf{Impacto en BD:}
-        \begin{itemize}
-            \item Estado del Préstamo: Un préstamo se considera "Activo" o "Pendiente" mientras el campo FEC\_REAL sea NULL (vacío), lo que indica que el equipo aún no ha reingresado al laboratorio.
-            \item Validación de Inserción: Antes de registrar un nuevo préstamo en la tabla PRESTAMOS, el sistema debe realizar una consulta para verificar que el ID\_USUA\_PRE no aparezca en ningún registro donde la fecha de devolución real aún no haya sido marcada.
-        \end{itemize}
-    \end{itemize}
+La Primera Forma Normal establece que los valores de cada campo deben ser atómicos, es decir, cada columna debe contener un solo dato. En el caso original, los campos se organizan en una estructura inicial sin grupos repetidos.
 
-    \item \textbf{Condición de Usuario Habilitado}
-    \begin{itemize}
-        \item \textbf{Regla:} Solo los usuarios con el atributo habilitado = 'S' pueden solicitar préstamos.
-        \item \textbf{Justificación:} Si un estudiante tiene multas pendientes o dañó un equipo anteriormente, el sistema debe bloquearle el acceso automáticamente.
-        \item \textbf{Impacto en la BD:} El campo habilitado en la tabla USUARIOS debe cambiar a 'N' automáticamente si se genera una multa.
-    \end{itemize}
+\begin{table}[H]
+\centering
+\caption{Modelo inicial en Primera Forma Normal}
+\begin{tabular}{|p{3.5cm}|p{9cm}|}
+\hline
+\textbf{Relación} & \textbf{Atributos} \\
+\hline
+VIAJE\_GENERAL & Num\_Viaje, Fecha, Cliente, Teléfono, Conductor, Vehículo, Placa, Origen, Destino, Valor, FormaPago \\
+\hline
+\end{tabular}
+\end{table}
 
-    \item \textbf{Integridad de la Devolución (Doble Verificación)}
-    \begin{itemize}
-        \item \textbf{Regla:} Todo préstamo debe registrar obligatoriamente al laboratorista que entrega (ID\_LAB\_PRESTA) y, posteriormente, al que recibe (ID\_LAB\_DEV).
-        \item \textbf{Justificación:} Esto asegura la trazabilidad (responsabilidad) en caso de que el equipo regrese dañado.
-        \item \textbf{Impacto en la BD:} El campo ID\_LAB\_DEV debe ser obligatorio al momento de actualizar la FEC\_REAL.
-    \end{itemize}
+\subsubsection{Segunda Forma Normal}
 
-    \item \textbf{Generación Automática de Multas por Mora}
-    \begin{itemize}
-        \item \textbf{Regla:} Si la FEC\_REAL (fecha de entrega real) es mayor a la FEC\_DEV (fecha máxima pactada), se debe generar automáticamente un registro en la tabla MULTAS.
-        \item \textbf{Justificación:} Garantiza que los equipos roten y estén disponibles para otros usuarios en los tiempos previstos.
-        \item \textbf{Impacto en la BD:} Se requiere un cálculo de ($FEC\_REAL - FEC\_DEV$) para determinar el VAL\_PAGAR.
-    \end{itemize}
+La Segunda Forma Normal elimina dependencias parciales. Para ello, se separan los datos de clientes, conductores y vehículos, ya que estos datos no dependen únicamente del viaje, sino de sus propias entidades.
 
-    \item \textbf{Vigencia por Periodo Académico}
-    \begin{itemize}
-        \item \textbf{Regla:} No se pueden realizar préstamos cuyas fechas estén fuera del rango de FEC\_INI\_PER y FEC\_FIN\_PER del periodo activo.
-        \item \textbf{Justificación:} Evita que los equipos se queden en manos de los usuarios durante las vacaciones o periodos donde no hay supervisión de laboratorio.
-        \item \textbf{Impacto en la BD:} Validación de fechas cruzando PRESTAMOS con PERIODOS.
-    \end{itemize}
+\begin{table}[H]
+\centering
+\caption{Modelo en Segunda Forma Normal}
+\begin{tabular}{|p{3.5cm}|p{9cm}|}
+\hline
+\textbf{Tabla} & \textbf{Atributos} \\
+\hline
+CLIENTES & id\_cliente, cedula, nombres, telefono, correo \\
+\hline
+CONDUCTORES & id\_conductor, cedula, nombres, licencia, telefono \\
+\hline
+VEHICULOS & id\_vehiculo, placa, tipo\_vehiculo, marca, capacidad, estado \\
+\hline
+VIAJES & id\_viaje, fecha, origen, destino, valor, forma\_pago, id\_conductor, id\_vehiculo \\
+\hline
+RESERVAS & id\_reserva, id\_cliente, id\_viaje, asiento, estado, fecha\_reserva \\
+\hline
+\end{tabular}
+\end{table}
 
-    \item \textbf{Exclusividad de Disponibilidad del Equipo}
-    \begin{itemize}
-        \item \textbf{Regla:} Un equipo solo puede ser objeto de un nuevo préstamo si su atributo DIS\_EQUI tiene el valor 'D' (Disponible). Al momento de registrar el préstamo, este valor debe cambiar automáticamente a 'P' (Prestado).
-        \item \textbf{Justificación:} Evita la duplicidad de préstamos sobre un mismo activo físico y garantiza que el inventario mostrado al laboratorista sea real.
-        \item \textbf{Impacto en la BD:}
-        \begin{itemize}
-            \item Antes del Préstamo: Una consulta SELECT debe filtrar solo equipos con DIS\_EQUI = 'D'.
-            \item Durante el Préstamo: Se ejecuta un UPDATE en la tabla EQUIPOS para cambiar el estado a 'P'.
-            \item En la Devolución: Cuando se registra la FEC\_REAL en la tabla PRESTAMOS, el estado en EQUIPOS debe volver a 'D'.
-        \end{itemize}
-    \end{itemize}
+\subsubsection{Tercera Forma Normal}
 
-    \item \textbf{Regla de Integridad del Estado Físico (Entregas vs. Devoluciones)}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El ESTADO\_DEV (estado de devolución) no puede ser superior en calidad al ESTADO\_PRE (estado de préstamo). Si un equipo sale como "ANTIGUO", no puede regresar como "NUEVO".
-        \item \textbf{Justificación:} Detecta errores de digitación o posibles cambios de piezas/equipos por parte del usuario. Si hay una discrepancia negativa (sale "NUEVO" y regresa "DAÑADO"), el sistema debe obligar a registrar una OBSERVACIÓN.
-        \item \textbf{Impacto en la BD:} El sistema debe comparar el texto o nivel de calidad de ambos atributos antes de cerrar el préstamo.
-    \end{itemize}
+La Tercera Forma Normal elimina dependencias transitivas. Por ejemplo, la placa depende del vehículo y no del viaje; el teléfono depende del cliente y no de la reserva; y los datos del conductor dependen de la tabla CONDUCTORES y no directamente de la tabla VIAJES. Con esta separación se reduce la redundancia y se mejora la integridad de los datos.
 
-    \item \textbf{Regla de Consistencia de Categoría}
-    \begin{itemize}
-        \item \textbf{Enunciado:} Todo equipo registrado en la tabla EQUIPOS debe tener obligatoriamente un ID\_CAT\_PER válido que exista en la tabla CATEGORIAS.
-        \item \textbf{Justificación:} Evita tener equipos "huérfanos" en el sistema. Si no sabemos si es una Laptop o un Proyector, no podemos aplicar reglas de tiempo (por ejemplo, las laptops se prestan por 2 días, pero los proyectores quizás solo por 3 horas).
-        \item \textbf{Impacto en la BD:} Aplicación de Integridad Referencial (Foreign Key). No se puede borrar una categoría si todavía tiene equipos asignados a ella.
-    \end{itemize}
+\subsubsection{Modelo relacional final}
 
-    \item \textbf{Regla de Liquidación de Multas para Rehabilitación}
-    \begin{itemize}
-        \item \textbf{Enunciado:} El atributo habilitado del usuario solo puede volver a 'S' (Sí) cuando todos los registros relacionados en la tabla MULTAS tengan el EST\_MUL como "PAGADO".
-        \item \textbf{Justificación:} Asegura que el proceso de cobro se complete. El laboratorista no debe habilitar a mano a un amigo si este aún debe dinero a la universidad.
-        \item \textbf{Impacto en la BD:} Al actualizar una multa a "PAGADO", el sistema debe hacer un COUNT de las multas pendientes del usuario; si el resultado es 0, entonces se ejecuta el UPDATE a habilitado = 'S'.
-    \end{itemize}
-\end{enumerate}
-%Especifique las TAC's utilizadas en la Tarea. 
+El modelo relacional final está compuesto por las tablas obligatorias solicitadas en el examen: CLIENTES, CONDUCTORES, VEHICULOS, VIAJES y RESERVAS.
+
+\begin{table}[H]
+\centering
+\caption{Modelo relacional final}
+\begin{tabular}{|p{3cm}|p{9.5cm}|}
+\hline
+\textbf{Tabla} & \textbf{Campos principales} \\
+\hline
+CLIENTES & id\_cliente PK, cedula UNIQUE, nombres, telefono UNIQUE, correo \\
+\hline
+CONDUCTORES & id\_conductor PK, cedula UNIQUE, nombres, licencia UNIQUE, telefono \\
+\hline
+VEHICULOS & id\_vehiculo PK, placa UNIQUE, tipo\_vehiculo, marca, capacidad, estado \\
+\hline
+VIAJES & id\_viaje PK, fecha, origen, destino, valor, forma\_pago, id\_conductor FK, id\_vehiculo FK \\
+\hline
+RESERVAS & id\_reserva PK, id\_cliente FK, id\_viaje FK, asiento, estado, fecha\_reserva \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsubsection{Cardinalidades}
+
+\begin{itemize}
+    \item CLIENTES 1 --- N RESERVAS: un cliente puede realizar muchas reservas.
+    \item VIAJES 1 --- N RESERVAS: un viaje puede tener muchas reservas.
+    \item CONDUCTORES 1 --- N VIAJES: un conductor puede realizar muchos viajes.
+    \item VEHICULOS 1 --- N VIAJES: un vehículo puede ser asignado a muchos viajes.
+\end{itemize}
+
+\captura[0.95\linewidth]{img/01_modelo_relacional.png}{Modelo relacional final del sistema de transporte puerta a puerta.}
+
+\subsection{Implementación DDL}
+
+Para implementar la base de datos se crearon las tablas CLIENTES, CONDUCTORES, VEHICULOS, VIAJES y RESERVAS. Cada tabla fue definida con restricciones de integridad para controlar la validez y relación de los datos.
+
+\begin{lstlisting}[caption={Creación de la tabla CLIENTES}]
+CREATE TABLE CLIENTES (
+    id_cliente NUMBER PRIMARY KEY,
+    cedula VARCHAR2(10) NOT NULL UNIQUE,
+    nombres VARCHAR2(80) NOT NULL,
+    telefono VARCHAR2(10) NOT NULL UNIQUE,
+    correo VARCHAR2(100),
+    CONSTRAINT chk_cliente_cedula CHECK (LENGTH(cedula) = 10),
+    CONSTRAINT chk_cliente_telefono CHECK (LENGTH(telefono) = 10)
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Creación de la tabla CONDUCTORES}]
+CREATE TABLE CONDUCTORES (
+    id_conductor NUMBER PRIMARY KEY,
+    cedula VARCHAR2(10) NOT NULL UNIQUE,
+    nombres VARCHAR2(80) NOT NULL,
+    licencia VARCHAR2(20) NOT NULL UNIQUE,
+    telefono VARCHAR2(10) NOT NULL,
+    CONSTRAINT chk_conductor_cedula CHECK (LENGTH(cedula) = 10),
+    CONSTRAINT chk_conductor_telefono CHECK (LENGTH(telefono) = 10)
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Creación de la tabla VEHICULOS}]
+CREATE TABLE VEHICULOS (
+    id_vehiculo NUMBER PRIMARY KEY,
+    placa VARCHAR2(10) NOT NULL UNIQUE,
+    tipo_vehiculo VARCHAR2(40) NOT NULL,
+    marca VARCHAR2(40) NOT NULL,
+    capacidad NUMBER NOT NULL,
+    estado VARCHAR2(20) NOT NULL,
+    CONSTRAINT chk_capacidad_vehiculo CHECK (capacidad > 0),
+    CONSTRAINT chk_estado_vehiculo CHECK (estado IN ('DISPONIBLE', 'MANTENIMIENTO'))
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Creación de la tabla VIAJES}]
+CREATE TABLE VIAJES (
+    id_viaje NUMBER PRIMARY KEY,
+    fecha DATE NOT NULL,
+    origen VARCHAR2(80) NOT NULL,
+    destino VARCHAR2(80) NOT NULL,
+    valor NUMBER(8,2) NOT NULL,
+    forma_pago VARCHAR2(30) NOT NULL,
+    id_conductor NUMBER NOT NULL,
+    id_vehiculo NUMBER NOT NULL,
+    CONSTRAINT fk_viaje_conductor FOREIGN KEY (id_conductor) REFERENCES CONDUCTORES(id_conductor),
+    CONSTRAINT fk_viaje_vehiculo FOREIGN KEY (id_vehiculo) REFERENCES VEHICULOS(id_vehiculo),
+    CONSTRAINT chk_valor_viaje CHECK (valor > 0),
+    CONSTRAINT chk_forma_pago_viaje CHECK (forma_pago IN ('EFECTIVO', 'TRANSFERENCIA', 'TARJETA'))
+);
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Creación de la tabla RESERVAS}]
+CREATE TABLE RESERVAS (
+    id_reserva NUMBER PRIMARY KEY,
+    id_cliente NUMBER NOT NULL,
+    id_viaje NUMBER NOT NULL,
+    asiento NUMBER NOT NULL,
+    estado VARCHAR2(20) NOT NULL,
+    fecha_reserva DATE DEFAULT SYSDATE NOT NULL,
+    CONSTRAINT fk_reserva_cliente FOREIGN KEY (id_cliente) REFERENCES CLIENTES(id_cliente),
+    CONSTRAINT fk_reserva_viaje FOREIGN KEY (id_viaje) REFERENCES VIAJES(id_viaje),
+    CONSTRAINT chk_asiento_reserva CHECK (asiento > 0),
+    CONSTRAINT chk_estado_reserva CHECK (estado IN ('RESERVADO', 'PAGADO', 'ANULADO')),
+    CONSTRAINT uk_viaje_asiento UNIQUE (id_viaje, asiento)
+);
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/02_creacion_tablas.png}{Ejecución de las sentencias DDL para la creación de tablas.}
+
+\subsection{DML y transacciones}
+
+En esta parte se insertaron datos en las tablas principales de la base de datos. Se registraron cinco clientes, cinco conductores, cinco vehículos, cinco viajes y diez reservas. Posteriormente, se aplicaron operaciones de actualización, eliminación, COMMIT y ROLLBACK.
+
+\begin{lstlisting}[caption={Inserción de clientes}]
+INSERT INTO CLIENTES VALUES (1, '1800000001', 'Ana Perez', '0991111111', 'ana@gmail.com');
+INSERT INTO CLIENTES VALUES (2, '1800000002', 'Luis Gomez', '0992222222', 'luis@gmail.com');
+INSERT INTO CLIENTES VALUES (3, '1800000003', 'Maria Lopez', '0993333333', 'maria@gmail.com');
+INSERT INTO CLIENTES VALUES (4, '1800000004', 'Carlos Ruiz', '0994444444', 'carlos@gmail.com');
+INSERT INTO CLIENTES VALUES (5, '1800000005', 'Sofia Torres', '0995555555', 'sofia@gmail.com');
+\end{lstlisting}
+
+\begin{lstlisting}[caption={Confirmación de cambios}]
+COMMIT;
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/03_insercion_datos.png}{Inserción de datos en CLIENTES, CONDUCTORES, VEHICULOS, VIAJES y RESERVAS.}
+
+\subsubsection{Actualización de viajes con destino Quito}
+
+Se incrementó en un 10\% el valor de todos los viajes cuyo destino es Quito.
+
+\begin{lstlisting}[caption={Actualización del valor de viajes hacia Quito}]
+UPDATE VIAJES
+SET valor = valor * 1.10
+WHERE destino = 'Quito';
+
+SELECT id_viaje, origen, destino, valor
+FROM VIAJES
+WHERE destino = 'Quito';
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/04_update_quito.png}{Actualización del valor de los viajes con destino Quito.}
+
+\subsubsection{Eliminación de reservas anuladas}
+
+Se eliminaron las reservas con estado ANULADO para cumplir con la operación DML solicitada.
+
+\begin{lstlisting}[caption={Eliminación de reservas anuladas}]
+DELETE FROM RESERVAS
+WHERE estado = 'ANULADO';
+
+SELECT *
+FROM RESERVAS;
+
+COMMIT;
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/05_delete_anuladas.png}{Eliminación de reservas con estado ANULADO.}
+
+\subsubsection{Transacción de prueba con ROLLBACK}
+
+Se realizó una transacción de prueba insertando un cliente temporal. Luego se ejecutó ROLLBACK para comprobar que el registro no se guarda definitivamente.
+
+\begin{lstlisting}[caption={Prueba de ROLLBACK}]
+INSERT INTO CLIENTES VALUES (6, '1800000006', 'Cliente Temporal', '0996666666', 'temporal@gmail.com');
+
+SELECT * FROM CLIENTES WHERE id_cliente = 6;
+
+ROLLBACK;
+
+SELECT * FROM CLIENTES WHERE id_cliente = 6;
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/06_rollback.png}{Demostración de la transacción utilizando ROLLBACK.}
+
+\subsection{Consultas SQL avanzadas}
+
+En esta sección se desarrollaron las diez consultas SQL avanzadas solicitadas. Cada consulta se ejecutó por separado para evidenciar su funcionamiento dentro de Oracle SQL Developer.
+
+\subsubsection{Consulta 1: Cliente que ha realizado el mayor número de reservas}
+
+\textbf{Enunciado:} Mostrar el cliente que ha realizado el mayor número de reservas.
+
+\begin{lstlisting}[caption={Consulta 1: Cliente con mayor número de reservas}]
+SELECT *
+FROM (
+    SELECT 
+        c.id_cliente,
+        c.nombres AS cliente,
+        COUNT(r.id_reserva) AS total_reservas
+    FROM CLIENTES c
+    INNER JOIN RESERVAS r
+        ON c.id_cliente = r.id_cliente
+    GROUP BY c.id_cliente, c.nombres
+    ORDER BY total_reservas DESC
+)
+WHERE ROWNUM = 1;
+\end{lstlisting}
+
+Esta consulta relaciona CLIENTES con RESERVAS, cuenta las reservas de cada cliente y muestra el cliente con mayor cantidad de reservas.
+
+\captura[0.95\linewidth]{img/07_consulta_01_cliente_mas_reservas.png}{Resultado de la consulta 1: cliente con mayor número de reservas.}
+
+\subsubsection{Consulta 2: Conductor que ha realizado más viajes}
+
+\textbf{Enunciado:} Mostrar el conductor que ha realizado más viajes.
+
+\begin{lstlisting}[caption={Consulta 2: Conductor con más viajes}]
+SELECT *
+FROM (
+    SELECT 
+        co.id_conductor,
+        co.nombres AS conductor,
+        COUNT(v.id_viaje) AS total_viajes
+    FROM CONDUCTORES co
+    INNER JOIN VIAJES v
+        ON co.id_conductor = v.id_conductor
+    GROUP BY co.id_conductor, co.nombres
+    ORDER BY total_viajes DESC
+)
+WHERE ROWNUM = 1;
+\end{lstlisting}
+
+Esta consulta relaciona CONDUCTORES con VIAJES y obtiene el conductor con mayor número de viajes registrados.
+
+\captura[0.95\linewidth]{img/08_consulta_02_conductor_mas_viajes.png}{Resultado de la consulta 2: conductor que ha realizado más viajes.}
+
+\subsubsection{Consulta 3: Total de ingresos generados por cada viaje}
+
+\textbf{Enunciado:} Mostrar el total de ingresos generados por cada viaje.
+
+\begin{lstlisting}[caption={Consulta 3: Ingresos por viaje}]
+SELECT 
+    v.id_viaje,
+    v.origen,
+    v.destino,
+    v.valor,
+    COUNT(r.id_reserva) AS reservas_pagadas,
+    SUM(v.valor) AS total_ingresos
+FROM VIAJES v
+INNER JOIN RESERVAS r
+    ON v.id_viaje = r.id_viaje
+WHERE r.estado = 'PAGADO'
+GROUP BY v.id_viaje, v.origen, v.destino, v.valor
+ORDER BY v.id_viaje;
+\end{lstlisting}
+
+Esta consulta calcula el total de ingresos por viaje considerando las reservas que se encuentran en estado PAGADO.
+
+\captura[0.95\linewidth]{img/09_consulta_03_ingresos_por_viaje.png}{Resultado de la consulta 3: total de ingresos generados por cada viaje.}
+
+\subsubsection{Consulta 4: Clientes que nunca han realizado reservas}
+
+\textbf{Enunciado:} Mostrar los clientes que nunca han realizado reservas.
+
+\begin{lstlisting}[caption={Consulta 4: Clientes sin reservas}]
+SELECT 
+    c.id_cliente,
+    c.nombres AS cliente,
+    c.telefono,
+    c.correo
+FROM CLIENTES c
+LEFT JOIN RESERVAS r
+    ON c.id_cliente = r.id_cliente
+WHERE r.id_reserva IS NULL;
+\end{lstlisting}
+
+Esta consulta utiliza LEFT JOIN para mostrar los clientes que no tienen reservas asociadas.
+
+\captura[0.95\linewidth]{img/10_consulta_04_clientes_sin_reservas.png}{Resultado de la consulta 4: clientes que nunca han realizado reservas.}
+
+\subsubsection{Consulta 5: Promedio de ingresos generado por cada conductor}
+
+\textbf{Enunciado:} Mostrar el promedio de ingresos generado por cada conductor.
+
+\begin{lstlisting}[caption={Consulta 5: Promedio de ingresos por conductor}]
+SELECT 
+    co.id_conductor,
+    co.nombres AS conductor,
+    AVG(v.valor) AS promedio_ingresos
+FROM CONDUCTORES co
+INNER JOIN VIAJES v
+    ON co.id_conductor = v.id_conductor
+INNER JOIN RESERVAS r
+    ON v.id_viaje = r.id_viaje
+WHERE r.estado = 'PAGADO'
+GROUP BY co.id_conductor, co.nombres
+ORDER BY promedio_ingresos DESC;
+\end{lstlisting}
+
+Esta consulta calcula el promedio de ingresos generados por cada conductor considerando los viajes con reservas pagadas.
+
+\captura[0.95\linewidth]{img/11_consulta_05_promedio_ingresos_conductor.png}{Resultado de la consulta 5: promedio de ingresos generado por cada conductor.}
+
+\subsubsection{Consulta 6: Viaje con el valor más alto registrado}
+
+\textbf{Enunciado:} Mostrar el viaje con el valor más alto registrado.
+
+\begin{lstlisting}[caption={Consulta 6: Viaje con valor más alto}]
+SELECT *
+FROM (
+    SELECT 
+        id_viaje,
+        fecha,
+        origen,
+        destino,
+        valor,
+        forma_pago
+    FROM VIAJES
+    ORDER BY valor DESC
+)
+WHERE ROWNUM = 1;
+\end{lstlisting}
+
+Esta consulta ordena los viajes por valor de forma descendente y muestra el viaje más costoso.
+
+\captura[0.95\linewidth]{img/12_consulta_06_viaje_valor_mas_alto.png}{Resultado de la consulta 6: viaje con el valor más alto registrado.}
+
+\subsubsection{Consulta 7: Tres clientes con mayor cantidad de reservas}
+
+\textbf{Enunciado:} Mostrar los tres clientes con mayor cantidad de reservas.
+
+\begin{lstlisting}[caption={Consulta 7: Tres clientes con mayor cantidad de reservas}]
+SELECT *
+FROM (
+    SELECT 
+        c.id_cliente,
+        c.nombres AS cliente,
+        COUNT(r.id_reserva) AS cantidad_reservas
+    FROM CLIENTES c
+    INNER JOIN RESERVAS r
+        ON c.id_cliente = r.id_cliente
+    GROUP BY c.id_cliente, c.nombres
+    ORDER BY cantidad_reservas DESC
+)
+WHERE ROWNUM <= 3;
+\end{lstlisting}
+
+Esta consulta permite obtener el top tres de clientes con mayor cantidad de reservas.
+
+\captura[0.95\linewidth]{img/13_consulta_07_tres_clientes_mas_reservas.png}{Resultado de la consulta 7: tres clientes con mayor cantidad de reservas.}
+
+\subsubsection{Consulta 8: Cantidad de viajes por destino}
+
+\textbf{Enunciado:} Mostrar cuántos viajes existen por destino.
+
+\begin{lstlisting}[caption={Consulta 8: Viajes por destino}]
+SELECT 
+    destino,
+    COUNT(id_viaje) AS cantidad_viajes
+FROM VIAJES
+GROUP BY destino
+ORDER BY cantidad_viajes DESC;
+\end{lstlisting}
+
+Esta consulta agrupa los viajes por destino y cuenta la cantidad de registros existentes por cada ciudad.
+
+\captura[0.95\linewidth]{img/14_consulta_08_viajes_por_destino.png}{Resultado de la consulta 8: cantidad de viajes existentes por destino.}
+
+\subsubsection{Consulta 9: Conductor cuyos viajes generan más ingresos acumulados}
+
+\textbf{Enunciado:} Mostrar el conductor cuyos viajes generan más ingresos acumulados.
+
+\begin{lstlisting}[caption={Consulta 9: Conductor con más ingresos acumulados}]
+SELECT *
+FROM (
+    SELECT 
+        co.id_conductor,
+        co.nombres AS conductor,
+        SUM(v.valor) AS ingresos_acumulados
+    FROM CONDUCTORES co
+    INNER JOIN VIAJES v
+        ON co.id_conductor = v.id_conductor
+    INNER JOIN RESERVAS r
+        ON v.id_viaje = r.id_viaje
+    WHERE r.estado = 'PAGADO'
+    GROUP BY co.id_conductor, co.nombres
+    ORDER BY ingresos_acumulados DESC
+)
+WHERE ROWNUM = 1;
+\end{lstlisting}
+
+Esta consulta suma los ingresos generados por los viajes de cada conductor y muestra al conductor con mayor ingreso acumulado.
+
+\captura[0.95\linewidth]{img/15_consulta_09_conductor_mas_ingresos.png}{Resultado de la consulta 9: conductor cuyos viajes generan más ingresos acumulados.}
+
+\subsubsection{Consulta 10: Destinos con ingreso promedio superior al promedio general}
+
+\textbf{Enunciado:} Mostrar los destinos cuyo ingreso promedio sea superior al promedio general de todos los viajes.
+
+\begin{lstlisting}[caption={Consulta 10: Destinos con promedio superior}]
+SELECT 
+    destino,
+    AVG(valor) AS ingreso_promedio_destino
+FROM VIAJES
+GROUP BY destino
+HAVING AVG(valor) > (
+    SELECT AVG(valor)
+    FROM VIAJES
+)
+ORDER BY ingreso_promedio_destino DESC;
+\end{lstlisting}
+
+Esta consulta compara el promedio de valor por destino con el promedio general de todos los viajes.
+
+\captura[0.95\linewidth]{img/16_consulta_10_destinos_promedio_superior.png}{Resultado de la consulta 10: destinos con ingreso promedio superior al promedio general.}
+
+\subsection{Programación PL/SQL}
+
+\subsubsection{Ejercicio 1: Bloque anónimo}
+
+El bloque anónimo recibe el código de un viaje, obtiene su valor mediante SELECT INTO y muestra si corresponde a un viaje económico o premium.
+
+\begin{lstlisting}[caption={Bloque anónimo para clasificar un viaje}]
+SET SERVEROUTPUT ON;
+
+DECLARE
+    v_codigo_viaje NUMBER := 2;
+    v_valor VIAJES.valor%TYPE;
+BEGIN
+    SELECT valor 
+    INTO v_valor
+    FROM VIAJES
+    WHERE id_viaje = v_codigo_viaje;
+
+    IF v_valor < 20 THEN
+        DBMS_OUTPUT.PUT_LINE('VIAJE ECONOMICO');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('VIAJE PREMIUM');
+    END IF;
+
+    DBMS_OUTPUT.PUT_LINE('Codigo de viaje: ' || v_codigo_viaje);
+    DBMS_OUTPUT.PUT_LINE('Valor del viaje: ' || v_valor);
+END;
+/
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/17_bloque_anonimo.png}{Ejecución del bloque anónimo para clasificar el viaje según su valor.}
+
+\subsubsection{Ejercicio 2: Procedimiento REGISTRAR\_RESERVA}
+
+El procedimiento almacenado REGISTRAR\_RESERVA recibe el cliente, el viaje y el asiento. Primero verifica si el asiento está disponible. Si se encuentra libre, registra la reserva y confirma la transacción. Si el asiento está ocupado, genera una excepción controlada.
+
+\begin{lstlisting}[caption={Procedimiento almacenado REGISTRAR\_RESERVA}]
+CREATE SEQUENCE seq_reserva
+START WITH 11
+INCREMENT BY 1;
+
+CREATE OR REPLACE PROCEDURE REGISTRAR_RESERVA (
+    p_id_cliente IN NUMBER,
+    p_id_viaje IN NUMBER,
+    p_asiento IN NUMBER
+)
+AS
+    v_asiento_ocupado NUMBER;
+BEGIN
+    SELECT COUNT(*)
+    INTO v_asiento_ocupado
+    FROM RESERVAS
+    WHERE id_viaje = p_id_viaje
+    AND asiento = p_asiento;
+
+    IF v_asiento_ocupado > 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'EL ASIENTO YA SE ENCUENTRA OCUPADO');
+    ELSE
+        INSERT INTO RESERVAS (
+            id_reserva,
+            id_cliente,
+            id_viaje,
+            asiento,
+            estado,
+            fecha_reserva
+        )
+        VALUES (
+            seq_reserva.NEXTVAL,
+            p_id_cliente,
+            p_id_viaje,
+            p_asiento,
+            'RESERVADO',
+            SYSDATE
+        );
+
+        COMMIT;
+
+        DBMS_OUTPUT.PUT_LINE('RESERVA REGISTRADA CORRECTAMENTE');
+    END IF;
+END;
+/
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/18_procedure_reserva_correcta.png}{Prueba correcta del procedimiento REGISTRAR\_RESERVA.}
+
+\captura[0.95\linewidth]{img/19_procedure_asiento_ocupado.png}{Prueba de excepción del procedimiento cuando el asiento ya se encuentra ocupado.}
+
+\subsubsection{Ejercicio 3: Cursor explícito}
+
+El cursor explícito recorre todas las reservas registradas y muestra el cliente, viaje, asiento y estado.
+
+\begin{lstlisting}[caption={Cursor explícito para recorrer reservas}]
+DECLARE
+    CURSOR c_reservas IS
+        SELECT 
+            c.nombres AS cliente,
+            'Viaje ' || v.id_viaje || ': ' || v.origen || ' - ' || v.destino AS viaje,
+            r.asiento,
+            r.estado
+        FROM RESERVAS r
+        INNER JOIN CLIENTES c
+            ON r.id_cliente = c.id_cliente
+        INNER JOIN VIAJES v
+            ON r.id_viaje = v.id_viaje
+        ORDER BY r.id_reserva;
+
+    v_cliente VARCHAR2(80);
+    v_viaje VARCHAR2(150);
+    v_asiento NUMBER;
+    v_estado VARCHAR2(20);
+BEGIN
+    OPEN c_reservas;
+
+    LOOP
+        FETCH c_reservas 
+        INTO v_cliente, v_viaje, v_asiento, v_estado;
+
+        EXIT WHEN c_reservas%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE('Cliente: ' || v_cliente);
+        DBMS_OUTPUT.PUT_LINE('Viaje: ' || v_viaje);
+        DBMS_OUTPUT.PUT_LINE('Asiento: ' || v_asiento);
+        DBMS_OUTPUT.PUT_LINE('Estado: ' || v_estado);
+        DBMS_OUTPUT.PUT_LINE('-----------------------------');
+    END LOOP;
+
+    CLOSE c_reservas;
+END;
+/
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/20_cursor_reservas.png}{Ejecución del cursor explícito para recorrer las reservas registradas.}
+
+\subsubsection{Ejercicio 4: Trigger}
+
+El trigger BEFORE INSERT sobre la tabla RESERVAS impide insertar reservas con asiento menor o igual a cero. Si ocurre una inserción inválida, se genera un error controlado con el mensaje ASIENTO INVALIDO.
+
+\begin{lstlisting}[caption={Trigger para validar asiento}]
+CREATE OR REPLACE TRIGGER trg_validar_asiento_reserva
+BEFORE INSERT ON RESERVAS
+FOR EACH ROW
+BEGIN
+    IF :NEW.asiento <= 0 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'ASIENTO INVALIDO');
+    END IF;
+END;
+/
+\end{lstlisting}
+
+\captura[0.95\linewidth]{img/21_trigger_asiento_invalido.png}{Prueba del trigger al intentar insertar una reserva con asiento inválido.}
+
+\subsection{Resultados obtenidos}
+
+Como resultado del examen práctico, se obtuvo una base de datos relacional funcional para el control de operaciones de una empresa de transporte puerta a puerta. Se aplicó normalización hasta la Tercera Forma Normal, se construyó el modelo relacional final y se implementaron las tablas obligatorias con restricciones de integridad.
+
+Además, se insertaron registros de prueba, se aplicaron operaciones DML, se confirmó información mediante COMMIT y se demostró el funcionamiento de ROLLBACK. También se ejecutaron consultas SQL avanzadas para obtener información sobre clientes, conductores, viajes, reservas e ingresos. Finalmente, se desarrollaron ejercicios PL/SQL mediante bloque anónimo, procedimiento almacenado, cursor explícito y trigger.
+
 \subsection{Habilidades blandas empleadas en la tarea}
+
 \begin{itemize}
     \item[$\square$] Liderazgo
     \item[$\square$] Trabajo en equipo
-    \item[$\square$] Comunicación asertiva
+    \item[$\boxtimes$] Comunicación asertiva
     \item[$\square$] La empatía
-    \item[$\square$] Pensamiento crítico
-    \item[$\square$] Flexibilidad
-    \item[$\square$] La resolución de conflictos
-    \item[$\square$] Adaptabilidad
-    \item[$\square$] Responsabilidad
+    \item[$\boxtimes$] Pensamiento crítico
+    \item[$\boxtimes$] Flexibilidad
+    \item[$\boxtimes$] La resolución de conflictos
+    \item[$\boxtimes$] Adaptabilidad
+    \item[$\boxtimes$] Responsabilidad
 \end{itemize}
-
 
 \subsection{Conclusiones}
-Se concluye que el diseño preliminar del sistema de gestión de préstamos, fundamentado en la correcta identificación de entidades y reglas de negocio, establece una base técnica sólida para el desarrollo de la base de datos. La aplicación de un enfoque estructurado permitió transformar los requerimientos institucionales en un modelo conceptual organizado, garantizando que la futura implementación responda eficazmente a las necesidades de control, integridad de la información y optimización de los procesos administrativos dentro del contexto universitario.
+
+Se concluye que la normalización permitió transformar una hoja de cálculo general en un modelo relacional organizado, reduciendo la redundancia y mejorando la integridad de la información. La implementación de restricciones en Oracle SQL Developer permitió controlar datos obligatorios, claves primarias, claves foráneas, valores únicos y condiciones específicas como el estado de una reserva y el número de asiento. Además, las consultas avanzadas y los ejercicios PL/SQL demostraron que la base de datos permite consultar, validar y automatizar procesos importantes dentro del sistema de transporte puerta a puerta.
 
 \subsection{Recomendaciones}
-\begin{itemize}
-    \item Realizar un análisis exhaustivo de la cardinalidad entre las 8 entidades identificadas para asegurar que las relaciones en el modelo entidad-relación reflejen fielmente la lógica del negocio.
-    \item Documentar de manera detallada cada regla de negocio establecida, con el fin de facilitar la posterior creación de restricciones (constraints) y disparadores (triggers) a nivel de base de datos.
-    \item Validar el listado de atributos propuesto mediante un proceso de normalización hasta la tercera forma normal (3NF), evitando así la redundancia de datos y posibles anomalías en futuras inserciones o actualizaciones.
-    \item Mantener una comunicación constante entre los integrantes del grupo para asegurar que el alcance definido se cumpla estrictamente dentro de los plazos establecidos por el docente. \cite{greenwade93}
-\end{itemize}
-\subsection{Referencias}
-Insertar las referencias bibliográficas empleadas aplicando la norma IEEE.
 
-\vspace{-3em} %reduce el espacio causado por refname vacío
-\renewcommand{\refname}{}
-\bibliographystyle{ieeetr}
-\bibliography{citas}
+Se recomienda ejecutar el script por secciones para verificar que cada parte funcione correctamente. También es importante activar DBMS OUTPUT antes de ejecutar los ejercicios PL/SQL, ya que los resultados del bloque anónimo, procedimiento y cursor se muestran en esa ventana. Finalmente, se recomienda guardar las capturas con nombres ordenados y claros, de manera que el informe evidencie cada actividad desarrollada.
+
+\subsection{Referencias}
+
+\begin{thebibliography}{00}
+
+\bibitem{oracleSQL}
+Oracle, \textit{Oracle Database SQL Language Reference}. Oracle Corporation.
+
+\bibitem{oraclePLSQL}
+Oracle, \textit{Oracle Database PL/SQL Language Reference}. Oracle Corporation.
+
+\bibitem{silberschatz}
+A. Silberschatz, H. F. Korth y S. Sudarshan, \textit{Database System Concepts}. McGraw-Hill.
+
+\bibitem{elmasri}
+R. Elmasri y S. B. Navathe, \textit{Fundamentals of Database Systems}. Pearson.
+
+\end{thebibliography}
 
 \subsection{Anexos}
+
+Las evidencias de ejecución se encuentran integradas en el desarrollo del informe. Cada captura debe guardarse en la carpeta \texttt{img} con el nombre indicado en la sección correspondiente.
+
 \vfill
 \end{document}
